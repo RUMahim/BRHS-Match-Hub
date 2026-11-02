@@ -714,11 +714,11 @@
             <div class="chips">
                 <div class="chip">
                     <b id="cM">0</b>
-                    <span>Completed</span>
+                    <span>Played</span>
                 </div>
                 <div class="chip">
                     <b id="cG">0</b>
-                    <span>Tournament Goals</span>
+                    <span>Goals</span>
                 </div>
                 <div class="chip">
                     <b id="cT">-</b>
@@ -1205,84 +1205,112 @@
                         x.closePath()
                     }
                     ;
+                    const mid = S / 2;
                     x.fillStyle = '#070707';
                     x.fillRect(0, 0, S, S);
-                    const gr = x.createRadialGradient(S / 2, 480, 40, S / 2, 480, 640);
-                    gr.addColorStop(0, 'rgba(201,162,39,.30)');
+                    const gr = x.createRadialGradient(mid, 520, 40, mid, 520, 660);
+                    gr.addColorStop(0, 'rgba(201,162,39,.34)');
                     gr.addColorStop(1, 'rgba(201,162,39,0)');
                     x.fillStyle = gr;
                     x.fillRect(0, 0, S, S);
+                    x.strokeStyle = 'rgba(255,255,255,.05)';
+                    x.lineWidth = 4;
+                    x.beginPath();
+                    x.arc(mid, 520, 260, 0, Math.PI * 2);
+                    x.stroke();
+                    x.beginPath();
+                    x.moveTo(60, 520);
+                    x.lineTo(S - 60, 520);
+                    x.stroke();
                     x.strokeStyle = 'rgba(212,175,55,.55)';
                     x.lineWidth = 3;
                     x.strokeRect(24, 24, S - 48, S - 48);
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', S / 2, 96, 26, GOLD2, 'center', 5, 800, MO, 940);
-                    x.font = '400 112px ' + AN;
+                    x.strokeStyle = GOLD2;
+                    x.lineWidth = 10;
+                    [[24, 24, 1], [S - 24, 24, -1]].forEach( ([cx,cy,dx]) => {
+                        x.beginPath();
+                        x.moveTo(cx + dx * 70, cy);
+                        x.lineTo(cx, cy);
+                        x.lineTo(cx, cy + 70);
+                        x.stroke()
+                    }
+                    );
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 94, 24, GOLD2, 'center', 5, 800, MO, 900);
+                    x.font = '400 104px ' + AN;
                     if ('letterSpacing'in x)
                         x.letterSpacing = '2px';
                     const w1 = x.measureText('MATCH ').width
                       , w2 = x.measureText('HUB').width
                       , sx = (S - w1 - w2) / 2;
-                    put('MATCH ', sx, 196, 112, '#ffffff', 'left', 2, 400, AN);
-                    put('HUB', sx + w1, 196, 112, GOLD, 'left', 2, 400, AN);
+                    put('MATCH ', sx, 226, 104, '#ffffff', 'left', 2, 400, AN);
+                    put('HUB', sx + w1, 226, 104, GOLD, 'left', 2, 400, AN);
                     const tag = lv ? '● LIVE' + (r.lm ? ' ' + r.lm : '') : d ? 'FULL TIME' : 'UPCOMING';
                     x.font = '800 28px ' + MO;
                     if ('letterSpacing'in x)
                         x.letterSpacing = '4px';
                     const tw = x.measureText(tag).width + 64;
-                    rr((S - tw) / 2, 232, tw, 58, 29);
+                    rr((S - tw) / 2, 262, tw, 58, 29);
                     if (lv) {
                         x.fillStyle = '#d92b2b';
                         x.fill();
-                        put(tag, S / 2, 270, 28, '#ffffff', 'center', 4, 800, MO)
+                        put(tag, mid, 300, 28, '#ffffff', 'center', 4, 800, MO)
                     } else if (d) {
                         x.fillStyle = GOLD;
                         x.fill();
-                        put(tag, S / 2, 270, 28, '#1a1204', 'center', 4, 800, MO)
+                        put(tag, mid, 300, 28, '#1a1204', 'center', 4, 800, MO)
                     } else {
                         x.strokeStyle = GOLD2;
                         x.lineWidth = 3;
                         x.stroke();
-                        put(tag, S / 2, 270, 28, GOLD, 'center', 4, 800, MO)
+                        put(tag, mid, 300, 28, GOLD, 'center', 4, 800, MO)
                     }
-                    put((ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase(), S / 2, 338, 26, '#9a927c', 'center', 4, 700, MO, 940);
+                    put((ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase(), mid, 372, 26, '#9a927c', 'center', 4, 700, MO, 940);
+                    const wA = d && (+r.sa > +r.sb || +r.sa == +r.sb && w === a)
+                      , wB = d && (+r.sb > +r.sa || +r.sa == +r.sb && w === b);
                     if (sh) {
-                        put(r.sa + ' – ' + r.sb, S / 2, 556, 220, '#ffffff', 'center', 6, 400, AN, 900)
+                        put(String(r.sa), mid - 190, 604, 230, '#ffffff', 'center', 0, 400, AN, 260);
+                        put('–', mid, 574, 120, GOLD2, 'center', 0, 400, AN);
+                        put(String(r.sb), mid + 190, 604, 230, '#ffffff', 'center', 0, 400, AN, 260)
                     } else {
-                        put('VS', S / 2, 556, 200, GOLD2, 'center', 6, 400, AN)
+                        put('VS', mid, 590, 200, GOLD2, 'center', 6, 400, AN)
                     }
-                    put(a.toUpperCase(), 270, 650, 42, '#ffffff', 'center', 1, 800, MO, 440);
-                    put(b.toUpperCase(), 810, 650, 42, '#ffffff', 'center', 1, 800, MO, 440);
-                    let yy = 720;
-                    if (!sh) {
-                        put(f[3], S / 2, 730, 44, GOLD, 'center', 4, 800, MO);
-                        yy = 800
-                    } else if (d && r.sa == r.sb && w) {
-                        put('WON ON PENALTIES: ' + w.toUpperCase(), S / 2, 716, 28, GOLD, 'center', 3, 800, MO, 900);
-                        yy = 740
-                    }
+                    put(a.toUpperCase(), mid - 190, 692, 40, wA ? GOLD : '#ffffff', 'center', 1, 800, MO, 360);
+                    put(b.toUpperCase(), mid + 190, 692, 40, wB ? GOLD : '#ffffff', 'center', 1, 800, MO, 360);
                     if (sh) {
+                        if (d && r.sa == r.sb && w)
+                            put('WON ON PENALTIES · ' + w.toUpperCase(), mid, 738, 24, GOLD, 'center', 3, 800, MO, 900);
                         const ln = arr => {
                             const o = (arr || []).map(g => '⚽ ' + g[0] + (g[1] > 1 ? ' ×' + g[1] : ''));
                             return o.length > 3 ? o.slice(0, 2).concat('+' + (o.length - 2) + ' more') : o
                         }
-                        ;
-                        [[ln(r.ga), 270], [ln(r.gb), 810]].forEach( ([L,px]) => L.forEach( (t, i) => put(t, px, yy + 50 + i * 42, 30, '#cfc8b2', 'center', 0, 700, MO, 470)));
+                          , LA = ln(r.ga)
+                          , LB = ln(r.gb);
+                        if (LA.length || LB.length) {
+                            put('GOALS', mid, 796, 22, GOLD2, 'center', 8, 800, MO);
+                            x.fillStyle = 'rgba(212,175,55,.45)';
+                            x.fillRect(120, 788, mid - 120 - 90, 2);
+                            x.fillRect(mid + 90, 788, mid - 120 - 90, 2);
+                            [[LA, mid - 190], [LB, mid + 190]].forEach( ([L,px]) => L.forEach( (t, i) => put(t, px, 846 + i * 38, 30, '#e6dfc8', 'center', 0, 700, MO, 400)))
+                        }
+                    } else {
+                        put('KICK-OFF', mid, 790, 24, GOLD2, 'center', 8, 800, MO);
+                        put(f[3], mid, 860, 56, GOLD, 'center', 3, 800, MO, 900)
                     }
                     if (sh && r.mo) {
-                        rr(150, 912, 780, 64, 14);
+                        rr(150, 904, 780, 70, 16);
                         x.fillStyle = '#1d1706';
                         x.fill();
                         x.strokeStyle = '#4a3a10';
                         x.lineWidth = 2;
                         x.stroke();
-                        put('★ MAN OF THE MATCH  ' + r.mo.toUpperCase(), S / 2, 954, 28, GOLD, 'center', 2, 800, MO, 740)
+                        put('★ MAN OF THE MATCH  ' + r.mo.toUpperCase(), mid, 951, 28, GOLD, 'center', 2, 800, MO, 740)
                     }
                     const bg = x.createLinearGradient(24, 0, S - 24, 0);
                     bg.addColorStop(0, GOLD2);
                     bg.addColorStop(1, GOLD);
                     x.fillStyle = bg;
                     x.fillRect(24, 996, S - 48, 60);
-                    put('FULL RESULTS · ' + location.host.toUpperCase(), S / 2, 1036, 28, '#1a1204', 'center', 3, 800, MO, 960);
+                    put('FULL RESULTS · ' + location.host.toUpperCase(), mid, 1036, 28, '#1a1204', 'center', 3, 800, MO, 960);
                     const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + '\nEX BRHSIAN Football Festival · Season 03 Match Hub'
                       , url = location.origin + location.pathname
                       , blob = await new Promise(res => c.toBlob(res, 'image/png'));
