@@ -685,6 +685,17 @@
             .cds p {
                 margin: 2px 0
             }
+        
+            .tag.lvt{background:#d92b2b;color:#fff;animation:lvp 1.2s infinite}
+            .tag.ft{background:#2a2410;color:var(--gold);border:1px solid var(--line)}
+            @keyframes lvp{50%{opacity:.5}}
+            .m.lv{border-color:#6b1f1f}
+            .m.lv::before{background:#d92b2b}
+            .lvb{display:flex;gap:8px;align-items:center;background:#2a0d0d;border:1px solid #6b1f1f;border-radius:10px;padding:9px 12px;margin-top:10px;font:800 12px Montserrat,Arial;letter-spacing:.08em;color:#ffd7d7;text-transform:uppercase}
+            .lvd{flex:none;width:8px;height:8px;border-radius:50%;background:#ff3b3b;animation:lvp 1.2s infinite}
+        
+            .sb{width:100%;min-height:44px;margin-top:10px;background:none;border:1px solid var(--line);color:var(--gold);border-radius:10px;font:800 12px Montserrat,Arial;letter-spacing:.12em;cursor:pointer}
+            .sb:active{background:#1d1706}
         </style>
     </head>
     <body>
@@ -701,13 +712,13 @@
                 </div>
             </header>
             <div class="chips">
-                <div class="chip"> 
+                <div class="chip">
                     <b id="cM">0</b>
-                    <span>Completed</span>
+                    <span>Played</span>
                 </div>
                 <div class="chip">
                     <b id="cG">0</b>
-                    <span> Tournament Goals</span>
+                    <span>Goals</span>
                 </div>
                 <div class="chip">
                     <b id="cT">-</b>
@@ -719,6 +730,7 @@
                 <button data-t="s">TOP SCORERS</button>
                 <button data-t="t">GROUPS</button>
                 <button data-t="c">CARDS</button>
+                <button data-t="o">MOTM</button>
             </nav>
             <section id="m">
                 <div class="fl" id="fl">
@@ -733,6 +745,7 @@
             <section id="s" hidden></section>
             <section id="t" hidden></section>
             <section id="c" hidden></section>
+            <section id="o" hidden></section>
             <p class="ven">
                 <span class="ft2">Designed and developed by<br><a class="cr" href="https://www.facebook.com/share/1CPnE47qJ8/" target="_blank" rel="noopener">Rakib Uddin Mahim</a></span><br>
                 <a href="#" id="lgl">Admin login</a>
@@ -749,6 +762,18 @@
                         </label>
                         <label>
                             Team B<input name="tb">
+                        </label>
+                    </div>
+                    <div class="two">
+                        <label>
+                            Match status
+                            <select name="st">
+                                <option value="ft">FULL TIME</option>
+                                <option value="live">LIVE (in progress)</option>
+                            </select>
+                        </label>
+                        <label>
+                            Live minute<input name="lm" placeholder="34'" maxlength="8">
                         </label>
                     </div>
                     <div class="two">
@@ -783,6 +808,14 @@
                     </div>
                     <label>
                         Man of the match<input name="mo" placeholder="Player name">
+                    </label>
+                    <label>
+                        Man of the match – team
+                        <select name="mt">
+                            <option value="">-</option>
+                            <option value="a">Team A</option>
+                            <option value="b">Team B</option>
+                        </select>
                     </label>
                     <label id="pwl">
                         If drawn, penalty winner
@@ -985,19 +1018,52 @@
                   , TL = Object.entries(T).filter( ([,v]) => v.y || v.r).sort( (a, b) => b[1].r - a[1].r || b[1].y - a[1].y || a[0].localeCompare(b[0]));
                 $('c').innerHTML = L.length ? '<div class="stg">By team</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>🟨</th><th>🟥</th></tr>' + TL.map( ([t,v], i) => '<tr><td>' + (i + 1) + '</td><td>' + esc(t) + '</td><td>' + v.y + '</td><td>' + v.r + '</td></tr>').join('') + '</table></div><div class="stg">By player</div>' + L.map( (p, i) => '<div class="row"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b><small>' + esc(p.t) + '</small></div><div class="g" style="font-size:20px">🟨 ' + p.y + (p.r ? '  🟥 ' + p.r : '') + '</div></div>').join('') : '<div class="empty">No cards recorded yet.</div>'
             }
+            function renderMotm() {
+                const P = {}
+                  , T = {};
+                FX.forEach( (f, i) => {
+                    const n = i + 1;
+                    if (!done(n))
+                        return;
+                    const r = R[n];
+                    if (!r.mo)
+                        return;
+                    let s = r.mt;
+                    if (!s) {
+                        const has = a => (a || []).some(g => g[0].toLowerCase() == r.mo.toLowerCase());
+                        s = has(r.ga) || has(r.ya) || has(r.ra) ? 'a' : has(r.gb) || has(r.yb) || has(r.rb) ? 'b' : ''
+                    }
+                    const t = s ? nm(n, s) : ''
+                      , key = (t + '|' + r.mo).toLowerCase()
+                      , o = P[key] || (P[key] = {
+                        n: r.mo,
+                        t,
+                        c: 0
+                    });
+                    o.c++;
+                    if (t)
+                        T[t] = (T[t] || 0) + 1
+                }
+                );
+                const L = Object.values(P).sort( (a, b) => b.c - a.c || a.n.localeCompare(b.n))
+                  , TL = Object.entries(T).sort( (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+                $('o').innerHTML = L.length ? (TL.length ? '<div class="stg">By team</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>★</th></tr>' + TL.map( ([t,v], i) => '<tr><td>' + (i + 1) + '</td><td>' + esc(t) + '</td><td>' + v + '</td></tr>').join('') + '</table></div>' : '') + '<div class="stg">By player</div>' + L.map( (p, i) => '<div class="row"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (p.t ? '<small>' + esc(p.t) + '</small>' : '') + '</div><div class="g" style="font-size:20px">★ ' + p.c + '</div></div>').join('') : '<div class="empty">No man of the match recorded yet.</div>'
+            }
             function card(n, nx) {
                 const f = FX[n - 1]
                   , r = R[n]
                   , d = done(n)
+                  , lv = !!(r && r.live && !r.done)
+                  , sh = d || lv
                   , a = nm(n, 'a')
                   , b = nm(n, 'b')
                   , w = d ? win(n) : null;
-                return '<div class="m' + (d ? '' : ' up') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (d ? '<span class="' + (r.sa > r.sb ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (r.sb > r.sa ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (d ? '<div class="gl"><div>' + gl(r.ga) + '</div><div>' + gl(r.gb) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (r.sa > r.sb ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (r.sb > r.sa ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga) + '</div><div>' + gl(r.gb) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
             function render() {
                 let nx = 0;
                 for (let n = 1; n <= 23; n++)
-                    if (!done(n)) {
+                    if (!done(n) && !(R[n] && R[n].live)) {
                         nx = n;
                         break
                     }
@@ -1013,6 +1079,9 @@
                     out += card(i + 1, i + 1 == nx)
                 }
                 );
+                const LV = FX.map( (f, i) => i + 1).filter(n => R[n] && R[n].live && !R[n].done);
+                if (LV.length)
+                    out = LV.map(n => '<div class="lvb"><span class="lvd"></span>LIVE NOW · ' + esc(nm(n, 'a')) + ' ' + R[n].sa + ' – ' + R[n].sb + ' ' + esc(nm(n, 'b')) + '</div>').join('') + out;
                 $('ml').innerHTML = out;
                 const P = {};
                 let goals = 0
@@ -1049,6 +1118,7 @@
                 t += '<p class="note">Top 2 of each group go to the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
                 $('t').innerHTML = t;
                 renderCards();
+                renderMotm();
                 $('cM').textContent = played + '/23';
                 $('cG').textContent = goals;
                 $('cT').textContent = L.length ? L[0].n : '-';
@@ -1058,7 +1128,7 @@
                 if (!b)
                     return;
                 document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x == b));
-                ['m', 's', 't', 'c'].forEach(k => $(k).hidden = k != b.dataset.t);
+                ['m', 's', 't', 'c', 'o'].forEach(k => $(k).hidden = k != b.dataset.t);
                 scrollTo({
                     top: 0
                 })
@@ -1074,11 +1144,194 @@
             }
             ;
             $('ml').onclick = e => {
+                const sb = e.target.closest('.sb');
+                if (sb) {
+                    shareMatch(+sb.dataset.s);
+                    return
+                }
                 const b = e.target.closest('.eb');
                 if (b)
                     openEdit(+b.dataset.n)
             }
             ;
+            async function shareMatch(n) {
+                if (shareMatch.busy)
+                    return;
+                shareMatch.busy = true;
+                try {
+                    const f = FX[n - 1]
+                      , r = R[n] || {}
+                      , lv = !!(r.live && !r.done)
+                      , d = !!r.done
+                      , sh = d || lv
+                      , a = nm(n, 'a')
+                      , b = nm(n, 'b')
+                      , w = d ? win(n) : null;
+                    try {
+                        await Promise.all([document.fonts.load('120px Anton'), document.fonts.load('800 30px Montserrat')])
+                    } catch (_) {}
+                    const S = 1080
+                      , c = document.createElement('canvas');
+                    c.width = c.height = S;
+                    const x = c.getContext('2d')
+                      , AN = 'Anton, Impact, sans-serif'
+                      , MO = 'Montserrat, Arial, sans-serif'
+                      , GOLD = '#F5D77A'
+                      , GOLD2 = '#C9A227';
+                    const put = (t, px, y, size, col, al, sp, wt, fam, maxW) => {
+                        x.textAlign = al;
+                        x.textBaseline = 'alphabetic';
+                        x.fillStyle = col;
+                        let z = size;
+                        for (; ; ) {
+                            x.font = wt + ' ' + z + 'px ' + fam;
+                            if ('letterSpacing'in x)
+                                x.letterSpacing = sp + 'px';
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 14)
+                                break;
+                            z -= 2
+                        }
+                        x.fillText(t, px, y);
+                        return x.measureText(t).width
+                    }
+                    ;
+                    const rr = (px, py, w2, h2, rad) => {
+                        x.beginPath();
+                        x.moveTo(px + rad, py);
+                        x.arcTo(px + w2, py, px + w2, py + h2, rad);
+                        x.arcTo(px + w2, py + h2, px, py + h2, rad);
+                        x.arcTo(px, py + h2, px, py, rad);
+                        x.arcTo(px, py, px + w2, py, rad);
+                        x.closePath()
+                    }
+                    ;
+                    x.fillStyle = '#070707';
+                    x.fillRect(0, 0, S, S);
+                    const gr = x.createRadialGradient(S / 2, 480, 40, S / 2, 480, 640);
+                    gr.addColorStop(0, 'rgba(201,162,39,.30)');
+                    gr.addColorStop(1, 'rgba(201,162,39,0)');
+                    x.fillStyle = gr;
+                    x.fillRect(0, 0, S, S);
+                    x.strokeStyle = 'rgba(212,175,55,.55)';
+                    x.lineWidth = 3;
+                    x.strokeRect(24, 24, S - 48, S - 48);
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', S / 2, 96, 26, GOLD2, 'center', 5, 800, MO, 940);
+                    x.font = '400 112px ' + AN;
+                    if ('letterSpacing'in x)
+                        x.letterSpacing = '2px';
+                    const w1 = x.measureText('MATCH ').width
+                      , w2 = x.measureText('HUB').width
+                      , sx = (S - w1 - w2) / 2;
+                    put('MATCH ', sx, 196, 112, '#ffffff', 'left', 2, 400, AN);
+                    put('HUB', sx + w1, 196, 112, GOLD, 'left', 2, 400, AN);
+                    const tag = lv ? '● LIVE' + (r.lm ? ' ' + r.lm : '') : d ? 'FULL TIME' : 'UPCOMING';
+                    x.font = '800 28px ' + MO;
+                    if ('letterSpacing'in x)
+                        x.letterSpacing = '4px';
+                    const tw = x.measureText(tag).width + 64;
+                    rr((S - tw) / 2, 232, tw, 58, 29);
+                    if (lv) {
+                        x.fillStyle = '#d92b2b';
+                        x.fill();
+                        put(tag, S / 2, 270, 28, '#ffffff', 'center', 4, 800, MO)
+                    } else if (d) {
+                        x.fillStyle = GOLD;
+                        x.fill();
+                        put(tag, S / 2, 270, 28, '#1a1204', 'center', 4, 800, MO)
+                    } else {
+                        x.strokeStyle = GOLD2;
+                        x.lineWidth = 3;
+                        x.stroke();
+                        put(tag, S / 2, 270, 28, GOLD, 'center', 4, 800, MO)
+                    }
+                    put((ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase(), S / 2, 338, 26, '#9a927c', 'center', 4, 700, MO, 940);
+                    if (sh) {
+                        put(r.sa + ' – ' + r.sb, S / 2, 556, 220, '#ffffff', 'center', 6, 400, AN, 900)
+                    } else {
+                        put('VS', S / 2, 556, 200, GOLD2, 'center', 6, 400, AN)
+                    }
+                    put(a.toUpperCase(), 270, 650, 42, '#ffffff', 'center', 1, 800, MO, 440);
+                    put(b.toUpperCase(), 810, 650, 42, '#ffffff', 'center', 1, 800, MO, 440);
+                    let yy = 720;
+                    if (!sh) {
+                        put(f[3], S / 2, 730, 44, GOLD, 'center', 4, 800, MO);
+                        yy = 800
+                    } else if (d && r.sa == r.sb && w) {
+                        put('WON ON PENALTIES: ' + w.toUpperCase(), S / 2, 716, 28, GOLD, 'center', 3, 800, MO, 900);
+                        yy = 740
+                    }
+                    if (sh) {
+                        const ln = arr => {
+                            const o = (arr || []).map(g => '⚽ ' + g[0] + (g[1] > 1 ? ' ×' + g[1] : ''));
+                            return o.length > 3 ? o.slice(0, 2).concat('+' + (o.length - 2) + ' more') : o
+                        }
+                        ;
+                        [[ln(r.ga), 270], [ln(r.gb), 810]].forEach( ([L,px]) => L.forEach( (t, i) => put(t, px, yy + 50 + i * 42, 30, '#cfc8b2', 'center', 0, 700, MO, 470)));
+                    }
+                    if (sh && r.mo) {
+                        rr(150, 912, 780, 64, 14);
+                        x.fillStyle = '#1d1706';
+                        x.fill();
+                        x.strokeStyle = '#4a3a10';
+                        x.lineWidth = 2;
+                        x.stroke();
+                        put('★ MAN OF THE MATCH  ' + r.mo.toUpperCase(), S / 2, 954, 28, GOLD, 'center', 2, 800, MO, 740)
+                    }
+                    const bg = x.createLinearGradient(24, 0, S - 24, 0);
+                    bg.addColorStop(0, GOLD2);
+                    bg.addColorStop(1, GOLD);
+                    x.fillStyle = bg;
+                    x.fillRect(24, 996, S - 48, 60);
+                    put('FULL RESULTS · ' + location.host.toUpperCase(), S / 2, 1036, 28, '#1a1204', 'center', 3, 800, MO, 960);
+                    const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + '\nEX BRHSIAN Football Festival · Season 03 Match Hub'
+                      , url = location.origin + location.pathname
+                      , blob = await new Promise(res => c.toBlob(res, 'image/png'));
+                    if (!blob) {
+                        toast('Could not create the image', false);
+                        return
+                    }
+                    const file = new File([blob],'brhs-match-' + String(n).padStart(2, '0') + '.png',{
+                        type: 'image/png'
+                    });
+                    try {
+                        if (navigator.canShare && navigator.canShare({
+                            files: [file]
+                        })) {
+                            await navigator.share({
+                                files: [file],
+                                text: text + '\n' + url
+                            });
+                            return
+                        }
+                        if (navigator.share) {
+                            await navigator.share({
+                                text,
+                                url
+                            });
+                            return
+                        }
+                    } catch (e) {
+                        if (e && e.name === 'AbortError')
+                            return
+                    }
+                    const u = URL.createObjectURL(blob)
+                      , el = document.createElement('a');
+                    el.href = u;
+                    el.download = file.name;
+                    document.body.appendChild(el);
+                    el.click();
+                    el.remove();
+                    setTimeout( () => URL.revokeObjectURL(u), 4000);
+                    try {
+                        await navigator.clipboard.writeText(text + '\n' + url)
+                    } catch (_) {}
+                    toast('Image saved. Caption copied.', true)
+                } catch (e) {
+                    toast('Could not share this match', false)
+                } finally {
+                    shareMatch.busy = false
+                }
+            }
             function openEdit(n) {
                 if (!ADMIN)
                     return;
@@ -1090,8 +1343,8 @@
                 $('shs').innerHTML = '<span>' + ST[f[0]] + '</span><span>' + f[3] + '</span>';
                 F.ta.value = nm(n, 'a');
                 F.tb.value = nm(n, 'b');
-                F.sa.value = r.done ? r.sa : '';
-                F.sb.value = r.done ? r.sb : '';
+                F.sa.value = r.done || r.live ? r.sa : '';
+                F.sb.value = r.done || r.live ? r.sb : '';
                 F.ga.value = (r.ga || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
                 F.gb.value = (r.gb || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
                 const fm = a => (a || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
@@ -1100,9 +1353,12 @@
                 F.ra.value = fm(r.ra);
                 F.rb.value = fm(r.rb);
                 F.mo.value = r.mo || '';
+                F.mt.value = r.mt || '';
                 F.pw.value = r.pw || '';
                 $('pwl').hidden = f[0] == 'G';
-                $('clr').hidden = !r.done;
+                $('clr').hidden = !(r.done || r.live);
+                F.st.value = r.live && !r.done ? 'live' : 'ft';
+                F.lm.value = r.lm || '';
                 $('sh').hidden = false
             }
             const closeEdit = () => {
@@ -1125,7 +1381,9 @@
                 const F = e.target.elements
                   , n = cur
                   , r = {
-                    done: true,
+                    done: F.st.value !== 'live',
+                    live: F.st.value === 'live',
+                    lm: F.st.value === 'live' ? F.lm.value.trim() : '',
                     sa: +F.sa.value || 0,
                     sb: +F.sb.value || 0,
                     ga: parse(F.ga.value),
@@ -1135,6 +1393,7 @@
                     ra: parse(F.ra.value),
                     rb: parse(F.rb.value),
                     mo: F.mo.value.trim(),
+                    mt: F.mt.value,
                     pw: F.pw.value
                 };
                 const ta = F.ta.value.trim()
