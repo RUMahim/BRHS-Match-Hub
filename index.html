@@ -1476,7 +1476,7 @@
                 , 4500)
             }
             function hdr() {
-                $('adm').textContent = MODE === 'local' ? 'DEMO MODE · results save on this device only (add Firebase config to share live)' : ADMIN ? 'ADMIN MODE · tap a match to enter or edit its result' : '';
+                $('adm').textContent = MODE === 'local' ? 'DEMO MODE · results save on this device only (add Firebase config to share live)' : ADMIN ? 'ADMIN MODE' : '';
                 $('upd').textContent = U0 ? 'Last updated ' + new Date(U0).toLocaleString([], {
                     day: 'numeric',
                     month: 'short',
