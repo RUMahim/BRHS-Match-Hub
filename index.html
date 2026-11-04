@@ -567,6 +567,331 @@
                 border: 0
             }
 
+            .bf-bar {
+                margin: 8px 0 2px
+            }
+
+            .batch-select {
+                min-height: 42px;
+                border-radius: 12px;
+                background: #14110a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23C9A227' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center;
+                border: 1px solid #4a3a10;
+                color: var(--gold);
+                font: 700 13px Montserrat,Arial,sans-serif;
+                letter-spacing: .06em;
+                padding: 0 36px 0 14px;
+                cursor: pointer;
+                width: 100%;
+                -webkit-appearance: none;
+                appearance: none
+            }
+
+            .batch-select:focus {
+                border-color: var(--gold);
+                outline: none
+            }
+
+            .vt-bar {
+                display: flex;
+                gap: 8px;
+                background: #0e0c07;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 4px;
+                margin-top: 6px;
+                margin-bottom: 8px
+            }
+
+            .vt-btn {
+                flex: 1;
+                min-height: 38px;
+                border: none;
+                background: transparent;
+                color: var(--mut);
+                font: 800 12px Montserrat,Arial,sans-serif;
+                letter-spacing: .08em;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all .2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px
+            }
+
+            .vt-btn.on {
+                background: linear-gradient(180deg,var(--gold),var(--gold2) 60%,#8A6A12);
+                color: #1a1204;
+                box-shadow: 0 2px 8px rgba(201,162,39,.25)
+            }
+
+            .bk-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px 2px 20px
+            }
+
+            .bk-scroll-hint {
+                font-size: 11px;
+                color: var(--mut);
+                text-align: center;
+                margin-bottom: 12px;
+                letter-spacing: .06em
+            }
+
+            .bk-tree {
+                display: flex;
+                min-width: 820px;
+                align-items: stretch
+            }
+
+            .bk-col {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-width: 175px
+            }
+
+            .bk-col-champ {
+                min-width: 165px
+            }
+
+            .bk-col-hdr {
+                text-align: center;
+                font: 800 11px Montserrat,Arial,sans-serif;
+                letter-spacing: .12em;
+                color: var(--gold);
+                text-transform: uppercase;
+                padding: 6px 8px;
+                background: rgba(201,162,39,.08);
+                border: 1px solid rgba(201,162,39,.25);
+                border-radius: 8px;
+                margin-bottom: 14px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box
+            }
+
+            .bk-col-hdr-spacer {
+                height: 32px;
+                margin-bottom: 14px
+            }
+
+            .bk-col-body {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                gap: 16px;
+                min-height: 520px
+            }
+
+            .bk-pair {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                gap: 16px;
+                flex: 1
+            }
+
+            .bk-item-wrap {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1
+            }
+
+            .bk-conn-col {
+                width: 28px;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column
+            }
+
+            .bk-conn-body {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                min-height: 520px
+            }
+
+            .bk-conn-half {
+                flex: 1;
+                display: flex;
+                position: relative
+            }
+
+            .bk-svg {
+                width: 100%;
+                height: 100%;
+                display: block
+            }
+
+            .bk-card {
+                background: linear-gradient(160deg,#17130a,#0c0b07);
+                border: 1px solid #332812;
+                border-radius: 10px;
+                padding: 8px 10px;
+                position: relative;
+                cursor: pointer;
+                transition: border-color .2s, transform .15s
+            }
+
+            .bk-card:hover {
+                border-color: var(--gold);
+                transform: translateY(-1px)
+            }
+
+            .bk-card.lv {
+                border-color: #e0533c;
+                box-shadow: 0 0 10px rgba(224,83,60,.25)
+            }
+
+            .bk-card.done {
+                border-left: 3px solid var(--gold)
+            }
+
+            .bk-card-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 10px;
+                font-weight: 700;
+                color: var(--mut);
+                letter-spacing: .08em;
+                margin-bottom: 4px
+            }
+
+            .bk-badge {
+                color: var(--gold)
+            }
+
+            .bk-act {
+                color: var(--gold);
+                font-size: 12px;
+                margin-left: auto;
+                padding-left: 4px
+            }
+
+            .bk-team-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 4px 0;
+                border-bottom: 1px solid rgba(255,255,255,.05)
+            }
+
+            .bk-team-row:last-of-type {
+                border-bottom: none
+            }
+
+            .bk-team-name {
+                font: 700 12px Montserrat,Arial,sans-serif;
+                color: #d8d2be;
+                max-width: 125px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap
+            }
+
+            .bk-team-score {
+                font: 400 16px Anton,Impact,sans-serif;
+                color: var(--gold);
+                min-width: 18px;
+                text-align: right
+            }
+
+            .bk-team-row.bk-win .bk-team-name {
+                color: #fff;
+                font-weight: 800
+            }
+
+            .bk-team-row.bk-win .bk-team-score {
+                color: #fff
+            }
+
+            .bk-pen {
+                font-size: 9px;
+                color: var(--gold);
+                margin-top: 3px;
+                font-style: italic
+            }
+
+            .bk-edit-btn {
+                width: 100%;
+                margin-top: 6px;
+                padding: 4px;
+                font: 800 10px Montserrat,Arial;
+                background: #241a06;
+                border: 1px solid var(--gold2);
+                color: var(--gold);
+                border-radius: 6px;
+                cursor: pointer
+            }
+
+            .bk-edit-btn:hover {
+                background: var(--gold);
+                color: #1a1204
+            }
+
+            .bk-champ-card {
+                background: linear-gradient(145deg,#241a06,#120e05);
+                border: 1px solid var(--gold);
+                box-shadow: 0 0 20px rgba(201,162,39,.25);
+                border-radius: 12px;
+                padding: 16px 14px;
+                text-align: center;
+                position: relative;
+                overflow: hidden
+            }
+
+            .bk-champ-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg,transparent,var(--gold),transparent)
+            }
+
+            .bk-champ-card.pending {
+                border-color: #3a2e12;
+                box-shadow: none;
+                background: #0f0d08
+            }
+
+            .bk-champ-trophy {
+                font-size: 32px;
+                line-height: 1;
+                margin-bottom: 6px;
+                filter: drop-shadow(0 2px 6px rgba(201,162,39,.4))
+            }
+
+            .bk-champ-title {
+                font: 800 10px Montserrat,Arial;
+                letter-spacing: .16em;
+                color: var(--gold);
+                text-transform: uppercase
+            }
+
+            .bk-champ-name {
+                font: 800 16px Montserrat,Arial;
+                color: #fff;
+                margin: 6px 0 2px;
+                text-transform: uppercase;
+                line-height: 1.2
+            }
+
+            .bk-champ-sub {
+                font-size: 10px;
+                color: var(--mut);
+                letter-spacing: .08em
+            }
+
             .nx {
                 display: inline-block;
                 font-size: 9px;
@@ -779,7 +1104,7 @@
             <div class="chips">
                 <div class="chip">
                     <b id="cM">0</b>
-                    <span>Played</span>
+                    <span>Completed</span>
                 </div>
                 <div class="chip">
                     <b id="cG">0</b>
@@ -798,14 +1123,26 @@
                 <button data-t="o">MOTM</button>
             </nav>
             <section id="m">
-                <div class="fl" id="fl">
-                    <button data-f="all" class="on">ALL</button>
-                    <button data-f="G">GROUP</button>
-                    <button data-f="Q">QUARTER</button>
-                    <button data-f="S">SEMI</button>
-                    <button data-f="F">FINAL</button>
+                <div class="vt-bar" id="viewToggle">
+                    <button type="button" class="vt-btn on" data-v="list">📋 LIST VIEW</button>
+                    <button type="button" class="vt-btn" data-v="bracket">🏆 BRACKET</button>
+                </div>
+                <div id="listControls">
+                    <div class="fl" id="fl">
+                        <button data-f="all" class="on">ALL</button>
+                        <button data-f="G">GROUP</button>
+                        <button data-f="Q">QUARTER</button>
+                        <button data-f="S">SEMI</button>
+                        <button data-f="F">FINAL</button>
+                    </div>
+                    <div class="bf-bar">
+                        <select id="batchFlt" class="batch-select" aria-label="Filter by batch">
+                            <option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="ml"><div class="loading">LOADING MATCHES...</div></div>
+                <div id="bracketView" hidden></div>
             </section>
             <section id="s" hidden></section>
             <section id="t" hidden></section>
@@ -949,6 +1286,8 @@
                 4: ['09', '11', '13', '14']
             }
               , flt = 'all'
+              , batchFlt = 'all'
+              , schedView = 'list'
               , cur = 0;
             let U0 = 0
               , ADMIN = false
@@ -1126,6 +1465,109 @@
                   , w = d ? win(n) : null;
                 return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (r.sa > r.sb ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (r.sb > r.sa ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga) + '</div><div>' + gl(r.gb) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
+            function renderBkCard(n, stageLabel) {
+                const f = FX[n - 1]
+                  , r = R[n] || {}
+                  , d = done(n)
+                  , lv = !!(r.live && !r.done)
+                  , a = nm(n, 'a')
+                  , b = nm(n, 'b')
+                  , w = d ? win(n) : null;
+                const winA = d && w && w === a;
+                const winB = d && w && w === b;
+                const scA = (d || lv) ? r.sa : '-';
+                const scB = (d || lv) ? r.sb : '-';
+                const pen = (d && r.sa == r.sb && w) ? '<div class="bk-pen">Penalties: ' + esc(w) + '</div>' : '';
+                return '<div class="bk-card' + (lv ? ' lv' : '') + (d ? ' done' : '') + '" data-n="' + n + '">'
+                    + '<div class="bk-card-head">'
+                    + '<span class="bk-badge">' + stageLabel + ' · #' + String(n).padStart(2, '0') + '</span>'
+                    + '<span class="bk-time">' + f[3] + '</span>'
+                    + (lv ? '<span class="tag lvt">● LIVE</span>' : d ? '<span class="tag ft">FT</span>' : '')
+                    + '<span class="bk-act" title="Share Match">↗</span>'
+                    + '</div>'
+                    + '<div class="bk-team-row' + (winA ? ' bk-win' : '') + '">'
+                    + '<span class="bk-team-name">' + esc(a) + '</span>'
+                    + '<span class="bk-team-score">' + scA + '</span>'
+                    + '</div>'
+                    + '<div class="bk-team-row' + (winB ? ' bk-win' : '') + '">'
+                    + '<span class="bk-team-name">' + esc(b) + '</span>'
+                    + '<span class="bk-team-score">' + scB + '</span>'
+                    + '</div>'
+                    + pen
+                    + (ADMIN ? '<button class="bk-edit-btn" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '')
+                    + '</div>';
+            }
+
+            function renderBracket() {
+                const bv = $('bracketView');
+                if (!bv) return;
+                const ch = win(23);
+                const champHtml = ch
+                    ? '<div class="bk-champ-card">'
+                        + '<div class="bk-champ-trophy">🏆</div>'
+                        + '<div class="bk-champ-title">CHAMPIONS 2026</div>'
+                        + '<div class="bk-champ-name">' + esc(ch) + '</div>'
+                        + '<div class="bk-champ-sub">BRHS FESTIVAL S03</div>'
+                        + '</div>'
+                    : '<div class="bk-champ-card pending">'
+                        + '<div class="bk-champ-trophy" style="opacity:0.35">🏆</div>'
+                        + '<div class="bk-champ-title">CHAMPION</div>'
+                        + '<div class="bk-champ-name" style="color:#776b4a;font-size:13px">TO BE DECIDED</div>'
+                        + '<div class="bk-champ-sub">GRAND FINAL WINNER</div>'
+                        + '</div>';
+
+                bv.innerHTML = '<div class="bk-wrap">'
+                    + '<div class="bk-scroll-hint">⇄ Swipe horizontally to view full tournament bracket</div>'
+                    + '<div class="bk-tree">'
+                    + '<div class="bk-col">'
+                    + '<div class="bk-col-hdr">QUARTER FINALS</div>'
+                    + '<div class="bk-col-body">'
+                    + '<div class="bk-pair">' + renderBkCard(18, 'QF 2') + renderBkCard(20, 'QF 4') + '</div>'
+                    + '<div class="bk-pair">' + renderBkCard(17, 'QF 1') + renderBkCard(19, 'QF 3') + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-conn-col">'
+                    + '<div class="bk-col-hdr-spacer"></div>'
+                    + '<div class="bk-conn-body">'
+                    + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
+                    + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-col">'
+                    + '<div class="bk-col-hdr">SEMI FINALS</div>'
+                    + '<div class="bk-col-body">'
+                    + '<div class="bk-item-wrap">' + renderBkCard(21, 'SF 1') + '</div>'
+                    + '<div class="bk-item-wrap">' + renderBkCard(22, 'SF 2') + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-conn-col">'
+                    + '<div class="bk-col-hdr-spacer"></div>'
+                    + '<div class="bk-conn-body">'
+                    + '<svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-col">'
+                    + '<div class="bk-col-hdr">GRAND FINAL</div>'
+                    + '<div class="bk-col-body">'
+                    + '<div class="bk-item-wrap">' + renderBkCard(23, 'FINAL') + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-conn-col" style="width:24px">'
+                    + '<div class="bk-col-hdr-spacer"></div>'
+                    + '<div class="bk-conn-body">'
+                    + '<svg class="bk-svg" viewBox="0 0 24 100" preserveAspectRatio="none"><path d="M 0 50 H 18" fill="none" stroke="#C9A227" stroke-width="2" vector-effect="non-scaling-stroke"/><polygon points="18,46 24,50 18,54" fill="#C9A227"/></svg>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="bk-col bk-col-champ">'
+                    + '<div class="bk-col-hdr" style="background:rgba(201,162,39,.18);border-color:#C9A227;color:#fff">🏆 CHAMPION</div>'
+                    + '<div class="bk-col-body">'
+                    + '<div class="bk-item-wrap">' + champHtml + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>';
+            }
+
             function render() {
                 let nx = 0;
                 for (let n = 1; n <= FX.length; n++)
@@ -1135,20 +1577,47 @@
                     }
                 let out = ''
                   , last = '';
+                let matchCnt = 0;
                 FX.forEach( (f, i) => {
+                    const n = i + 1;
                     if (flt != 'all' && f[0] != flt)
                         return;
+                    if (batchFlt != 'all') {
+                        const a = nm(n, 'a').toLowerCase();
+                        const b = nm(n, 'b').toLowerCase();
+                        const target = batchFlt.toLowerCase();
+                        const inMatch = a.includes(target) || b.includes(target) || f[1] == batchFlt || f[2] == batchFlt;
+                        if (!inMatch) return;
+                    }
+                    matchCnt++;
                     if (f[0] != last) {
                         out += '<div class="stg">' + ST[f[0]] + '</div>';
                         last = f[0]
                     }
-                    out += card(i + 1, i + 1 == nx)
+                    out += card(n, n == nx)
                 }
                 );
-                const LV = FX.map( (f, i) => i + 1).filter(n => R[n] && R[n].live && !R[n].done);
+                if (matchCnt === 0) {
+                    out = '<div class="empty">No matches found for Batch ' + esc(batchFlt) + (flt != 'all' ? ' in ' + ST[flt] : '') + '.</div>';
+                }
+                const LV = FX.map( (f, i) => i + 1).filter(n => {
+                    if (!R[n] || !R[n].live || R[n].done) return false;
+                    if (batchFlt == 'all') return true;
+                    const a = nm(n, 'a').toLowerCase();
+                    const b = nm(n, 'b').toLowerCase();
+                    const target = batchFlt.toLowerCase();
+                    return a.includes(target) || b.includes(target) || FX[n - 1][1] == batchFlt || FX[n - 1][2] == batchFlt;
+                });
                 if (LV.length)
                     out = LV.map(n => '<div class="lvb"><span class="lvd"></span>LIVE NOW · ' + esc(nm(n, 'a')) + ' ' + R[n].sa + ' – ' + R[n].sb + ' ' + esc(nm(n, 'b')) + '</div>').join('') + out;
                 $('ml').innerHTML = out;
+                const sel = $('batchFlt');
+                if (sel && sel.options.length <= 1) {
+                    const curSel = sel.value || batchFlt;
+                    const allB = [...new Set(Object.values(G).flat())].sort((a,b) => a.localeCompare(b));
+                    sel.innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>' + allB.map(b => '<option value="' + esc(b) + '">Batch ' + esc(b) + '</option>').join('');
+                    sel.value = curSel;
+                }
                 const P = {};
                 let goals = 0
                   , played = 0;
@@ -1181,10 +1650,12 @@
                     t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td>BRHS ' + esc(x.t) + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
                 }
                 );
-                t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
+                t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>';
+                t += '<button class="sb" id="shareTableBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px">↗ SHARE POINTS TABLE (ছবি ডাউনলোড / শেয়ার)</button>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
                 $('t').innerHTML = t;
                 renderCards();
                 renderMotm();
+                if (schedView === 'bracket') renderBracket();
                 $('cM').textContent = played + '/' + FX.length;
                 $('cG').textContent = goals;
                 $('cT').textContent = L.length ? L[0].n : '-';
@@ -1209,6 +1680,11 @@
                 render()
             }
             ;
+            $('batchFlt').onchange = e => {
+                batchFlt = e.target.value;
+                render()
+            }
+            ;
             $('ml').onclick = e => {
                 const sb = e.target.closest('.sb');
                 if (sb) {
@@ -1218,6 +1694,46 @@
                 const b = e.target.closest('.eb');
                 if (b)
                     openEdit(+b.dataset.n)
+            }
+            ;
+            $('viewToggle').onclick = e => {
+                const b = e.target.closest('button');
+                if (!b) return;
+                schedView = b.dataset.v;
+                document.querySelectorAll('#viewToggle button').forEach(x => x.classList.toggle('on', x === b));
+                if (schedView === 'bracket') {
+                    $('listControls').hidden = true;
+                    $('ml').hidden = true;
+                    $('bracketView').hidden = false;
+                    renderBracket();
+                } else {
+                    $('listControls').hidden = false;
+                    $('ml').hidden = false;
+                    $('bracketView').hidden = true;
+                    render();
+                }
+            };
+            $('bracketView').onclick = e => {
+                const eb = e.target.closest('.bk-edit-btn');
+                if (eb) {
+                    openEdit(+eb.dataset.n);
+                    return;
+                }
+                const card = e.target.closest('.bk-card');
+                if (card) {
+                    const n = +card.dataset.n;
+                    if (ADMIN) {
+                        openEdit(n);
+                    } else {
+                        shareMatch(n);
+                    }
+                }
+            };
+            $('t').onclick = e => {
+                const sb = e.target.closest('#shareTableBtn');
+                if (sb) {
+                    shareTable();
+                }
             }
             ;
             async function shareMatch(n) {
@@ -1428,6 +1944,224 @@
                     if (sbtn) { sbtn.disabled = false; sbtn.textContent = '↗ SHARE' }
                 }
             }
+            async function shareTable() {
+                if (shareTable.busy) return;
+                shareTable.busy = true;
+                const btn = $('shareTableBtn');
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ GENERATING TABLE IMAGE...'; }
+                try {
+                    try {
+                        await Promise.all([document.fonts.load('120px Anton'), document.fonts.load('800 30px Montserrat')]);
+                    } catch (_) {}
+                    const S = 1080;
+                    const c = document.createElement('canvas');
+                    c.width = c.height = S;
+                    const x = c.getContext('2d');
+                    const AN = 'Anton, Impact, sans-serif';
+                    const MO = 'Montserrat, Arial, sans-serif';
+                    const GOLD = '#F5D77A';
+                    const GOLD2 = '#C9A227';
+
+                    const put = (t, px, y, size, col, al, sp, wt, fam, maxW) => {
+                        x.textAlign = al;
+                        x.textBaseline = 'alphabetic';
+                        x.fillStyle = col;
+                        let z = size;
+                        for (;;) {
+                            x.font = wt + ' ' + z + 'px ' + fam;
+                            if ('letterSpacing' in x) x.letterSpacing = sp + 'px';
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 11) break;
+                            z -= 1;
+                        }
+                        x.fillText(t, px, y);
+                        return x.measureText(t).width;
+                    };
+
+                    const rr = (px, py, w2, h2, rad) => {
+                        x.beginPath();
+                        x.moveTo(px + rad, py);
+                        x.arcTo(px + w2, py, px + w2, py + h2, rad);
+                        x.arcTo(px + w2, py + h2, px, py + h2, rad);
+                        x.arcTo(px, py + h2, px, py, rad);
+                        x.arcTo(px, py, px + w2, py, rad);
+                        x.closePath();
+                    };
+
+                    const mid = S / 2;
+
+                    // Dark Background
+                    x.fillStyle = '#070707';
+                    x.fillRect(0, 0, S, S);
+                    const gr = x.createRadialGradient(mid, 300, 40, mid, 300, 700);
+                    gr.addColorStop(0, 'rgba(201,162,39,.26)');
+                    gr.addColorStop(1, 'rgba(201,162,39,0)');
+                    x.fillStyle = gr;
+                    x.fillRect(0, 0, S, S);
+
+                    // Outer Borders & Gold Corners
+                    x.strokeStyle = 'rgba(212,175,55,.35)';
+                    x.lineWidth = 2;
+                    x.strokeRect(24, 24, S - 48, S - 48);
+                    x.strokeStyle = GOLD2;
+                    x.lineWidth = 8;
+                    [[24, 24, 1], [S - 24, 24, -1]].forEach(([cx, cy, dx]) => {
+                        x.beginPath();
+                        x.moveTo(cx + dx * 60, cy);
+                        x.lineTo(cx, cy);
+                        x.lineTo(cx, cy + 60);
+                        x.stroke();
+                    });
+
+                    // Tournament Title
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
+                    put('POINTS TABLE & STANDINGS', mid, 122, 38, '#ffffff', 'center', 2, 400, AN, 920);
+
+                    // 2x2 Grid of Groups
+                    const groups = Object.keys(G);
+                    const coords = [
+                        { x: 38, y: 155, w: 488, h: 375, g: groups[0] || '1' },
+                        { x: 554, y: 155, w: 488, h: 375, g: groups[1] || '2' },
+                        { x: 38, y: 555, w: 488, h: 375, g: groups[2] || '3' },
+                        { x: 554, y: 555, w: 488, h: 375, g: groups[3] || '4' }
+                    ];
+
+                    coords.forEach(box => {
+                        if (!box.g) return;
+                        const r = rank(box.g);
+                        const dn = gDone(box.g);
+
+                        // Group Box Background
+                        rr(box.x, box.y, box.w, box.h, 12);
+                        x.fillStyle = '#121009';
+                        x.fill();
+                        x.strokeStyle = dn ? '#38a169' : '#2f260d';
+                        x.lineWidth = 1.5;
+                        x.stroke();
+
+                        // Group Header
+                        rr(box.x, box.y, box.w, 42, 12);
+                        x.fillStyle = dn ? 'rgba(56,161,105,0.18)' : '#1a160c';
+                        x.fill();
+
+                        put('GROUP ' + box.g, box.x + 16, box.y + 28, 20, GOLD, 'left', 1, 400, AN);
+                        if (dn) {
+                            put('COMPLETE', box.x + box.w - 16, box.y + 27, 12, '#4ade80', 'right', 2, 800, MO);
+                        }
+
+                        // Table Columns Header
+                        const thY = box.y + 64;
+                        x.fillStyle = '#17130a';
+                        x.fillRect(box.x + 4, thY - 16, box.w - 8, 22);
+
+                        const colX = {
+                            rk: box.x + 14,
+                            tm: box.x + 36,
+                            p: box.x + 225,
+                            w: box.x + 265,
+                            d: box.x + 305,
+                            l: box.x + 345,
+                            gd: box.x + 400,
+                            pts: box.x + 455
+                        };
+
+                        put('#', colX.rk, thY, 11, '#9a927c', 'left', 1, 700, MO);
+                        put('TEAM', colX.tm, thY, 11, '#9a927c', 'left', 1, 700, MO);
+                        put('P', colX.p, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                        put('W', colX.w, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                        put('D', colX.d, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                        put('L', colX.l, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                        put('GD', colX.gd, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                        put('PTS', colX.pts, thY, 11, GOLD, 'center', 1, 800, MO);
+
+                        // Table Rows
+                        r.forEach((team, idx) => {
+                            const rowY = box.y + 104 + idx * 64;
+                            const isQ = dn && idx < 2;
+
+                            if (isQ) {
+                                rr(box.x + 6, rowY - 26, box.w - 12, 54, 8);
+                                x.fillStyle = 'rgba(56,161,105,0.12)';
+                                x.fill();
+                                x.strokeStyle = '#276749';
+                                x.lineWidth = 1;
+                                x.stroke();
+                            } else {
+                                x.strokeStyle = '#1f1a0e';
+                                x.lineWidth = 1;
+                                x.beginPath();
+                                x.moveTo(box.x + 12, rowY + 28);
+                                x.lineTo(box.x + box.w - 12, rowY + 28);
+                                x.stroke();
+                            }
+
+                            put(String(idx + 1), colX.rk, rowY + 6, 17, isQ ? '#4ade80' : GOLD2, 'left', 0, 400, AN);
+                            put('BRHS ' + team.t, colX.tm, rowY + 6, 15, isQ ? '#ffffff' : '#f3efe4', 'left', 0, 800, MO, 160);
+                            if (isQ) {
+                                rr(colX.tm + 88, rowY - 14, 24, 18, 4);
+                                x.fillStyle = '#14381d';
+                                x.fill();
+                                x.strokeStyle = '#4ade80';
+                                x.lineWidth = 1;
+                                x.stroke();
+                                put('Q', colX.tm + 100, rowY - 1, 11, '#4ade80', 'center', 0, 800, MO);
+                            }
+
+                            put(String(team.p), colX.p, rowY + 6, 15, '#cfc8b2', 'center', 0, 700, MO);
+                            put(String(team.w), colX.w, rowY + 6, 15, '#cfc8b2', 'center', 0, 700, MO);
+                            put(String(team.d), colX.d, rowY + 6, 15, '#cfc8b2', 'center', 0, 700, MO);
+                            put(String(team.l), colX.l, rowY + 6, 15, '#cfc8b2', 'center', 0, 700, MO);
+                            const gdStr = (team.gf - team.ga > 0 ? '+' : '') + (team.gf - team.ga);
+                            put(gdStr, colX.gd, rowY + 6, 15, '#cfc8b2', 'center', 0, 700, MO);
+                            put(String(team.pt), colX.pts, rowY + 6, 18, GOLD, 'center', 0, 800, MO);
+                        });
+                    });
+
+                    // Bottom Bar
+                    const bg = x.createLinearGradient(24, 0, S - 24, 0);
+                    bg.addColorStop(0, GOLD2);
+                    bg.addColorStop(1, GOLD);
+                    x.fillStyle = bg;
+                    x.fillRect(24, 996, S - 48, 60);
+                    put('FULL RESULTS & LIVE UPDATES · https://' + location.host.toLowerCase(), mid, 1036, 26, '#1a1204', 'center', 3, 800, MO, 960);
+
+                    // Share or Download
+                    const text = '🏆 EX BRHSIAN Football Festival – Season 03\nPoints Table & Standings\n' + location.origin + location.pathname;
+                    const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+                    if (!blob) {
+                        toast('Could not create table image', false);
+                        return;
+                    }
+                    const file = new File([blob], 'brhs-points-table.png', { type: 'image/png' });
+
+                    try {
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({ files: [file], text });
+                            return;
+                        }
+                        if (navigator.share) {
+                            await navigator.share({ text });
+                            return;
+                        }
+                    } catch (e) {
+                        if (e && e.name === 'AbortError') return;
+                    }
+
+                    const u = URL.createObjectURL(blob);
+                    const el = document.createElement('a');
+                    el.href = u;
+                    el.download = file.name;
+                    document.body.appendChild(el);
+                    el.click();
+                    el.remove();
+                    setTimeout(() => URL.revokeObjectURL(u), 4000);
+                    toast('Points Table image saved! 📸', true);
+                } catch (e) {
+                    toast('Could not share table', false);
+                } finally {
+                    shareTable.busy = false;
+                    if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE POINTS TABLE (ছবি ডাউনলোড / শেয়ার)'; }
+                }
+            }
             function openEdit(n) {
                 if (!ADMIN)
                     return;
@@ -1502,16 +2236,17 @@
                 R[n] = r;
                 render();
                 closeEdit();
-                persist(pv)
+                persistChange({ matchId: n, matchData: r }, pv)
             }
             ;
             $('clr').onclick = () => {
                 if (confirm('Clear the result of this match?')) {
                     const pv = snap();
-                    delete R[cur];
+                    const n = cur;
+                    delete R[n];
                     render();
                     closeEdit();
-                    persist(pv)
+                    persistChange({ matchId: n, matchData: null }, pv)
                 }
             }
             ;
@@ -1525,8 +2260,9 @@
                 );
                 const pv = snap();
                 G = g;
+                if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
                 render();
-                persist(pv)
+                persistChange({ groups: g }, pv)
             }
             ;
 
@@ -1555,33 +2291,54 @@
                 $('lgl').hidden = MODE === 'local';
                 $('lgl').textContent = ADMIN ? 'Admin logout' : 'Admin login'
             }
-            async function persist(prev) {
-                const st = {
-                    R,
-                    G
-                }
-                  , u = Date.now();
+            async function persistChange(change, prev) {
+                const u = Date.now();
                 if (MODE === 'local') {
                     try {
-                        localStorage.setItem('brhsHubLocal', JSON.stringify(st))
-                    } catch (e) { console.warn('Cache save failed:', e) }
+                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G }));
+                    } catch (e) { console.warn('Cache save failed:', e); }
                     U0 = u;
                     hdr();
-                    return
+                    return;
                 }
                 try {
-                    await F.setDoc(F.doc(DB, 'hub', 'season3'), {
-                        json: JSON.stringify(st),
-                        u
-                    })
+                    await F.runTransaction(DB, async (tx) => {
+                        const docRef = F.doc(DB, 'hub', 'season3');
+                        const docSnap = await tx.get(docRef);
+                        let remoteR = {};
+                        let remoteG = G;
+                        if (docSnap.exists()) {
+                            try {
+                                const parsed = JSON.parse(docSnap.data().json);
+                                if (parsed.R) remoteR = parsed.R;
+                                if (parsed.G) remoteG = parsed.G;
+                            } catch (_) {}
+                        }
+                        // Atomically merge the specific match or group changes
+                        if (change && change.matchId !== undefined) {
+                            if (change.matchData === null) {
+                                delete remoteR[change.matchId];
+                            } else {
+                                remoteR[change.matchId] = change.matchData;
+                            }
+                        }
+                        if (change && change.groups) {
+                            remoteG = change.groups;
+                        }
+                        tx.set(docRef, {
+                            json: JSON.stringify({ R: remoteR, G: remoteG }),
+                            u
+                        });
+                    });
                 } catch (e) {
+                    console.warn('Transaction failed, reverting:', e);
                     try {
                         const p = JSON.parse(prev);
                         R = p.R;
-                        G = p.G
+                        G = p.G;
                     } catch (_) {}
                     render();
-                    toast(e.code === 'permission-denied' ? 'Not allowed. Log in as admin.' : '✕ Not saved (' + (e.code || 'error') + '). Try again.', false)
+                    toast(e.code === 'permission-denied' ? 'Not allowed. Log in as admin.' : '✕ Not saved (' + (e.code || 'error') + '). Try again.', false);
                 }
             }
             async function initFb() {
@@ -1621,8 +2378,10 @@
                             try {
                                 const st = JSON.parse(s.data().json);
                                 R = st.R || {};
-                                if (st.G)
+                                if (st.G) {
                                     G = st.G;
+                                    if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
+                                }
                                 U0 = s.data().u || 0;
                                 try {
                                     localStorage.setItem('brhsHubCache', JSON.stringify({
