@@ -5,6 +5,13 @@
         <meta name="theme-color" content="#070707">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>EX BRHSIAN Football Festival – Season 03 Match Portal</title>
+        <link rel="manifest" href="manifest.json">
+        <link rel="icon" type="image/svg+xml" href="icon.svg">
+        <link rel="alternate icon" type="image/png" href="icon-192.png">
+        <link rel="apple-touch-icon" href="icon-192.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="BRHS Portal">
         <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -578,8 +585,36 @@
                 letter-spacing: .06em
             }
 
+            tr.q {
+                background: rgba(46, 125, 65, 0.08);
+            }
+
             tr.q td:first-child {
-                box-shadow: inset 3px 0 var(--gold2)
+                box-shadow: inset 3px 0 #4ade80;
+                color: #4ade80;
+                font-weight: 800;
+            }
+
+            .q-badge {
+                display: inline-block;
+                font-size: 9px;
+                line-height: 1.1;
+                letter-spacing: .06em;
+                font-weight: 800;
+                padding: 2px 5px;
+                border-radius: 4px;
+                margin-left: 6px;
+                vertical-align: middle;
+                background: #14381d;
+                color: #4ade80;
+                border: 1px solid #287a3e;
+            }
+
+            .q-badge.pot {
+                background: #162c1d;
+                color: #86efac;
+                border-color: #1f572e;
+                opacity: .88;
             }
 
             .ven {
@@ -721,6 +756,10 @@
             .loading{text-align:center;padding:40px 0;color:var(--gold2);font:800 13px Montserrat,Arial;letter-spacing:.12em}
             .loading::after{content:'';display:block;width:32px;height:32px;margin:14px auto 0;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
             @keyframes spin{to{transform:rotate(360deg)}}
+
+            .pwa-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1204;border:none;padding:6px 14px;border-radius:20px;font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:8px;box-shadow:0 2px 10px rgba(201,162,39,.3)}
+            .pwa-btn:active{transform:scale(.97)}
+            .pwa-btn[hidden]{display:none}
         </style>
     </head>
     <body>
@@ -734,6 +773,7 @@
                     <div class="sub">SEASON 03 · RESULTS</div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
+                    <button id="pwaBtn" class="pwa-btn" hidden>📲 INSTALL APP</button>
                 </div>
             </header>
             <div class="chips">
@@ -1138,10 +1178,10 @@
                 Object.keys(G).forEach(g => {
                     const r = rank(g)
                       , dn = gDone(g);
-                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td>BRHS ' + esc(x.t) + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
+                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td>BRHS ' + esc(x.t) + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
                 }
                 );
-                t += '<p class="note">Top 2 of each group go to the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
+                t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
                 $('t').innerHTML = t;
                 renderCards();
                 renderMotm();
@@ -1652,6 +1692,36 @@
             render();
             hdr();
             initFb();
+
+            /* ===== PWA & Offline Support ===== */
+            let defPrompt = null;
+            window.addEventListener('beforeinstallprompt', e => {
+                e.preventDefault();
+                defPrompt = e;
+                const b = $('pwaBtn');
+                if (b) b.hidden = false;
+            });
+            const pb = $('pwaBtn');
+            if (pb) {
+                pb.onclick = async () => {
+                    if (!defPrompt) return;
+                    defPrompt.prompt();
+                    const { outcome } = await defPrompt.userChoice;
+                    if (outcome === 'accepted') toast('✓ App installed to Home Screen!', true);
+                    defPrompt = null;
+                    pb.hidden = true;
+                };
+            }
+            window.addEventListener('appinstalled', () => {
+                const b = $('pwaBtn');
+                if (b) b.hidden = true;
+                toast('✓ App installed to Home Screen!', true);
+            });
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW error:', err));
+                });
+            }
         </script>
     </body>
 </html>
