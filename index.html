@@ -3273,7 +3273,203 @@
                     if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE TOP SCORERS (ছবি ডাউনলোড / শেয়ার)'; }
                 }
             }
-            function openEdit(n) {
+                        async function shareAssists() {
+                if (shareAssists.busy) return;
+                shareAssists.busy = true;
+                const btn = $('shareAssistsBtn');
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ GENERATING TOP ASSISTS IMAGE...'; }
+                try {
+                    const P = {};
+                    FX.forEach((f, i) => {
+                        const n = i + 1;
+                        if (!done(n)) return;
+                        const r = R[n];
+                        [['a', r.aa, r.ga], ['b', r.ab, r.gb]].forEach(([s, asst, g]) => {
+                            (asst || []).forEach(([p, c]) => {
+                                const t = nm(n, s);
+                                const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
+                                (P[k] || (P[k] = { n: p, t, g: 0, a: 0 })).a += c;
+                            });
+                            (g || []).forEach(([p, c]) => {
+                                const t = nm(n, s);
+                                const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
+                                (P[k] || (P[k] = { n: p, t, g: 0, a: 0 })).g += c;
+                            });
+                        });
+                    });
+                    const LA = Object.values(P).filter(p => p.a > 0).sort((a, b) => b.a - a.a || b.g - a.g || a.n.localeCompare(b.n));
+                    if (!LA.length) {
+                        toast('No assists recorded yet to share', false);
+                        return;
+                    }
+                    try {
+                        await Promise.all([document.fonts.load('120px Anton'), document.fonts.load('800 30px Montserrat')]);
+                    } catch (_) {}
+
+                    const S = 1080;
+                    const c = document.createElement('canvas');
+                    c.width = c.height = S;
+                    const x = c.getContext('2d');
+                    const AN = 'Anton, Impact, sans-serif';
+                    const MO = 'Montserrat, Arial, sans-serif';
+                    const LIME = '#a3e635';
+                    const LIME2 = '#65a30d';
+
+                    const put = (t, px, y, size, col, al, sp, wt, fam, maxW) => {
+                        x.textAlign = al;
+                        x.textBaseline = 'alphabetic';
+                        x.fillStyle = col;
+                        let z = size;
+                        for (;;) {
+                            x.font = wt + ' ' + z + 'px ' + fam;
+                            if ('letterSpacing' in x) x.letterSpacing = sp + 'px';
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 11) break;
+                            z -= 1;
+                        }
+                        x.fillText(t, px, y);
+                        return x.measureText(t).width;
+                    };
+
+                    const rr = (px, py, w2, h2, rad) => {
+                        x.beginPath();
+                        x.moveTo(px + rad, py);
+                        x.arcTo(px + w2, py, px + w2, py + h2, rad);
+                        x.arcTo(px + w2, py + h2, px, py + h2, rad);
+                        x.arcTo(px, py + h2, px, py, rad);
+                        x.arcTo(px, py, px + w2, py, rad);
+                        x.closePath();
+                    };
+
+                    const mid = S / 2;
+
+                    // Dark Stadium Background
+                    x.fillStyle = '#070707';
+                    x.fillRect(0, 0, S, S);
+                    const gr = x.createRadialGradient(mid, 260, 40, mid, 260, 680);
+                    gr.addColorStop(0, 'rgba(101,163,13,.26)');
+                    gr.addColorStop(1, 'rgba(101,163,13,0)');
+                    x.fillStyle = gr;
+                    x.fillRect(0, 0, S, S);
+
+                    // Outer Borders & Lime/Gold Accents
+                    x.strokeStyle = 'rgba(163,230,53,.35)';
+                    x.lineWidth = 2;
+                    x.strokeRect(24, 24, S - 48, S - 48);
+                    x.strokeStyle = 'rgba(163,230,53,.12)';
+                    x.strokeRect(32, 32, S - 64, S - 64);
+
+                    // Header
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 82, 16, LIME, 'center', 4, 800, MO);
+                    put('TOP PLAYMAKERS', mid, 154, 62, '#ffffff', 'center', 3, 400, AN);
+                    put('MOST ASSISTS LEADERBOARD', mid, 186, 15, '#9a927c', 'center', 3, 700, MO);
+
+                    // Hero Card: Rank #1 Top Playmaker
+                    const top1 = LA[0];
+                    const hY = 210, hH = 175;
+                    x.fillStyle = 'rgba(16,22,10,.92)';
+                    rr(48, hY, S - 96, hH, 20);
+                    x.fill();
+                    x.strokeStyle = LIME;
+                    x.lineWidth = 2;
+                    x.stroke();
+
+                    // Playmaker Badge
+                    x.fillStyle = LIME2;
+                    rr(72, hY + 22, 155, 28, 6);
+                    x.fill();
+                    put('★ TOP PLAYMAKER', 72 + 77, hY + 41, 11, '#ffffff', 'center', 2, 800, MO);
+
+                    put(top1.n.toUpperCase(), 72, hY + 98, 40, '#ffffff', 'left', 1, 800, MO, 560);
+                    put('BRHS ' + top1.t + (top1.g ? ' · ' + top1.g + (top1.g > 1 ? ' Goals' : ' Goal') : ''), 72, hY + 138, 20, '#9a927c', 'left', 1, 600, MO, 560);
+
+                    // Right Assist Pill
+                    const pillW = 200, pillH = 125;
+                    const pillX = S - 48 - 24 - pillW, pillY = hY + 25;
+                    x.fillStyle = 'rgba(0,0,0,.6)';
+                    rr(pillX, pillY, pillW, pillH, 16);
+                    x.fill();
+                    x.strokeStyle = 'rgba(163,230,53,.45)';
+                    x.lineWidth = 1.5;
+                    x.stroke();
+
+                    put(String(top1.a), pillX + pillW / 2, pillY + 86, 76, LIME, 'center', 2, 400, AN);
+                    put(top1.a > 1 ? 'ASSISTS' : 'ASSIST', pillX + pillW / 2, pillY + 112, 13, '#ffffff', 'center', 3, 800, MO);
+
+                    // Leaderboard list
+                    const rows = LA.slice(1, 8);
+                    const listY = 412;
+                    const rowH = 68;
+                    const maxA = top1.a || 1;
+
+                    rows.forEach((p, idx) => {
+                        const ry = listY + idx * (rowH + 10);
+                        x.fillStyle = 'rgba(18,16,9,.75)';
+                        rr(48, ry, S - 96, rowH, 12);
+                        x.fill();
+                        x.strokeStyle = 'rgba(255,255,255,.07)';
+                        x.lineWidth = 1;
+                        x.stroke();
+
+                        // Rank
+                        x.fillStyle = 'rgba(163,230,53,.15)';
+                        rr(60, ry + 14, 40, 40, 8);
+                        x.fill();
+                        put('#' + (idx + 2), 80, ry + 42, 17, LIME, 'center', 0, 800, MO);
+
+                        // Name & Team
+                        put(p.n.toUpperCase(), 116, ry + 32, 21, '#ffffff', 'left', 1, 800, MO, 440);
+                        put('BRHS ' + p.t + (p.g ? ' · ' + p.g + ' G' : ''), 116, ry + 54, 14, '#9a927c', 'left', 0.5, 600, MO, 440);
+
+                        // Visual Bar
+                        const barW = 200;
+                        const fillW = Math.max(12, Math.round((p.a / maxA) * barW));
+                        x.fillStyle = 'rgba(255,255,255,.08)';
+                        rr(S - 48 - 40 - barW - 60, ry + 27, barW, 14, 7);
+                        x.fill();
+                        x.fillStyle = LIME2;
+                        rr(S - 48 - 40 - barW - 60, ry + 27, fillW, 14, 7);
+                        x.fill();
+
+                        // Assist Count
+                        put(String(p.a), S - 48 - 36, ry + 45, 34, LIME, 'right', 1, 400, AN);
+                    });
+
+                    // Footer Branding
+                    const ftY = S - 52;
+                    x.fillStyle = 'rgba(255,255,255,.08)';
+                    x.fillRect(48, ftY - 26, S - 96, 1);
+                    put('LIVE MATCH PORTAL · brhs-match-hub.pages.dev', 52, ftY, 13, '#9a927c', 'left', 1.5, 700, MO);
+                    put('ORGANIZED BY EX BRHSIANS', S - 52, ftY, 13, LIME, 'right', 1.5, 800, MO);
+
+                    const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+                    const file = new File([blob], 'brhs-top-assists.png', { type: 'image/png' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Top Assists – BRHS Football Festival Season 03',
+                            text: 'Top Playmakers leaderboard of EX BRHSIAN Football Festival Season 03!'
+                        });
+                        toast('✓ Shared successfully!', true);
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = 'brhs-season03-top-assists.png';
+                        a.click();
+                        URL.revokeObjectURL(a.href);
+                        toast('✓ Top Assists poster downloaded!', true);
+                    }
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        toast('Could not generate assists poster', false);
+                    }
+                } finally {
+                    shareAssists.busy = false;
+                    const btn2 = $('shareAssistsBtn');
+                    if (btn2) { btn2.disabled = false; btn2.textContent = '↗ SHARE TOP ASSISTS (ছবি ডাউনলোড / শেয়ার)'; }
+                }
+            }
+function openEdit(n) {
                 if (!ADMIN)
                     return;
                 cur = n;
