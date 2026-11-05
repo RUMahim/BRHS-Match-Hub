@@ -1523,6 +1523,7 @@
                         <div id="adminQuickBar" style="display:none;padding:6px 10px;background:rgba(201,162,39,.12);border:1px solid rgba(201,162,39,.4);border-radius:8px;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">
                             <span style="font:800 11px Montserrat;color:var(--gold);display:flex;align-items:center;gap:4px">🛡️ ADMIN MODE</span>
                             <div style="display:flex;gap:4px;align-items:center">
+                                <button type="button" id="topNoticeBtn" style="background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">📢 Notice</button>
                                 <button type="button" id="topExportBackupBtn" style="background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">💾 Backup</button>
                                 <button type="button" id="topImportBackupBtn" style="background:#14110a;border:1px solid #4a3b1a;color:#d1c7b0;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">⬆ Restore</button>
                                 <button type="button" id="topLogoutBtn" style="background:transparent;border:1px solid rgba(224,83,60,.4);color:#fca5a5;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">Logout</button>
@@ -1533,6 +1534,16 @@
                     <button id="pwaBtn" class="pwa-btn" hidden>📲 INSTALL APP</button>
                 </div>
             </header>
+            <div id="anncBar" class="annc-bar" style="display:none;margin-bottom:14px;background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(161,98,7,.25));border:1px solid rgba(201,162,39,.55);border-radius:10px;padding:10px 14px;box-shadow:0 3px 12px rgba(0,0,0,.3)">
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                    <span style="font-size:18px;line-height:1.2">📢</span>
+                    <div style="flex:1">
+                        <div style="font:800 10px Montserrat;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px">IMPORTANT NOTICE (জরুরি ঘোষণা)</div>
+                        <div id="anncText" style="font-size:13px;color:#f3efe6;font-weight:600;line-height:1.45;word-break:break-word"></div>
+                    </div>
+                    <button type="button" id="anncCloseBtn" style="background:transparent;border:none;color:var(--mut);font-size:16px;cursor:pointer;padding:0 4px;line-height:1" title="Dismiss notice">✕</button>
+                </div>
+            </div>
             <div class="chips">
                 <div class="chip">
                     <b id="cM">0</b>
@@ -1711,6 +1722,23 @@
                 </form>
             </div>
         </div>
+        <div class="sh" id="anm" hidden>
+            <div class="sheet">
+                <div class="lgh">📢</div>
+                <h2 class="lgt">BROADCAST NOTICE</h2>
+                <p class="lgs">This message will appear instantly at the top of all visitors' screens.</p>
+                <form id="anf">
+                    <label>
+                        Notice Message
+                        <textarea name="msg" id="anncInput" rows="3" placeholder="e.g. Weather alert: Match 5 delayed by 15 mins due to rain." maxlength="250" style="width:100%;background:#14110a;border:1px solid var(--line);border-radius:8px;color:#fff;padding:10px;font:500 13px Inter,sans-serif;resize:vertical;margin-top:6px"></textarea>
+                    </label>
+                    <div style="font-size:11px;color:var(--mut);margin-bottom:12px;text-align:right"><span id="anncCharCount">0</span>/250 characters</div>
+                    <button class="btn" type="submit">POST NOTICE (সবাইকে দেখান)</button>
+                    <button class="btn g2" type="button" id="anmClearBtn">CLEAR NOTICE (নোটিশ মুছুন)</button>
+                    <button class="btn g2" type="button" id="anmCancelBtn">CANCEL</button>
+                </form>
+            </div>
+        </div>
         <div id="toast" role="status" aria-live="polite"></div>
         <script>
             /* ===== SETUP: paste your Firebase web config here (see README.md) ===== */
@@ -1739,7 +1767,8 @@
                 '"': '&quot;',
                 "'": '&#39;'
             }[c]));
-            let R = {}
+            let ANNC = ''
+              , R = {}
               , G = {
                 1: ['23', '24', '25', '26'],
                 2: ['15', '16', '17', '18'],
@@ -2659,7 +2688,8 @@
                         R: R,
                         G: G,
                         SQ: SQ || {},
-                        TB: TB || {}
+                        TB: TB || {},
+                        annc: ANNC || ''
                     };
                     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
                     const d = new Date();
@@ -2705,6 +2735,8 @@
                         G = data.G || G;
                         SQ = data.SQ || SQ;
                         TB = data.TB || TB;
+                        if (data.annc !== undefined) ANNC = data.annc;
+                        renderAnnc();
                         render();
                         await persistChange({ restoreAll: data }, pv);
                         toast('✓ Tournament backup restored successfully!', true);
@@ -3992,7 +4024,27 @@ function openEdit(n) {
                 }
                 , 4500)
             }
-            function hdr() {
+            
+            function renderAnnc() {
+                const b = $('anncBar');
+                const t = $('anncText');
+                if (!b || !t) return;
+                const text = (ANNC || '').trim();
+                if (!text) {
+                    b.style.display = 'none';
+                    return;
+                }
+                try {
+                    const dismissed = sessionStorage.getItem('brhsDismissedAnnc');
+                    if (dismissed === text) {
+                        b.style.display = 'none';
+                        return;
+                    }
+                } catch (_) {}
+                t.textContent = text;
+                b.style.display = 'block';
+            }
+function hdr() {
                 $('adm').textContent = MODE === 'local' ? 'DEMO MODE' : ADMIN ? 'ADMIN MODE' : '';
                 $('upd').textContent = U0 ? 'Last updated ' + new Date(U0).toLocaleString([], {
                     day: 'numeric',
@@ -4011,7 +4063,7 @@ function openEdit(n) {
                 const u = Date.now();
                 if (MODE === 'local') {
                     try {
-                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G, SQ, TB }));
+                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G, SQ, TB, annc: ANNC }));
                     } catch (e) { console.warn('Cache save failed:', e); }
                     U0 = u;
                     hdr();
@@ -4025,6 +4077,7 @@ function openEdit(n) {
                         let remoteG = G;
                         let remoteSQ = SQ || {};
                         let remoteTB = TB || {};
+                        let remoteANNC = ANNC || '';
                         if (docSnap.exists()) {
                             try {
                                 const parsed = JSON.parse(docSnap.data().json);
@@ -4032,6 +4085,7 @@ function openEdit(n) {
                                 if (parsed.G) remoteG = parsed.G;
                                 if (parsed.SQ) remoteSQ = parsed.SQ;
                                 if (parsed.TB) remoteTB = parsed.TB;
+                                if (parsed.annc !== undefined) remoteANNC = parsed.annc;
                             } catch (_) {}
                         }
                         // Atomically merge the specific match, group, squad, or tiebreaker changes
@@ -4055,6 +4109,9 @@ function openEdit(n) {
                                 remoteTB[change.g] = change.tiebreaker;
                             }
                         }
+                        if (change && change.annc !== undefined) {
+                            remoteANNC = change.annc;
+                        }
                         if (change && change.restoreAll) {
                             const backup = change.restoreAll;
                             if (backup.R) remoteR = backup.R;
@@ -4063,7 +4120,7 @@ function openEdit(n) {
                             if (backup.TB) remoteTB = backup.TB;
                         }
                         tx.set(docRef, {
-                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ, TB: remoteTB }),
+                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ, TB: remoteTB, annc: remoteANNC }),
                             u
                         });
                     });
@@ -4091,6 +4148,8 @@ function openEdit(n) {
                             G = s.G || G;
                             SQ = s.SQ || SQ || {};
                             TB = s.TB || TB || {};
+                            ANNC = s.annc || '';
+                            renderAnnc();
                         }
                     } catch (e) { console.warn('Cache save failed:', e) }
                     render();
@@ -4131,6 +4190,10 @@ function openEdit(n) {
                                 } else {
                                     TB = {};
                                 }
+                                if (st.annc !== undefined) {
+                                    ANNC = st.annc;
+                                }
+                                renderAnnc();
                                 U0 = s.data().u || 0;
                                 try {
                                     localStorage.setItem('brhsHubCache', JSON.stringify({
@@ -4197,7 +4260,49 @@ function openEdit(n) {
             if (tlb) tlb.onclick = () => { resetPwToggle(); $('lg').hidden = false; };
             const tlob = $('topLogoutBtn');
             if (tlob) tlob.onclick = () => { if (AU && AUTH) AU.signOut(AUTH); };
-            const teb = $('topExportBackupBtn');
+            
+            const tnb = $('topNoticeBtn');
+            if (tnb) tnb.onclick = () => {
+                if (!ADMIN) return;
+                $('anncInput').value = ANNC || '';
+                $('anncCharCount').textContent = ($('anncInput').value || '').length;
+                $('anm').hidden = false;
+            };
+            const acb = $('anncCloseBtn');
+            if (acb) acb.onclick = () => {
+                try { sessionStorage.setItem('brhsDismissedAnnc', (ANNC || '').trim()); } catch (_) {}
+                $('anncBar').style.display = 'none';
+            };
+            const ai = $('anncInput');
+            if (ai) ai.oninput = () => {
+                $('anncCharCount').textContent = ai.value.length;
+            };
+            const anmCx = $('anmCancelBtn');
+            if (anmCx) anmCx.onclick = () => { $('anm').hidden = true; };
+            $('anm').onclick = e => { if (e.target === $('anm')) $('anm').hidden = true; };
+            const anmClr = $('anmClearBtn');
+            if (anmClr) anmClr.onclick = async () => {
+                if (!ADMIN) return;
+                const pv = snap();
+                ANNC = '';
+                renderAnnc();
+                $('anm').hidden = true;
+                await persistChange({ annc: '' }, pv);
+                toast('Notice cleared', true);
+            };
+            $('anf').onsubmit = async (e) => {
+                e.preventDefault();
+                if (!ADMIN) return;
+                const msg = $('anncInput').value.trim();
+                const pv = snap();
+                ANNC = msg;
+                try { sessionStorage.removeItem('brhsDismissedAnnc'); } catch (_) {}
+                renderAnnc();
+                $('anm').hidden = true;
+                await persistChange({ annc: msg }, pv);
+                toast(msg ? '✓ Notice broadcasted to all screens!' : 'Notice cleared', true);
+            };
+const teb = $('topExportBackupBtn');
             if (teb) teb.onclick = () => exportBackup();
             const tib = $('topImportBackupBtn');
             if (tib) tib.onclick = () => {
