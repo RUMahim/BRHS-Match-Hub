@@ -1506,6 +1506,85 @@
             .pwa-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1204;border:none;padding:6px 14px;border-radius:20px;font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:8px;box-shadow:0 2px 10px rgba(201,162,39,.3)}
             .pwa-btn:active{transform:scale(.97)}
             .pwa-btn[hidden]{display:none}
+        
+            /* ===== Live Goal Alert Dropdown ===== */
+            .goal-alert {
+                position: fixed;
+                top: 14px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-140%);
+                z-index: 9999;
+                width: calc(100% - 24px);
+                max-width: 440px;
+                transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+                opacity: 0;
+                pointer-events: none;
+            }
+            .goal-alert.show {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .goal-alert-inner {
+                background: linear-gradient(135deg, rgba(20, 28, 10, 0.98), rgba(8, 14, 5, 0.99));
+                border: 2px solid #a3e635;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(163, 230, 53, 0.35);
+                border-radius: 16px;
+                padding: 12px 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                cursor: pointer;
+            }
+            .goal-ball {
+                font-size: 28px;
+                line-height: 1;
+                animation: goalBounce 0.55s infinite alternate ease-in-out;
+            }
+            @keyframes goalBounce {
+                from { transform: translateY(0) scale(1); }
+                to { transform: translateY(-4px) scale(1.15); }
+            }
+            .goal-info {
+                flex: 1;
+                min-width: 0;
+            }
+            .goal-title {
+                font: 800 11px Montserrat, Arial, sans-serif;
+                color: #a3e635;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .goal-team {
+                font: 800 15px Montserrat, Arial, sans-serif;
+                color: #ffffff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-top: 1px;
+            }
+            .goal-score {
+                font: 600 12px Inter, Arial, sans-serif;
+                color: #d1c7b0;
+                margin-top: 2px;
+            }
+            .goal-close {
+                background: transparent;
+                border: none;
+                color: var(--mut);
+                font-size: 16px;
+                cursor: pointer;
+                padding: 4px;
+                line-height: 1;
+            }
+            .goal-close:hover {
+                color: #fff;
+            }
         </style>
     </head>
     <body>
@@ -1737,6 +1816,18 @@
                     <button class="btn g2" type="button" id="anmClearBtn">CLEAR NOTICE (নোটিশ মুছুন)</button>
                     <button class="btn g2" type="button" id="anmCancelBtn">CANCEL</button>
                 </form>
+            </div>
+        </div>
+        
+        <div id="goalAlert" class="goal-alert" role="alert" aria-live="assertive">
+            <div class="goal-alert-inner" id="goalAlertBox">
+                <div class="goal-ball">⚽</div>
+                <div class="goal-info">
+                    <div class="goal-title">GOAL ALERT! <span id="goalAlertMin" style="color:#ffffff;background:rgba(163,230,53,.2);padding:1px 6px;border-radius:10px;font-size:10px"></span></div>
+                    <div class="goal-team" id="goalAlertTeam">BRHS SCORED!</div>
+                    <div class="goal-score" id="goalAlertScore">0 – 0</div>
+                </div>
+                <button type="button" class="goal-close" id="goalAlertClose" aria-label="Close alert">✕</button>
             </div>
         </div>
         <div id="toast" role="status" aria-live="polite"></div>
@@ -4025,7 +4116,91 @@ function openEdit(n) {
                 , 4500)
             }
             
-            function renderAnnc() {
+            
+            let prevMatchScores = null;
+            let isInitialSnapshot = true;
+
+            function playGoalSound() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.45);
+                } catch (_) {}
+                try {
+                    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                } catch (_) {}
+            }
+
+            let goalAlertTimer = null;
+            function showGoalAlert(teamScored, sa, sb, aName, bName, min, matchNum) {
+                const ga = $('goalAlert');
+                if (!ga) return;
+                $('goalAlertTeam').textContent = teamScored.toUpperCase() + ' SCORED!';
+                $('goalAlertScore').textContent = aName + '  ' + sa + ' – ' + sb + '  ' + bName;
+                const minEl = $('goalAlertMin');
+                if (minEl) {
+                    minEl.textContent = min ? min : 'LIVE';
+                    minEl.style.display = 'inline-block';
+                }
+                ga.classList.add('show');
+                playGoalSound();
+
+                clearTimeout(goalAlertTimer);
+                goalAlertTimer = setTimeout(() => {
+                    ga.classList.remove('show');
+                }, 5500);
+
+                $('goalAlertBox').onclick = (e) => {
+                    if (e.target.id === 'goalAlertClose') return;
+                    ga.classList.remove('show');
+                    switchTab('m');
+                    const cardEl = document.querySelector('.m:nth-child(' + matchNum + ')');
+                    if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                };
+            }
+
+            $('goalAlertClose').onclick = (e) => {
+                e.stopPropagation();
+                $('goalAlert').classList.remove('show');
+                clearTimeout(goalAlertTimer);
+            };
+
+            function checkScoreChanges(newR) {
+                if (isInitialSnapshot || !prevMatchScores) {
+                    prevMatchScores = {};
+                    for (let n = 1; n <= FX.length; n++) {
+                        const r = newR[n] || {};
+                        prevMatchScores[n] = { sa: +r.sa || 0, sb: +r.sb || 0, done: !!r.done };
+                    }
+                    isInitialSnapshot = false;
+                    return;
+                }
+                for (let n = 1; n <= FX.length; n++) {
+                    const r = newR[n] || {};
+                    const prev = prevMatchScores[n] || { sa: 0, sb: 0, done: false };
+                    const curSa = +r.sa || 0;
+                    const curSb = +r.sb || 0;
+                    const aName = nm(n, 'a');
+                    const bName = nm(n, 'b');
+
+                    if (curSa > prev.sa) {
+                        showGoalAlert(aName, curSa, curSb, aName, bName, r.lm, n);
+                    } else if (curSb > prev.sb) {
+                        showGoalAlert(bName, curSa, curSb, aName, bName, r.lm, n);
+                    }
+                    prevMatchScores[n] = { sa: curSa, sb: curSb, done: !!r.done };
+                }
+            }
+function renderAnnc() {
                 const b = $('anncBar');
                 const t = $('anncText');
                 if (!b || !t) return;
@@ -4206,6 +4381,7 @@ function hdr() {
                                 } catch (_) {}
                             } catch (e) { console.warn('Cache save failed:', e) }
                         }
+                        checkScoreChanges(R);
                         render();
                         hdr()
                     }
