@@ -2387,20 +2387,20 @@
                   , mxA = LA.length ? LA[0].a : 1;
 
                 let sHtml = '<div class="vt-bar" id="statsToggle" style="margin-bottom:14px">'
-                    + '<button type="button" class="vt-btn ' + (statsTab === 'goals' ? 'on' : '') + '" data-st="goals">⚽ GOALS (টপ গোলদাতা)</button>'
-                    + '<button type="button" class="vt-btn ' + (statsTab === 'assists' ? 'on' : '') + '" data-st="assists">🎯 ASSISTS (টপ অ্যাসিস্ট)</button>'
+                    + '<button type="button" class="vt-btn ' + (statsTab === 'goals' ? 'on' : '') + '" data-st="goals">⚽ TOP SCORERS</button>'
+                    + '<button type="button" class="vt-btn ' + (statsTab === 'assists' ? 'on' : '') + '" data-st="assists">🎯 TOP ASSISTS</button>'
                     + '</div>';
 
                 if (statsTab === 'goals') {
                     sHtml += L.length 
                         ? L.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag">GOLDEN BOOT</span>' : '') + '<small>' + esc(p.t) + (p.a ? ' · 🎯 ' + p.a + (p.a > 1 ? ' assists' : ' assist') : '') + '</small><div class="bar"><i style="width:' + Math.round(p.g / mx * 100) + '%"></i></div></div><div class="g">' + p.g + '</div></div>').join('') 
-                            + '<button class="sb" id="shareScorersBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px;width:100%">↗ SHARE TOP SCORERS (ছবি ডাউনলোড / শেয়ার)</button>'
+                            + '<button class="sb" id="shareScorersBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px;width:100%">↗ SHARE TOP SCORERS POSTER</button>'
                         : '<div class="empty">No goals recorded yet.</div>';
                 } else {
                     sHtml += LA.length 
                         ? LA.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '" style="' + (i == 0 ? 'border-color:rgba(132,204,22,.45);background:linear-gradient(165deg,rgba(20,28,10,.94),rgba(10,14,6,.98))' : '') + '"><div class="rk" style="' + (i == 0 ? 'color:#a3e635' : '') + '">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag" style="background:linear-gradient(180deg,#a3e635,#65a30d);color:#0a1a04">TOP PLAYMAKER</span>' : '') + '<small>' + esc(p.t) + (p.g ? ' · ⚽ ' + p.g + (p.g > 1 ? ' goals' : ' goal') : '') + '</small><div class="bar"><i style="width:' + Math.round(p.a / mxA * 100) + '%;background:linear-gradient(90deg,#a3e635,#65a30d)"></i></div></div><div class="g" style="color:#a3e635;border-color:rgba(132,204,22,.35)">' + p.a + '</div></div>').join('') 
-                            + '<button class="sb" id="shareAssistsBtn" style="margin-top:14px;background:#10160a;border:1px solid #65a30d;color:#a3e635;padding:12px;font-size:13px;width:100%">↗ SHARE TOP ASSISTS (ছবি ডাউনলোড / শেয়ার)</button>'
-                        : '<div class="empty">No assists recorded yet. (ম্যাচ রেজাল্ট এডিটে অ্যাসিস্ট যুক্ত করতে পারেন)</div>';
+                            + '<button class="sb" id="shareAssistsBtn" style="margin-top:14px;background:#10160a;border:1px solid #65a30d;color:#a3e635;padding:12px;font-size:13px;width:100%">↗ SHARE TOP ASSISTS POSTER</button>'
+                        : '<div class="empty">No assists recorded yet.</div>';
                 }
                 $('s').innerHTML = sHtml;
                 let t = '';
@@ -3298,7 +3298,7 @@
                     toast('Could not share top scorers', false);
                 } finally {
                     shareScorers.busy = false;
-                    if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE TOP SCORERS (ছবি ডাউনলোড / শেয়ার)'; }
+                    if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE TOP SCORERS POSTER'; }
                 }
             }
                         async function shareAssists() {
@@ -3494,7 +3494,7 @@
                 } finally {
                     shareAssists.busy = false;
                     const btn2 = $('shareAssistsBtn');
-                    if (btn2) { btn2.disabled = false; btn2.textContent = '↗ SHARE TOP ASSISTS (ছবি ডাউনলোড / শেয়ার)'; }
+                    if (btn2) { btn2.disabled = false; btn2.textContent = '↗ SHARE TOP ASSISTS POSTER'; }
                 }
             }
 function openEdit(n) {
