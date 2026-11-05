@@ -1027,6 +1027,200 @@
                 margin: 4px 0 18px
             }
 
+            .pw-wrap {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%
+            }
+
+            .pw-wrap input {
+                padding-right: 44px;
+                width: 100%
+            }
+
+            .pw-toggle {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: transparent;
+                border: none;
+                color: var(--mut);
+                cursor: pointer;
+                padding: 8px 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                transition: color .2s ease
+            }
+
+            .pw-toggle:hover {
+                color: var(--gold)
+            }
+
+            .pw-toggle:focus-visible {
+                outline: 2px solid var(--gold);
+                outline-offset: 1px
+            }
+
+            .pw-icon {
+                width: 20px;
+                height: 20px
+            }
+
+            .sq-card {
+                background: linear-gradient(160deg,#17130a,#0c0b07);
+                border: 1px solid var(--line);
+                border-radius: 14px;
+                padding: 14px;
+                margin-top: 12px;
+                position: relative;
+                overflow: hidden
+            }
+
+            .sq-card::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 3px;
+                background: linear-gradient(var(--gold),var(--gold2))
+            }
+
+            .sq-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px
+            }
+
+            .sq-batch-title {
+                font: 400 24px Anton,Impact,sans-serif;
+                color: var(--gold);
+                letter-spacing: .04em;
+                margin: 0;
+                line-height: 1.1
+            }
+
+            .sq-grp-badge {
+                display: inline-block;
+                font-size: 10px;
+                letter-spacing: .12em;
+                color: var(--mut);
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-top: 2px
+            }
+
+            .sq-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+                margin-top: 10px;
+                background: #090805;
+                padding: 8px 6px;
+                border-radius: 8px;
+                border: 1px solid rgba(255,255,255,.05);
+                text-align: center
+            }
+
+            .sq-stat-item b {
+                display: block;
+                font: 400 18px Anton,Impact,sans-serif;
+                color: #fff
+            }
+
+            .sq-stat-item span {
+                font-size: 9px;
+                color: var(--mut);
+                font-weight: 700;
+                letter-spacing: .08em;
+                text-transform: uppercase
+            }
+
+            .sq-player-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 9px 12px;
+                background: var(--card);
+                border: 1px solid rgba(255,255,255,.04);
+                border-radius: 8px;
+                margin-top: 6px
+            }
+
+            .sq-player-info {
+                display: flex;
+                align-items: center;
+                gap: 10px
+            }
+
+            .sq-player-num {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: #241a06;
+                color: var(--gold);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font: 800 11px Montserrat,Arial;
+                flex-shrink: 0
+            }
+
+            .sq-player-name {
+                font: 700 13px Montserrat,Arial;
+                color: #fff;
+                text-transform: uppercase
+            }
+
+            .sq-player-badges {
+                display: flex;
+                gap: 6px;
+                align-items: center
+            }
+
+            .sq-badge {
+                font-size: 11px;
+                font-weight: 800;
+                padding: 2px 6px;
+                border-radius: 4px;
+                background: #1c1608;
+                border: 1px solid #453410;
+                color: var(--gold)
+            }
+
+            .sq-link {
+                color: var(--gold);
+                text-decoration: underline;
+                cursor: pointer
+            }
+
+            .sq-link:hover {
+                color: #fff
+            }
+
+            textarea {
+                background: #0b0a06;
+                border: 1px solid #3a2f12;
+                color: #fff;
+                border-radius: 8px;
+                padding: 10px;
+                font: 600 13px Montserrat,Arial;
+                min-height: 120px;
+                width: 100%;
+                box-sizing: border-box;
+                resize: vertical
+            }
+
+            textarea:focus {
+                border-color: var(--gold);
+                outline: none
+            }
+
             #toast {
                 position: fixed;
                 left: 50%;
@@ -1121,6 +1315,7 @@
                 <button data-t="t">POINTS TABLE</button>
                 <button data-t="c">CARDS</button>
                 <button data-t="o">MOTM</button>
+                <button data-t="q">SQUADS</button>
             </nav>
             <section id="m">
                 <div class="vt-bar" id="viewToggle">
@@ -1148,6 +1343,7 @@
             <section id="t" hidden></section>
             <section id="c" hidden></section>
             <section id="o" hidden></section>
+            <section id="q" hidden></section>
             <p class="ven">
                 <span class="ft2">Designed and developed by<br><a class="cr" href="https://www.facebook.com/share/1CPnE47qJ8/" target="_blank" rel="noopener">Rakib Uddin Mahim</a></span><br>
                 <a href="#" id="lgl">Admin login</a>
@@ -1243,7 +1439,20 @@
                         Email<input name="e" type="email" autocomplete="username" required>
                     </label>
                     <label>
-                        Password<input name="p" type="password" autocomplete="current-password" required>
+                        Password
+                        <div class="pw-wrap">
+                            <input name="p" id="lfp" type="password" autocomplete="current-password" required>
+                            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Toggle password visibility">
+                                <svg class="pw-icon eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="pw-icon eye-off" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
                     </label>
                     <button class="btn" type="submit">LOGIN</button>
                     <button class="btn g2" type="button" id="lcx">CANCEL</button>
@@ -1568,6 +1777,177 @@
                     + '</div>';
             }
 
+            /* === Squad Data: auto-discovered from match results + admin editable === */
+            let SQ = {}; // { '09': ['Player A', 'Player B', ...], ... }
+            try { SQ = JSON.parse(localStorage.getItem('brhsSquads') || '{}') } catch (_) {}
+
+            function getSquadPlayers(batch) {
+                // Auto-discover players that appeared in goals, cards, MOTM for this batch
+                const players = {};
+                FX.forEach((f, i) => {
+                    const n = i + 1;
+                    if (!done(n)) return;
+                    const r = R[n];
+                    ['a', 'b'].forEach(s => {
+                        const t = nm(n, s);
+                        if (!t.includes(batch)) return;
+                        // Goals
+                        const ga = s === 'a' ? r.ga : r.gb;
+                        (ga || []).forEach(g => { players[g[0].trim()] = true });
+                        // Yellow cards
+                        const ya = s === 'a' ? r.ya : r.yb;
+                        (ya || []).forEach(g => { players[g[0].trim()] = true });
+                        // Red cards
+                        const ra = s === 'a' ? r.ra : r.rb;
+                        (ra || []).forEach(g => { players[g[0].trim()] = true });
+                        // MOTM
+                        if (r.mo && r.mt === s) players[r.mo.trim()] = true;
+                        else if (r.mo && !r.mt) {
+                            const has = a2 => (a2 || []).some(g => g[0].toLowerCase() === r.mo.toLowerCase());
+                            const inThis = has(ga) || has(ya) || has(ra);
+                            if (inThis) players[r.mo.trim()] = true;
+                        }
+                    });
+                });
+                return Object.keys(players).sort((a, b) => a.localeCompare(b));
+            }
+
+            function getBatchStats(batch) {
+                let played = 0, wins = 0, draws = 0, losses = 0, gf = 0, ga2 = 0, goals = 0, yellows = 0, reds = 0, motm = 0;
+                FX.forEach((f, i) => {
+                    const n = i + 1;
+                    if (f[0] !== 'G' || !done(n)) return;
+                    const r = R[n];
+                    ['a', 'b'].forEach(s => {
+                        const t = nm(n, s);
+                        if (!t.includes(batch)) return;
+                        const opp = s === 'a' ? 'b' : 'a';
+                        played++;
+                        const sf = s === 'a' ? r.sa : r.sb;
+                        const so = s === 'a' ? r.sb : r.sa;
+                        gf += sf;
+                        ga2 += so;
+                        if (sf > so) wins++;
+                        else if (sf === so) draws++;
+                        else losses++;
+                        const g = s === 'a' ? r.ga : r.gb;
+                        (g || []).forEach(x => goals += x[1]);
+                        const y = s === 'a' ? r.ya : r.yb;
+                        (y || []).forEach(x => yellows += x[1]);
+                        const rd = s === 'a' ? r.ra : r.rb;
+                        (rd || []).forEach(x => reds += x[1]);
+                        if (r.mo && r.mt === s) motm++;
+                    });
+                });
+                return { played, wins, draws, losses, gf, ga: ga2, goals, yellows, reds, motm };
+            }
+
+            function getPlayerBadges(batch, playerName) {
+                let goals = 0, yellows = 0, reds = 0, motm = 0;
+                const pn = playerName.toLowerCase();
+                FX.forEach((f, i) => {
+                    const n = i + 1;
+                    if (!done(n)) return;
+                    const r = R[n];
+                    ['a', 'b'].forEach(s => {
+                        const t = nm(n, s);
+                        if (!t.includes(batch)) return;
+                        const g = s === 'a' ? r.ga : r.gb;
+                        (g || []).forEach(x => { if (x[0].toLowerCase() === pn) goals += x[1] });
+                        const y = s === 'a' ? r.ya : r.yb;
+                        (y || []).forEach(x => { if (x[0].toLowerCase() === pn) yellows += x[1] });
+                        const rd = s === 'a' ? r.ra : r.rb;
+                        (rd || []).forEach(x => { if (x[0].toLowerCase() === pn) reds += x[1] });
+                        if (r.mo && r.mo.toLowerCase() === pn) {
+                            if (r.mt === s) motm++;
+                            else if (!r.mt) {
+                                const has = a2 => (a2 || []).some(x => x[0].toLowerCase() === pn);
+                                if (has(g) || has(y) || has(rd)) motm++;
+                            }
+                        }
+                    });
+                });
+                return { goals, yellows, reds, motm };
+            }
+
+            function renderSquads() {
+                const allBatches = [...new Set(Object.values(G).flat())].sort((a, b) => a.localeCompare(b));
+                // Build group lookup
+                const batchGroup = {};
+                Object.entries(G).forEach(([g, batches]) => {
+                    batches.forEach(b => { batchGroup[b] = g });
+                });
+
+                let html = '<div class="stg">BATCH SQUADS</div>'
+                    + '<p class="note" style="margin-bottom:14px">Player lists are automatically built from match data (goal scorers, card recipients, MOTM).' + (ADMIN ? ' You can also manually add players below each squad.' : '') + '</p>';
+
+                allBatches.forEach(batch => {
+                    const auto = getSquadPlayers(batch);
+                    const manual = (SQ[batch] || []).filter(p => !auto.map(a => a.toLowerCase()).includes(p.toLowerCase()));
+                    const allPlayers = [...auto, ...manual];
+                    const stats = getBatchStats(batch);
+                    const grp = batchGroup[batch] || '?';
+
+                    html += '<div class="sq-card">'
+                        + '<div class="sq-top">'
+                        + '<div>'
+                        + '<div class="sq-batch-title">BRHS ' + esc(batch) + '</div>'
+                        + '<div class="sq-grp-badge">Group ' + esc(grp) + '</div>'
+                        + '</div>'
+                        + '<div style="text-align:right">'
+                        + '<div style="font:400 22px Anton,Impact,sans-serif;color:var(--gold)">' + allPlayers.length + '</div>'
+                        + '<div class="sq-grp-badge">Players</div>'
+                        + '</div>'
+                        + '</div>';
+
+                    if (stats.played > 0) {
+                        html += '<div class="sq-stats-grid">'
+                            + '<div class="sq-stat-item"><b>' + stats.played + '</b><span>P</span></div>'
+                            + '<div class="sq-stat-item"><b>' + stats.wins + '</b><span>W</span></div>'
+                            + '<div class="sq-stat-item"><b>' + stats.draws + '</b><span>D</span></div>'
+                            + '<div class="sq-stat-item"><b>' + stats.losses + '</b><span>L</span></div>'
+                            + '</div>'
+                            + '<div class="sq-stats-grid" style="grid-template-columns:repeat(3,1fr);margin-top:4px">'
+                            + '<div class="sq-stat-item"><b>' + stats.goals + '</b><span>⚽ Goals</span></div>'
+                            + '<div class="sq-stat-item"><b>' + stats.yellows + '</b><span>🟨 Cards</span></div>'
+                            + '<div class="sq-stat-item"><b>' + stats.motm + '</b><span>★ MOTM</span></div>'
+                            + '</div>';
+                    }
+
+                    if (allPlayers.length === 0) {
+                        html += '<div class="empty" style="padding:16px 0">No players recorded yet. Player names will appear here as matches are played.</div>';
+                    } else {
+                        allPlayers.forEach((p, idx) => {
+                            const badges = getPlayerBadges(batch, p);
+                            let bHtml = '';
+                            if (badges.goals) bHtml += '<span class="sq-badge">⚽ ' + badges.goals + '</span>';
+                            if (badges.yellows) bHtml += '<span class="sq-badge">🟨 ' + badges.yellows + '</span>';
+                            if (badges.reds) bHtml += '<span class="sq-badge" style="border-color:#6b1f1f;background:#2a0d0d;color:#ffd7d7">🟥 ' + badges.reds + '</span>';
+                            if (badges.motm) bHtml += '<span class="sq-badge" style="border-color:#5a4716">★ ' + badges.motm + '</span>';
+
+                            html += '<div class="sq-player-row">'
+                                + '<div class="sq-player-info">'
+                                + '<div class="sq-player-num">' + (idx + 1) + '</div>'
+                                + '<div class="sq-player-name">' + esc(p) + '</div>'
+                                + '</div>'
+                                + '<div class="sq-player-badges">' + bHtml + '</div>'
+                                + '</div>';
+                        });
+                    }
+
+                    if (ADMIN) {
+                        html += '<div style="margin-top:10px">'
+                            + '<textarea class="sq-edit-area" data-batch="' + esc(batch) + '" placeholder="Add player names (comma separated)&#10;e.g. Mahim, Sakib, Rafiq">' + (SQ[batch] || []).join(', ') + '</textarea>'
+                            + '<button class="btn sq-save-btn" data-batch="' + esc(batch) + '" style="margin-top:6px;min-height:36px;font-size:11px">SAVE SQUAD · BRHS ' + esc(batch) + '</button>'
+                            + '</div>';
+                    }
+
+                    html += '</div>';
+                });
+
+                $('q').innerHTML = html;
+            }
+
             function render() {
                 let nx = 0;
                 for (let n = 1; n <= FX.length; n++)
@@ -1655,6 +2035,7 @@
                 $('t').innerHTML = t;
                 renderCards();
                 renderMotm();
+                renderSquads();
                 if (schedView === 'bracket') renderBracket();
                 $('cM').textContent = played + '/' + FX.length;
                 $('cG').textContent = goals;
@@ -1665,7 +2046,7 @@
                 if (!b)
                     return;
                 document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x == b));
-                ['m', 's', 't', 'c', 'o'].forEach(k => $(k).hidden = k != b.dataset.t);
+                ['m', 's', 't', 'c', 'o', 'q'].forEach(k => $(k).hidden = k != b.dataset.t);
                 scrollTo({
                     top: 0
                 })
@@ -1734,6 +2115,19 @@
                 if (sb) {
                     shareTable();
                 }
+            }
+            ;
+            $('q').onclick = e => {
+                const btn = e.target.closest('.sq-save-btn');
+                if (!btn || !ADMIN) return;
+                const batch = btn.dataset.batch;
+                const area = document.querySelector('.sq-edit-area[data-batch="' + batch + '"]');
+                if (!area) return;
+                const names = area.value.split(',').map(x => x.trim()).filter(Boolean);
+                SQ[batch] = names;
+                try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)) } catch (_) {}
+                renderSquads();
+                toast('Squad saved for BRHS ' + batch, true);
             }
             ;
             async function shareMatch(n) {
@@ -2411,15 +2805,40 @@
                     toast('Live results are unavailable. Check your connection.', false)
                 }
             }
+            const resetPwToggle = () => {
+                const inp = $('lfp');
+                if (inp) inp.type = 'password';
+                const eye = $('pwToggle') && $('pwToggle').querySelector('.eye');
+                const eyeOff = $('pwToggle') && $('pwToggle').querySelector('.eye-off');
+                if (eye) eye.style.display = 'block';
+                if (eyeOff) eyeOff.style.display = 'none';
+            };
+            if ($('pwToggle')) {
+                $('pwToggle').onclick = () => {
+                    const inp = $('lfp');
+                    if (!inp) return;
+                    const isPw = inp.type === 'password';
+                    inp.type = isPw ? 'text' : 'password';
+                    const eye = $('pwToggle').querySelector('.eye');
+                    const eyeOff = $('pwToggle').querySelector('.eye-off');
+                    if (eye && eyeOff) {
+                        eye.style.display = isPw ? 'none' : 'block';
+                        eyeOff.style.display = isPw ? 'block' : 'none';
+                    }
+                };
+            }
             $('lgl').onclick = e => {
                 e.preventDefault();
                 if (ADMIN && AUTH)
                     AU.signOut(AUTH);
-                else
+                else {
+                    resetPwToggle();
                     $('lg').hidden = false
+                }
             }
             ;
             $('lcx').onclick = () => {
+                resetPwToggle();
                 $('lg').hidden = true
             }
             ;
@@ -2432,6 +2851,7 @@
                 const f = e.target.elements;
                 try {
                     await AU.signInWithEmailAndPassword(AUTH, f.e.value.trim(), f.p.value);
+                    resetPwToggle();
                     $('lg').hidden = true;
                     e.target.reset();
                     toast('✓ Logged in as admin', true)
