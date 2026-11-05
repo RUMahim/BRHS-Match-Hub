@@ -635,8 +635,8 @@
                 justify-content: center
             }
 
-            .sh[hidden] {
-                display: none
+            [hidden], .sh[hidden] {
+                display: none !important
             }
 
             .sheet {
@@ -1650,14 +1650,20 @@
                             <option value="b">Team B</option>
                         </select>
                     </label>
-                    <label id="pwl">
-                        If drawn, penalty winner
-                        <select name="pw">
-                            <option value="">-</option>
-                            <option value="a">Team A</option>
-                            <option value="b">Team B</option>
-                        </select>
-                    </label>
+                    <div id="pwl" class="two" hidden>
+                        <label>
+                            If drawn, penalty winner
+                            <select name="pw">
+                                <option value="">-</option>
+                                <option value="a">Team A</option>
+                                <option value="b">Team B</option>
+                            </select>
+                        </label>
+                        <label>
+                            Shootout score (optional)
+                            <input name="ps" placeholder="e.g. 4-3, 5-4" maxlength="15">
+                        </label>
+                    </div>
                     <button class="btn" type="submit">SAVE RESULT</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
                     <button class="btn g2" type="button" id="cx">CANCEL</button>
@@ -1983,7 +1989,7 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
             function renderBkCard(n, stageLabel) {
                 const f = FX[n - 1]
@@ -1997,7 +2003,7 @@
                 const winB = d && w && w === b;
                 const scA = (d || lv) ? r.sa : '-';
                 const scB = (d || lv) ? r.sb : '-';
-                const pen = (d && r.sa == r.sb && w) ? '<div class="bk-pen">Penalties: ' + esc(w) + '</div>' : '';
+                const pen = (d && r.sa == r.sb && w) ? '<div class="bk-pen">Penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '';
                 return '<div class="bk-card' + (lv ? ' lv' : '') + (d ? ' done' : '') + '" data-n="' + n + '">'
                     + '<div class="bk-card-head">'
                     + '<span class="bk-badge">' + stageLabel + ' · #' + String(n).padStart(2, '0') + '</span>'
@@ -2786,7 +2792,7 @@
                     put(b.toUpperCase(), mid + 190, 632, 38, wB ? GOLD : '#ffffff', 'center', 1, 800, MO, 360);
                     if (sh) {
                         if (d && r.sa == r.sb && w)
-                            put('WON ON PENALTIES · ' + w.toUpperCase(), mid, 674, 24, GOLD, 'center', 3, 800, MO, 900);
+                            put('WON ON PENALTIES · ' + w.toUpperCase() + (r.ps ? ' (' + r.ps + ')' : ''), mid, 674, 24, GOLD, 'center', 3, 800, MO, 900);
                         const ln = (arr, asst) => {
                             const o = (arr || []).map(g => g[0] + (g[1] > 1 ? ' ×' + g[1] : ''));
                             if (asst && asst.length) {
@@ -3521,7 +3527,12 @@ function openEdit(n) {
                 F.rb.value = fm(r.rb);
                 F.mo.value = r.mo || '';
                 F.mt.value = r.mt || '';
-                F.pw.value = r.pw || '';
+                if (F.pw) {
+                    F.pw.value = r.pw || '';
+                    if (F.pw.options[1]) F.pw.options[1].textContent = 'Team A (' + nm(n, 'a') + ')';
+                    if (F.pw.options[2]) F.pw.options[2].textContent = 'Team B (' + nm(n, 'b') + ')';
+                }
+                if (F.ps) F.ps.value = r.ps || '';
                 $('pwl').hidden = f[0] == 'G';
                 $('clr').hidden = !(r.done || r.live);
                 F.st.value = r.live && !r.done ? 'live' : 'ft';
@@ -3563,7 +3574,8 @@ function openEdit(n) {
                     rb: parse(F.rb.value),
                     mo: F.mo.value.trim(),
                     mt: F.mt.value,
-                    pw: F.pw.value
+                    pw: F.pw ? F.pw.value : '',
+                    ps: (F.ps && F.ps.value.trim()) ? F.ps.value.trim() : ''
                 };
                 const ta = F.ta.value.trim()
                   , tb = F.tb.value.trim();
