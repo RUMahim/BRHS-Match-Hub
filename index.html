@@ -1602,6 +1602,14 @@
                     </label>
                     <div class="two">
                         <label>
+                            🎯 Assists – Team A (optional)<input name="aa" placeholder="e.g. Mahim, Sakib">
+                        </label>
+                        <label>
+                            🎯 Assists – Team B (optional)<input name="ab" placeholder="e.g. Tanvir, Rafiq">
+                        </label>
+                    </div>
+                    <div class="two">
+                        <label>
                             🟨 Yellow – Team A<input name="ya" placeholder="Rafi, Sumon 2">
                         </label>
                         <label>
@@ -1707,6 +1715,7 @@
                 4: ['09', '11', '13', '14']
             }
               , SQ = {}
+              , TB = {}
               , flt = 'all'
               , batchFlt = 'all'
               , sqBatchFlt = 'all'
@@ -1761,16 +1770,45 @@
                     )
                 }
                 );
-                return Object.values(S).sort( (a, b) => b.pt - a.pt || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.t.localeCompare(b.t))
+                return Object.values(S).sort((a, b) => {
+                    const dPt = b.pt - a.pt;
+                    if (dPt !== 0) return dPt;
+                    const dGd = (b.gf - b.ga) - (a.gf - a.ga);
+                    if (dGd !== 0) return dGd;
+                    const dGf = b.gf - a.gf;
+                    if (dGf !== 0) return dGf;
+                    if (TB && TB[g]) {
+                        const w = TB[g].winner || TB[g];
+                        if (a.t === w) return -1;
+                        if (b.t === w) return 1;
+                    }
+                    return a.t.localeCompare(b.t);
+                });
             }
             function gDone(g) {
                 const ms = FX.map( (f, i) => [f, i + 1]).filter( ([f]) => f[0] == 'G' && G[g].includes(f[1]) && G[g].includes(f[2]));
                 return ms.length > 0 && ms.every( ([,n]) => done(n))
             }
+            function getTiedTeams(g) {
+                const S = {};
+                G[g].forEach(t => S[t] = { t, p: 0, gf: 0, ga: 0, pt: 0 });
+                FX.forEach((f, i) => {
+                    if (f[0] != 'G' || !done(i + 1) || !S[f[1]] || !S[f[2]]) return;
+                    const r = R[i + 1];
+                    [[f[1], r.sa, r.sb], [f[2], r.sb, r.sa]].forEach(([t, a, b]) => {
+                        const s = S[t];
+                        s.p++; s.gf += a; s.ga += b;
+                        if (a > b) s.pt += 3; else if (a == b) s.pt++;
+                    });
+                });
+                const r = Object.values(S).sort((a, b) => (b.pt - a.pt) || ((b.gf - b.ga) - (a.gf - a.ga)) || (b.gf - a.gf));
+                const k = x => x.pt + '|' + (x.gf - x.ga) + '|' + x.gf;
+                if (r.length > 1 && k(r[0]) === k(r[1])) return [r[0].t, r[1].t];
+                if (r.length > 2 && k(r[1]) === k(r[2])) return [r[1].t, r[2].t];
+                return null;
+            }
             function tie(g) {
-                const r = rank(g)
-                  , k = x => x.pt + '|' + (x.gf - x.ga) + '|' + x.gf;
-                return r.length > 2 && (k(r[0]) == k(r[1]) || k(r[1]) == k(r[2]))
+                return !!getTiedTeams(g);
             }
             function lab(ref) {
                 if (ref[0] == 'C')
@@ -1805,7 +1843,13 @@
                   , b = nm(n, 'b');
                 return r.sa > r.sb ? a : r.sb > r.sa ? b : r.pw == 'a' ? a : r.pw == 'b' ? b : null
             }
-            const gl = a => a && a.length ? a.map(g => '<p>⚽ ' + esc(g[0]) + (g[1] > 1 ? ' ×' + g[1] : '') + '</p>').join('') : '<p style="color:#6d6650">-</p>';
+            const gl = (a, asst) => {
+                let s = a && a.length ? a.map(g => '<p>⚽ ' + esc(g[0]) + (g[1] > 1 ? ' ×' + g[1] : '') + '</p>').join('') : '<p style="color:#6d6650">-</p>';
+                if (asst && asst.length) {
+                    s += '<p style="color:#9a927c;font-size:11px;margin-top:2px">🎯 ' + esc(asst.map(x => x[0] + (x[1] > 1 ? ' ×' + x[1] : '')).join(', ')) + '</p>';
+                }
+                return s;
+            };
             const cl = (a, i) => (a || []).map(g => '<p>' + i + ' ' + esc(g[0]) + (g[1] > 1 ? ' ×' + g[1] : '') + '</p>').join('');
             function cds(r) {
                 const A = cl(r.ya, '🟨') + cl(r.ra, '🟥')
@@ -1888,7 +1932,7 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga) + '</div><div>' + gl(r.gb) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
             function renderBkCard(n, stageLabel) {
                 const f = FX[n - 1]
@@ -2014,6 +2058,9 @@
                         // Goals
                         const ga = s === 'a' ? r.ga : r.gb;
                         (ga || []).forEach(g => { players[g[0].trim()] = true });
+                        // Assists
+                        const aa = s === 'a' ? r.aa : r.ab;
+                        (aa || []).forEach(g => { players[g[0].trim()] = true });
                         // Yellow cards
                         const ya = s === 'a' ? r.ya : r.yb;
                         (ya || []).forEach(g => { players[g[0].trim()] = true });
@@ -2024,7 +2071,7 @@
                         if (r.mo && r.mt === s) players[r.mo.trim()] = true;
                         else if (r.mo && !r.mt) {
                             const has = a2 => (a2 || []).some(g => g[0].toLowerCase() === r.mo.toLowerCase());
-                            const inThis = has(ga) || has(ya) || has(ra);
+                            const inThis = has(ga) || has(aa) || has(ya) || has(ra);
                             if (inThis) players[r.mo.trim()] = true;
                         }
                     });
@@ -2033,7 +2080,7 @@
             }
 
             function getBatchStats(batch) {
-                let played = 0, wins = 0, draws = 0, losses = 0, gf = 0, ga2 = 0, goals = 0, yellows = 0, reds = 0, motm = 0;
+                let played = 0, wins = 0, draws = 0, losses = 0, gf = 0, ga2 = 0, goals = 0, assists = 0, yellows = 0, reds = 0, motm = 0;
                 FX.forEach((f, i) => {
                     const n = i + 1;
                     if (!done(n)) return;
@@ -2051,6 +2098,8 @@
                         else draws++;
                         const g = s === 'a' ? r.ga : r.gb;
                         (g || []).forEach(x => goals += x[1]);
+                        const a = s === 'a' ? r.aa : r.ab;
+                        (a || []).forEach(x => assists += x[1]);
                         const y = s === 'a' ? r.ya : r.yb;
                         (y || []).forEach(x => yellows += x[1]);
                         const rd = s === 'a' ? r.ra : r.rb;
@@ -2059,16 +2108,16 @@
                             if (r.mt === s) motm++;
                             else if (!r.mt) {
                                 const has = a2 => (a2 || []).some(x => x[0].toLowerCase() === r.mo.toLowerCase());
-                                if (has(g) || has(y) || has(rd)) motm++;
+                                if (has(g) || has(a) || has(y) || has(rd)) motm++;
                             }
                         }
                     });
                 });
-                return { played, wins, draws, losses, gf, ga: ga2, goals, yellows, reds, motm };
+                return { played, wins, draws, losses, gf, ga: ga2, goals, assists, yellows, reds, motm };
             }
 
             function getPlayerBadges(batch, playerName) {
-                let goals = 0, yellows = 0, reds = 0, motm = 0;
+                let goals = 0, assists = 0, yellows = 0, reds = 0, motm = 0;
                 const pn = playerName.toLowerCase();
                 FX.forEach((f, i) => {
                     const n = i + 1;
@@ -2079,6 +2128,8 @@
                         if (!t.includes(batch) && f[s == 'a' ? 1 : 2] != batch) return;
                         const g = s === 'a' ? r.ga : r.gb;
                         (g || []).forEach(x => { if (x[0].toLowerCase() === pn) goals += x[1] });
+                        const a = s === 'a' ? r.aa : r.ab;
+                        (a || []).forEach(x => { if (x[0].toLowerCase() === pn) assists += x[1] });
                         const y = s === 'a' ? r.ya : r.yb;
                         (y || []).forEach(x => { if (x[0].toLowerCase() === pn) yellows += x[1] });
                         const rd = s === 'a' ? r.ra : r.rb;
@@ -2087,12 +2138,12 @@
                             if (r.mt === s) motm++;
                             else if (!r.mt) {
                                 const has = a2 => (a2 || []).some(x => x[0].toLowerCase() === pn);
-                                if (has(g) || has(y) || has(rd)) motm++;
+                                if (has(g) || has(a) || has(y) || has(rd)) motm++;
                             }
                         }
                     });
                 });
-                return { goals, yellows, reds, motm };
+                return { goals, assists, yellows, reds, motm };
             }
 
             function renderSquads() {
@@ -2139,8 +2190,9 @@
                             + '<div class="sq-stat-item"><b>' + stats.draws + '</b><span>D</span></div>'
                             + '<div class="sq-stat-item"><b>' + stats.losses + '</b><span>L</span></div>'
                             + '</div>'
-                            + '<div class="sq-stats-grid" style="grid-template-columns:repeat(3,1fr);margin-top:4px">'
+                            + '<div class="sq-stats-grid" style="grid-template-columns:repeat(' + (stats.assists > 0 ? 4 : 3) + ',1fr);margin-top:4px">'
                             + '<div class="sq-stat-item"><b>' + stats.goals + '</b><span>⚽ Goals</span></div>'
+                            + (stats.assists > 0 ? '<div class="sq-stat-item"><b>' + stats.assists + '</b><span>🎯 Assists</span></div>' : '')
                             + '<div class="sq-stat-item"><b>' + stats.yellows + '</b><span>🟨 Cards</span></div>'
                             + '<div class="sq-stat-item"><b>' + stats.motm + '</b><span>★ MOTM</span></div>'
                             + '</div>';
@@ -2155,6 +2207,7 @@
                             const badges = getPlayerBadges(batch, p);
                             let bHtml = '';
                             if (badges.goals) bHtml += '<span class="sq-badge">⚽ ' + badges.goals + '</span>';
+                            if (badges.assists) bHtml += '<span class="sq-badge" style="border-color:#3a4b1f;color:#c0ea7d">🎯 ' + badges.assists + '</span>';
                             if (badges.yellows) bHtml += '<span class="sq-badge">🟨 ' + badges.yellows + '</span>';
                             if (badges.reds) bHtml += '<span class="sq-badge" style="border-color:#6b1f1f;background:#2a0d0d;color:#ffd7d7">🟥 ' + badges.reds + '</span>';
                             if (badges.motm) bHtml += '<span class="sq-badge" style="border-color:#5a4716">★ ' + badges.motm + '</span>';
@@ -2251,29 +2304,69 @@
                     const r = R[n];
                     played++;
                     goals += r.sa + r.sb;
-                    [['a', r.ga], ['b', r.gb]].forEach( ([s,g]) => (g || []).forEach( ([p,c]) => {
-                        const t = nm(n, s);
-                        const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
-                        (P[k] || (P[k] = {
-                            n: p,
-                            t,
-                            g: 0
-                        })).g += c
-                    }
-                    ))
+                    [['a', r.ga, r.aa], ['b', r.gb, r.ab]].forEach( ([s,g,asst]) => {
+                        (g || []).forEach( ([p,c]) => {
+                            const t = nm(n, s);
+                            const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
+                            const obj = (P[k] || (P[k] = {
+                                n: p,
+                                t,
+                                g: 0,
+                                a: 0
+                            }));
+                            obj.g += c;
+                        });
+                        (asst || []).forEach( ([p,c]) => {
+                            const t = nm(n, s);
+                            const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
+                            const obj = (P[k] || (P[k] = {
+                                n: p,
+                                t,
+                                g: 0,
+                                a: 0
+                            }));
+                            obj.a += c;
+                        });
+                    });
                 }
                 );
-                const L = Object.values(P).sort( (a, b) => b.g - a.g || a.n.localeCompare(b.n))
+                const L = Object.values(P).sort( (a, b) => b.g - a.g || b.a - a.a || a.n.localeCompare(b.n))
                   , mx = L.length ? L[0].g : 1;
-                $('s').innerHTML = L.length ? L.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag">GOLDEN BOOT</span>' : '') + '<small>' + esc(p.t) + '</small><div class="bar"><i style="width:' + Math.round(p.g / mx * 100) + '%"></i></div></div><div class="g">' + p.g + '</div></div>').join('') : '<div class="empty">No goals recorded yet.</div>';
+                $('s').innerHTML = L.length 
+                    ? L.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag">GOLDEN BOOT</span>' : '') + '<small>' + esc(p.t) + (p.a ? ' · 🎯 ' + p.a + (p.a > 1 ? ' assists' : ' assist') : '') + '</small><div class="bar"><i style="width:' + Math.round(p.g / mx * 100) + '%"></i></div></div><div class="g">' + p.g + '</div></div>').join('') 
+                        + '<button class="sb" id="shareScorersBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px;width:100%">↗ SHARE TOP SCORERS (ছবি ডাউনলোড / শেয়ার)</button>'
+                    : '<div class="empty">No goals recorded yet.</div>';
                 let t = '';
                 Object.keys(G).forEach(g => {
                     const r = rank(g)
                       , dn = gDone(g);
-                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td><button type="button" class="sq-jump-btn" data-b="' + esc(x.t) + '" title="View Batch ' + esc(x.t) + ' Squad">BRHS ' + esc(x.t) + ' <span class="sq-jump-icon">↗</span></button>' + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
+                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td><button type="button" class="sq-jump-btn" data-b="' + esc(x.t) + '" title="View Batch ' + esc(x.t) + ' Squad">BRHS ' + esc(x.t) + ' <span class="sq-jump-icon">↗</span></button>' + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>';
+                    const tied = dn ? getTiedTeams(g) : null;
+                    const tb = TB && TB[g];
+                    if (tied) {
+                        if (tb && tb.winner) {
+                            t += '<div style="margin-top:6px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.35);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--gold)">⚡ <b>Tiebreaker Penalty Shootout:</b> BRHS ' + esc(tb.winner) + ' won shootout ' + (tb.score ? '(' + esc(tb.score) + ') ' : '') + 'vs BRHS ' + esc(tb.loser || (tied[0] === tb.winner ? tied[1] : tied[0])) + ' to finish higher.</div>';
+                        } else {
+                            t += '<div style="margin-top:6px;background:rgba(224,83,60,.12);border:1px solid rgba(224,83,60,.4);border-radius:8px;padding:8px 12px;font-size:11px;color:#fca5a5">⚠ <b>Tiebreaker Alert:</b> BRHS ' + esc(tied[0]) + ' and BRHS ' + esc(tied[1]) + ' are level on Points, GD and Goals. A penalty shootout is required to decide who finishes higher.</div>';
+                        }
+                        if (ADMIN) {
+                            t += '<div style="margin-top:8px;background:linear-gradient(165deg,rgba(26,21,12,.95),rgba(12,11,7,.98));border:1px dashed #C9A227;border-radius:10px;padding:12px">'
+                                + '<div style="font:800 11px Montserrat;color:var(--gold);letter-spacing:.12em;text-transform:uppercase">⚽ TIEBREAKER PENALTY SHOOTOUT (GROUP ' + g + ')</div>'
+                                + '<div style="font-size:11px;color:var(--mut);margin:4px 0 8px">Select the winner of the penalty shootout between BRHS ' + esc(tied[0]) + ' and BRHS ' + esc(tied[1]) + ':</div>'
+                                + '<div class="two">'
+                                + '<label>Shootout Winner<select class="tb-sel" data-g="' + g + '"><option value="">-- Select Winner --</option><option value="' + esc(tied[0]) + '"' + (tb && tb.winner === tied[0] ? ' selected' : '') + '>BRHS ' + esc(tied[0]) + '</option><option value="' + esc(tied[1]) + '"' + (tb && tb.winner === tied[1] ? ' selected' : '') + '>BRHS ' + esc(tied[1]) + '</option></select></label>'
+                                + '<label>Shootout Score (optional)<input class="tb-score" data-g="' + g + '" placeholder="e.g. 4 - 3" value="' + esc((tb && tb.score) || '') + '"></label>'
+                                + '</div>'
+                                + '<div style="display:flex;gap:8px;margin-top:8px">'
+                                + '<button type="button" class="btn tb-save-btn" data-g="' + g + '" style="flex:1;min-height:36px;font-size:11px">SAVE TIEBREAKER</button>'
+                                + (tb && tb.winner ? '<button type="button" class="btn g2 tb-clear-btn" data-g="' + g + '" style="min-height:36px;font-size:11px">CLEAR</button>' : '')
+                                + '</div>'
+                                + '</div>';
+                        }
+                    }
                 }
                 );
-                t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>';
+                t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored, followed by a tiebreaker penalty shootout.</p>';
                 t += '<button class="sb" id="shareTableBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px">↗ SHARE POINTS TABLE (ছবি ডাউনলোড / শেয়ার)</button>' + (ADMIN ? '<form id="gf"><div class="stg" style="margin:0">Group setup</div><p class="note" style="margin:0">Groups are assumed from the fixture order. Edit if they are different (batch numbers, comma separated).</p>' + Object.keys(G).map(g => '<label>Group ' + g + '<input name="g' + g + '" value="' + esc(G[g].join(', ')) + '"></label>').join('') + '<button class="btn" type="submit">SAVE GROUPS</button></form>' : '');
                 $('t').innerHTML = t;
                 renderCards();
@@ -2354,6 +2447,12 @@
                     }
                 }
             };
+            $('s').onclick = e => {
+                const sb = e.target.closest('#shareScorersBtn');
+                if (sb) {
+                    shareScorers();
+                }
+            };
             $('t').onclick = e => {
                 const jb = e.target.closest('.sq-jump-btn');
                 if (jb) {
@@ -2366,6 +2465,39 @@
                 const sb = e.target.closest('#shareTableBtn');
                 if (sb) {
                     shareTable();
+                    return;
+                }
+                const saveBtn = e.target.closest('.tb-save-btn');
+                if (saveBtn && ADMIN) {
+                    const g = saveBtn.dataset.g;
+                    const sel = document.querySelector('.tb-sel[data-g="' + g + '"]');
+                    const scInp = document.querySelector('.tb-score[data-g="' + g + '"]');
+                    if (!sel || !sel.value) {
+                        toast('Please select the shootout winner', false);
+                        return;
+                    }
+                    const winner = sel.value;
+                    const tied = getTiedTeams(g) || [];
+                    const loser = tied.find(t => t !== winner) || '';
+                    const score = scInp ? scInp.value.trim() : '';
+                    const pv = snap();
+                    TB[g] = { winner, loser, score };
+                    render();
+                    persistChange({ tiebreaker: TB[g], g }, pv);
+                    toast('✓ Tiebreaker saved: BRHS ' + winner + ' won shootout!', true);
+                    return;
+                }
+                const clrBtn = e.target.closest('.tb-clear-btn');
+                if (clrBtn && ADMIN) {
+                    const g = clrBtn.dataset.g;
+                    if (confirm('Clear penalty shootout tiebreaker for Group ' + g + '?')) {
+                        const pv = snap();
+                        delete TB[g];
+                        render();
+                        persistChange({ tiebreaker: null, g }, pv);
+                        toast('Tiebreaker cleared', true);
+                    }
+                    return;
                 }
             }
             ;
@@ -2503,12 +2635,15 @@
                     if (sh) {
                         if (d && r.sa == r.sb && w)
                             put('WON ON PENALTIES · ' + w.toUpperCase(), mid, 674, 24, GOLD, 'center', 3, 800, MO, 900);
-                        const ln = arr => {
+                        const ln = (arr, asst) => {
                             const o = (arr || []).map(g => g[0] + (g[1] > 1 ? ' ×' + g[1] : ''));
+                            if (asst && asst.length) {
+                                o.push('🎯 ' + asst.map(a => a[0] + (a[1] > 1 ? ' ×' + a[1] : '')).join(', '));
+                            }
                             return o.length > 5 ? o.slice(0, 4).concat('+' + (o.length - 4) + ' more') : o
                         }
-                          , LA = ln(r.ga)
-                          , LB = ln(r.gb);
+                          , LA = ln(r.ga, r.aa)
+                          , LB = ln(r.gb, r.ab);
                         if (LA.length || LB.length) {
                             put('GOALS', mid, 716, 22, GOLD2, 'center', 8, 800, MO);
                             x.fillStyle = 'rgba(212,175,55,.45)';
@@ -2692,6 +2827,10 @@
                         x.fill();
 
                         put('GROUP ' + box.g, box.x + 16, box.y + 28, 20, GOLD, 'left', 1, 400, AN);
+                        const boxTb = TB && TB[box.g];
+                        if (boxTb && boxTb.winner) {
+                            put('⚡ SO: BRHS ' + boxTb.winner + (boxTb.score ? ' (' + boxTb.score + ')' : ''), box.x + 115, box.y + 27, 11, '#f5d77a', 'left', 0, 700, MO, 210);
+                        }
                         if (dn) {
                             put('COMPLETE', box.x + box.w - 16, box.y + 27, 12, '#4ade80', 'right', 2, 800, MO);
                         }
@@ -2810,6 +2949,206 @@
                     if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE POINTS TABLE (ছবি ডাউনলোড / শেয়ার)'; }
                 }
             }
+            async function shareScorers() {
+                if (shareScorers.busy) return;
+                shareScorers.busy = true;
+                const btn = $('shareScorersBtn');
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ GENERATING TOP SCORERS IMAGE...'; }
+                try {
+                    const P = {};
+                    FX.forEach((f, i) => {
+                        const n = i + 1;
+                        if (!done(n)) return;
+                        const r = R[n];
+                        [['a', r.ga], ['b', r.gb]].forEach(([s, g]) => (g || []).forEach(([p, c]) => {
+                            const t = nm(n, s);
+                            const k = t.trim().toLowerCase() + '::' + p.trim().toLowerCase();
+                            (P[k] || (P[k] = {
+                                n: p,
+                                t,
+                                g: 0
+                            })).g += c;
+                        }));
+                    });
+                    const L = Object.values(P).sort((a, b) => b.g - a.g || a.n.localeCompare(b.n));
+                    if (!L.length) {
+                        toast('No goals recorded yet to share', false);
+                        return;
+                    }
+
+                    try {
+                        await Promise.all([document.fonts.load('120px Anton'), document.fonts.load('800 30px Montserrat')]);
+                    } catch (_) {}
+
+                    const S = 1080;
+                    const c = document.createElement('canvas');
+                    c.width = c.height = S;
+                    const x = c.getContext('2d');
+                    const AN = 'Anton, Impact, sans-serif';
+                    const MO = 'Montserrat, Arial, sans-serif';
+                    const GOLD = '#F5D77A';
+                    const GOLD2 = '#C9A227';
+
+                    const put = (t, px, y, size, col, al, sp, wt, fam, maxW) => {
+                        x.textAlign = al;
+                        x.textBaseline = 'alphabetic';
+                        x.fillStyle = col;
+                        let z = size;
+                        for (;;) {
+                            x.font = wt + ' ' + z + 'px ' + fam;
+                            if ('letterSpacing' in x) x.letterSpacing = sp + 'px';
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 11) break;
+                            z -= 1;
+                        }
+                        x.fillText(t, px, y);
+                        return x.measureText(t).width;
+                    };
+
+                    const rr = (px, py, w2, h2, rad) => {
+                        x.beginPath();
+                        x.moveTo(px + rad, py);
+                        x.arcTo(px + w2, py, px + w2, py + h2, rad);
+                        x.arcTo(px + w2, py + h2, px, py + h2, rad);
+                        x.arcTo(px, py + h2, px, py, rad);
+                        x.arcTo(px, py, px + w2, py, rad);
+                        x.closePath();
+                    };
+
+                    const mid = S / 2;
+
+                    // Dark Stadium Background
+                    x.fillStyle = '#070707';
+                    x.fillRect(0, 0, S, S);
+                    const gr = x.createRadialGradient(mid, 260, 40, mid, 260, 680);
+                    gr.addColorStop(0, 'rgba(201,162,39,.28)');
+                    gr.addColorStop(1, 'rgba(201,162,39,0)');
+                    x.fillStyle = gr;
+                    x.fillRect(0, 0, S, S);
+
+                    // Outer Borders & Gold Corners
+                    x.strokeStyle = 'rgba(212,175,55,.35)';
+                    x.lineWidth = 2;
+                    x.strokeRect(24, 24, S - 48, S - 48);
+                    x.strokeStyle = GOLD2;
+                    x.lineWidth = 8;
+                    [[24, 24, 1], [S - 24, 24, -1]].forEach(([cx, cy, dx]) => {
+                        x.beginPath();
+                        x.moveTo(cx + dx * 60, cy);
+                        x.lineTo(cx, cy);
+                        x.lineTo(cx, cy + 60);
+                        x.stroke();
+                    });
+
+                    // Tournament Title
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
+                    put('TOP SCORERS · GOLDEN BOOT', mid, 122, 38, '#ffffff', 'center', 2, 400, AN, 920);
+
+                    // Hero Card for #1 Rank (Leader)
+                    const leader = L[0];
+                    rr(44, 150, S - 88, 170, 16);
+                    const hg = x.createLinearGradient(44, 150, S - 44, 320);
+                    hg.addColorStop(0, '#2d1f07');
+                    hg.addColorStop(1, '#120f06');
+                    x.fillStyle = hg;
+                    x.fill();
+                    x.strokeStyle = GOLD;
+                    x.lineWidth = 2;
+                    x.stroke();
+
+                    // Leader Tag
+                    rr(68, 172, 195, 28, 6);
+                    x.fillStyle = GOLD;
+                    x.fill();
+                    put('🏆 GOLDEN BOOT LEADER', 68 + 97, 191, 11, '#1a1204', 'center', 1, 800, MO);
+
+                    // Leader Rank and Name
+                    put('#1', 105, 275, 42, GOLD, 'center', 0, 400, AN);
+                    put(leader.n.toUpperCase(), 165, 255, 34, '#ffffff', 'left', 1, 800, MO, 560);
+                    put(leader.t.toUpperCase(), 165, 292, 17, GOLD2, 'left', 1, 700, MO, 560);
+
+                    // Leader Goals Big Number
+                    put(String(leader.g), S - 125, 260, 72, GOLD, 'center', 0, 400, AN);
+                    put('GOALS', S - 125, 292, 13, '#9a927c', 'center', 2, 800, MO);
+
+                    // Table Header
+                    const thY = 356;
+                    x.fillStyle = '#17130a';
+                    x.fillRect(44, thY - 20, S - 88, 28);
+                    put('#', 75, thY, 11, '#9a927c', 'center', 1, 700, MO);
+                    put('PLAYER', 135, thY, 11, '#9a927c', 'left', 1, 700, MO);
+                    put('TEAM', 640, thY, 11, '#9a927c', 'left', 1, 700, MO);
+                    put('GOALS', S - 100, thY, 11, GOLD, 'center', 1, 800, MO);
+
+                    // Leaderboard Rows (Ranks 2 through up to 8)
+                    const rowH = 68;
+                    const displayLimit = Math.min(L.length, 8);
+                    for (let i = 1; i < displayLimit; i++) {
+                        const p = L[i];
+                        const rowY = 378 + (i - 1) * rowH;
+
+                        rr(44, rowY, S - 88, 58, 10);
+                        x.fillStyle = i % 2 === 1 ? '#131008' : '#0c0a05';
+                        x.fill();
+                        x.strokeStyle = 'rgba(255,255,255,.05)';
+                        x.lineWidth = 1;
+                        x.stroke();
+
+                        put(String(i + 1), 75, rowY + 39, 24, GOLD2, 'center', 0, 400, AN);
+                        put(p.n.toUpperCase(), 135, rowY + 36, 19, '#ffffff', 'left', 0, 800, MO, 480);
+                        put(p.t, 640, rowY + 36, 16, '#cfc8b2', 'left', 0, 700, MO, 220);
+                        put(String(p.g), S - 100, rowY + 39, 28, GOLD, 'center', 0, 400, AN);
+                    }
+
+                    if (L.length > 8) {
+                        put('+ ' + (L.length - 8) + ' more goalscorers on match portal', mid, 885, 14, '#9a927c', 'center', 1, 700, MO);
+                    }
+
+                    // Bottom Bar
+                    const bg = x.createLinearGradient(24, 0, S - 24, 0);
+                    bg.addColorStop(0, GOLD2);
+                    bg.addColorStop(1, GOLD);
+                    x.fillStyle = bg;
+                    x.fillRect(24, 996, S - 48, 60);
+                    put('FULL RESULTS & LIVE UPDATES · https://' + location.host.toLowerCase(), mid, 1036, 26, '#1a1204', 'center', 3, 800, MO, 960);
+
+                    // Share or Download
+                    const text = '⚽ EX BRHSIAN Football Festival – Season 03\nTop Scorers & Golden Boot Leaderboard\n' + location.origin + location.pathname;
+                    const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+                    if (!blob) {
+                        toast('Could not create top scorers image', false);
+                        return;
+                    }
+                    const file = new File([blob], 'brhs-top-scorers.png', { type: 'image/png' });
+
+                    try {
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({ files: [file], text });
+                            return;
+                        }
+                        if (navigator.share) {
+                            await navigator.share({ text });
+                            return;
+                        }
+                    } catch (e) {
+                        if (e && e.name === 'AbortError') return;
+                    }
+
+                    const u = URL.createObjectURL(blob);
+                    const el = document.createElement('a');
+                    el.href = u;
+                    el.download = file.name;
+                    document.body.appendChild(el);
+                    el.click();
+                    el.remove();
+                    setTimeout(() => URL.revokeObjectURL(u), 4000);
+                    toast('Top Scorers image saved! 📸', true);
+                } catch (e) {
+                    toast('Could not share top scorers', false);
+                } finally {
+                    shareScorers.busy = false;
+                    if (btn) { btn.disabled = false; btn.textContent = '↗ SHARE TOP SCORERS (ছবি ডাউনলোড / শেয়ার)'; }
+                }
+            }
             function openEdit(n) {
                 if (!ADMIN)
                     return;
@@ -2825,6 +3164,8 @@
                 F.sb.value = r.done || r.live ? r.sb : '';
                 F.ga.value = (r.ga || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
                 F.gb.value = (r.gb || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
+                F.aa.value = (r.aa || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
+                F.ab.value = (r.ab || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
                 const fm = a => (a || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
                 F.ya.value = fm(r.ya);
                 F.yb.value = fm(r.yb);
@@ -2866,6 +3207,8 @@
                     sb: +F.sb.value || 0,
                     ga: parse(F.ga.value),
                     gb: parse(F.gb.value),
+                    aa: parse(F.aa.value),
+                    ab: parse(F.ab.value),
                     ya: parse(F.ya.value),
                     yb: parse(F.yb.value),
                     ra: parse(F.ra.value),
@@ -2917,7 +3260,8 @@
             const snap = () => JSON.stringify({
                 R,
                 G,
-                SQ
+                SQ,
+                TB
             });
             function toast(m, ok) {
                 const t = $('toast');
@@ -2944,7 +3288,7 @@
                 const u = Date.now();
                 if (MODE === 'local') {
                     try {
-                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G, SQ }));
+                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G, SQ, TB }));
                     } catch (e) { console.warn('Cache save failed:', e); }
                     U0 = u;
                     hdr();
@@ -2957,15 +3301,17 @@
                         let remoteR = {};
                         let remoteG = G;
                         let remoteSQ = SQ || {};
+                        let remoteTB = TB || {};
                         if (docSnap.exists()) {
                             try {
                                 const parsed = JSON.parse(docSnap.data().json);
                                 if (parsed.R) remoteR = parsed.R;
                                 if (parsed.G) remoteG = parsed.G;
                                 if (parsed.SQ) remoteSQ = parsed.SQ;
+                                if (parsed.TB) remoteTB = parsed.TB;
                             } catch (_) {}
                         }
-                        // Atomically merge the specific match, group, or squad changes
+                        // Atomically merge the specific match, group, squad, or tiebreaker changes
                         if (change && change.matchId !== undefined) {
                             if (change.matchData === null) {
                                 delete remoteR[change.matchId];
@@ -2979,8 +3325,15 @@
                         if (change && change.squads) {
                             remoteSQ = change.squads;
                         }
+                        if (change && change.tiebreaker !== undefined) {
+                            if (change.tiebreaker === null) {
+                                delete remoteTB[change.g];
+                            } else {
+                                remoteTB[change.g] = change.tiebreaker;
+                            }
+                        }
                         tx.set(docRef, {
-                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ }),
+                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ, TB: remoteTB }),
                             u
                         });
                     });
@@ -2991,6 +3344,7 @@
                         R = p.R;
                         G = p.G;
                         SQ = p.SQ || {};
+                        TB = p.TB || {};
                     } catch (_) {}
                     render();
                     toast(e.code === 'permission-denied' ? 'Not allowed. Log in as admin.' : '✕ Not saved (' + (e.code || 'error') + '). Try again.', false);
@@ -3006,6 +3360,7 @@
                             R = s.R || {};
                             G = s.G || G;
                             SQ = s.SQ || SQ || {};
+                            TB = s.TB || TB || {};
                         }
                     } catch (e) { console.warn('Cache save failed:', e) }
                     render();
@@ -3041,12 +3396,18 @@
                                 if (st.SQ) {
                                     SQ = st.SQ;
                                 }
+                                if (st.TB) {
+                                    TB = st.TB;
+                                } else {
+                                    TB = {};
+                                }
                                 U0 = s.data().u || 0;
                                 try {
                                     localStorage.setItem('brhsHubCache', JSON.stringify({
                                         R,
                                         G,
                                         SQ,
+                                        TB,
                                         u: U0
                                     }))
                                 } catch (_) {}
@@ -3132,6 +3493,7 @@
                     R = c.R || {};
                     G = c.G || G;
                     SQ = c.SQ || SQ || {};
+                    TB = c.TB || TB || {};
                     U0 = c.u || 0
                 }
             } catch (e) {}
