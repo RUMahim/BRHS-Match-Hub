@@ -2457,18 +2457,36 @@
                 $('cG').textContent = goals;
                 $('cT').textContent = L.length ? L[0].n : '-';
             }
+            function switchTab(t, updateHash = true) {
+                const validTabs = ['m', 's', 't', 'c', 'o', 'q'];
+                if (!validTabs.includes(t)) t = 'm';
+                document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x.dataset.t === t));
+                validTabs.forEach(k => {
+                    const el = $(k);
+                    if (el) el.hidden = (k !== t);
+                });
+                if (t === 'q') renderSquads();
+                try {
+                    localStorage.setItem('brhsActiveTab', t);
+                    if (updateHash) history.replaceState(null, '', '#' + t);
+                } catch (_) {}
+            }
             $('nav').onclick = e => {
                 const b = e.target.closest('button');
                 if (!b)
                     return;
-                document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x == b));
-                ['m', 's', 't', 'c', 'o', 'q'].forEach(k => $(k).hidden = k != b.dataset.t);
-                if (b.dataset.t === 'q') renderSquads();
+                switchTab(b.dataset.t);
                 scrollTo({
                     top: 0
                 })
             }
             ;
+            window.addEventListener('hashchange', () => {
+                const h = location.hash.replace('#', '').toLowerCase();
+                const aliases = { table: 't', points: 't', scorers: 's', cards: 'c', motm: 'o', squads: 'q', schedule: 'm' };
+                const t = aliases[h] || (['m','s','t','c','o','q'].includes(h) ? h : null);
+                if (t) switchTab(t, false);
+            });
             $('fl').onclick = e => {
                 const b = e.target.closest('button');
                 if (!b)
@@ -3606,6 +3624,17 @@
             render();
             hdr();
             initFb();
+
+            // Restore active tab across refresh without any database reads
+            try {
+                const h = location.hash.replace('#', '').toLowerCase();
+                const aliases = { table: 't', points: 't', scorers: 's', cards: 'c', motm: 'o', squads: 'q', schedule: 'm' };
+                const saved = localStorage.getItem('brhsActiveTab');
+                const initTab = aliases[h] || (['m','s','t','c','o','q'].includes(h) ? h : (saved || 'm'));
+                if (initTab && initTab !== 'm') {
+                    switchTab(initTab, false);
+                }
+            } catch (_) {}
 
             /* ===== PWA & Offline Support ===== */
             let defPrompt = null;
