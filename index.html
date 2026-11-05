@@ -236,15 +236,18 @@
                 display: grid;
                 grid-template-columns: 1fr auto 1fr;
                 align-items: center;
-                gap: 12px;
-                margin: 12px 0
+                gap: 8px;
+                margin: 10px 0
             }
 
             .tm {
-                font: 800 15px Montserrat,Arial;
+                font: 800 clamp(12px, 3.8vw, 15px) Montserrat,Arial;
                 text-transform: uppercase;
                 letter-spacing: .02em;
-                color: #f7f4ea
+                color: #f7f4ea;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
             }
 
             .tm:last-child {
@@ -455,7 +458,8 @@
             td:nth-child(2),th:nth-child(2) {
                 text-align: left;
                 font-weight: 800;
-                text-transform: uppercase
+                text-transform: uppercase;
+                white-space: nowrap
             }
 
             td:last-child {
@@ -1279,7 +1283,8 @@
                 letter-spacing: .04em;
                 margin: 0;
                 line-height: 1.1;
-                text-shadow: 0 2px 8px rgba(201,162,39,.25)
+                text-shadow: 0 2px 8px rgba(201,162,39,.25);
+                white-space: nowrap
             }
 
             .sq-grp-badge {
@@ -1404,7 +1409,8 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 4px;
-                vertical-align: middle
+                vertical-align: middle;
+                white-space: nowrap
             }
 
             .sq-jump-btn:hover {
@@ -1557,7 +1563,7 @@
                         </select>
                     </div>
                 </div>
-                <div id="ml"><div class="stg">Group stage</div><div class="m up" id="m1"><div class="top"><span>Group stage · M1</span><span>3:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 23</div><div class="s"><em>VS</em></div><div class="tm">BRHS 24</div></div></div><div class="m up" id="m2"><div class="top"><span>Group stage · M2</span><span>3:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 15</div><div class="s"><em>VS</em></div><div class="tm">BRHS 18</div></div></div><div class="m up" id="m3"><div class="top"><span>Group stage · M3</span><span>3:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 25</div><div class="s"><em>VS</em></div><div class="tm">BRHS 26</div></div></div><div class="m up" id="m4"><div class="top"><span>Group stage · M4</span><span>3:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 19</div><div class="s"><em>VS</em></div><div class="tm">BRHS 20</div></div></div><div class="m up" id="m5"><div class="top"><span>Group stage · M5</span><span>4:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 13</div><div class="s"><em>VS</em></div><div class="tm">BRHS 14</div></div></div><div class="m up" id="m6"><div class="top"><span>Group stage · M6</span><span>4:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 16</div><div class="s"><em>VS</em></div><div class="tm">BRHS 17</div></div></div><div class="m up" id="m7"><div class="top"><span>Group stage · M7</span><span>4:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 09</div><div class="s"><em>VS</em></div><div class="tm">BRHS 11</div></div></div><div class="m up" id="m8"><div class="top"><span>Group stage · M8</span><span>4:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 21</div><div class="s"><em>VS</em></div><div class="tm">BRHS 22</div></div></div><div class="m up" id="m9"><div class="top"><span>Group stage · M9</span><span>5:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 17</div><div class="s"><em>VS</em></div><div class="tm">BRHS 18</div></div></div><div class="m up" id="m10"><div class="top"><span>Group stage · M10</span><span>5:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 23</div><div class="s"><em>VS</em></div><div class="tm">BRHS 25</div></div></div><div class="m up" id="m11"><div class="top"><span>Group stage · M11</span><span>5:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 19</div><div class="s"><em>VS</em></div><div class="tm">BRHS 22</div></div></div><div class="m up" id="m12"><div class="top"><span>Group stage · M12</span><span>5:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 24</div><div class="s"><em>VS</em></div><div class="tm">BRHS 26</div></div></div><div class="m up" id="m13"><div class="top"><span>Group stage · M13</span><span>6:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 20</div><div class="s"><em>VS</em></div><div class="tm">BRHS 21</div></div></div><div class="m up" id="m14"><div class="top"><span>Group stage · M14</span><span>6:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 11</div><div class="s"><em>VS</em></div><div class="tm">BRHS 13</div></div></div><div class="m up" id="m15"><div class="top"><span>Group stage · M15</span><span>6:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS 15</div><div class="s"><em>VS</em></div><div class="tm">BRHS 16</div></div></div><div class="m up" id="m16"><div class="top"><span>Group stage · M16</span><span>6:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS 09</div><div class="s"><em>VS</em></div><div class="tm">BRHS 14</div></div></div><div class="stg">Quarter final</div><div class="m up" id="m17"><div class="top"><span>Quarter final · M17</span><span>7:00 PM</span></div><div class="sc"><div class="tm">Champion Group B</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group C</div></div></div><div class="m up" id="m18"><div class="top"><span>Quarter final · M18</span><span>7:00 PM</span></div><div class="sc"><div class="tm">Champion Group C</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group B</div></div></div><div class="m up" id="m19"><div class="top"><span>Quarter final · M19</span><span>7:30 PM</span></div><div class="sc"><div class="tm">Champion Group D</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group A</div></div></div><div class="m up" id="m20"><div class="top"><span>Quarter final · M20</span><span>7:30 PM</span></div><div class="sc"><div class="tm">Champion Group A</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group D</div></div></div><div class="stg">Semi final</div><div class="m up" id="m21"><div class="top"><span>Semi final · M21</span><span>8:00 PM</span></div><div class="sc"><div class="tm">Winner M18</div><div class="s"><em>VS</em></div><div class="tm">Winner M20</div></div></div><div class="m up" id="m22"><div class="top"><span>Semi final · M22</span><span>8:30 PM</span></div><div class="sc"><div class="tm">Winner M17</div><div class="s"><em>VS</em></div><div class="tm">Winner M19</div></div></div><div class="stg">Grand final</div><div class="m up" id="m23"><div class="top"><span>Grand final · M23</span><span>9:00 PM</span></div><div class="sc"><div class="tm">Winner M21</div><div class="s"><em>VS</em></div><div class="tm">Winner M22</div></div></div></div>
+                <div id="ml"><div class="stg">Group stage</div><div class="m up" id="m1"><div class="top"><span>Group stage · M1</span><span>3:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;23</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;24</div></div></div><div class="m up" id="m2"><div class="top"><span>Group stage · M2</span><span>3:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;15</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;18</div></div></div><div class="m up" id="m3"><div class="top"><span>Group stage · M3</span><span>3:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;25</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;26</div></div></div><div class="m up" id="m4"><div class="top"><span>Group stage · M4</span><span>3:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;19</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;20</div></div></div><div class="m up" id="m5"><div class="top"><span>Group stage · M5</span><span>4:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;13</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;14</div></div></div><div class="m up" id="m6"><div class="top"><span>Group stage · M6</span><span>4:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;16</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;17</div></div></div><div class="m up" id="m7"><div class="top"><span>Group stage · M7</span><span>4:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;09</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;11</div></div></div><div class="m up" id="m8"><div class="top"><span>Group stage · M8</span><span>4:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;21</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;22</div></div></div><div class="m up" id="m9"><div class="top"><span>Group stage · M9</span><span>5:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;17</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;18</div></div></div><div class="m up" id="m10"><div class="top"><span>Group stage · M10</span><span>5:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;23</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;25</div></div></div><div class="m up" id="m11"><div class="top"><span>Group stage · M11</span><span>5:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;19</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;22</div></div></div><div class="m up" id="m12"><div class="top"><span>Group stage · M12</span><span>5:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;24</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;26</div></div></div><div class="m up" id="m13"><div class="top"><span>Group stage · M13</span><span>6:00 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;20</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;21</div></div></div><div class="m up" id="m14"><div class="top"><span>Group stage · M14</span><span>6:00 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;11</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;13</div></div></div><div class="m up" id="m15"><div class="top"><span>Group stage · M15</span><span>6:30 PM · বড় মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;15</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;16</div></div></div><div class="m up" id="m16"><div class="top"><span>Group stage · M16</span><span>6:30 PM · ছোট মাঠ</span></div><div class="sc"><div class="tm">BRHS&nbsp;09</div><div class="s"><em>VS</em></div><div class="tm">BRHS&nbsp;14</div></div></div><div class="stg">Quarter final</div><div class="m up" id="m17"><div class="top"><span>Quarter final · M17</span><span>7:00 PM</span></div><div class="sc"><div class="tm">Champion Group B</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group C</div></div></div><div class="m up" id="m18"><div class="top"><span>Quarter final · M18</span><span>7:00 PM</span></div><div class="sc"><div class="tm">Champion Group C</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group B</div></div></div><div class="m up" id="m19"><div class="top"><span>Quarter final · M19</span><span>7:30 PM</span></div><div class="sc"><div class="tm">Champion Group D</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group A</div></div></div><div class="m up" id="m20"><div class="top"><span>Quarter final · M20</span><span>7:30 PM</span></div><div class="sc"><div class="tm">Champion Group A</div><div class="s"><em>VS</em></div><div class="tm">Runner-up Group D</div></div></div><div class="stg">Semi final</div><div class="m up" id="m21"><div class="top"><span>Semi final · M21</span><span>8:00 PM</span></div><div class="sc"><div class="tm">Winner M18</div><div class="s"><em>VS</em></div><div class="tm">Winner M20</div></div></div><div class="m up" id="m22"><div class="top"><span>Semi final · M22</span><span>8:30 PM</span></div><div class="sc"><div class="tm">Winner M17</div><div class="s"><em>VS</em></div><div class="tm">Winner M19</div></div></div><div class="stg">Grand final</div><div class="m up" id="m23"><div class="top"><span>Grand final · M23</span><span>9:00 PM</span></div><div class="sc"><div class="tm">Winner M21</div><div class="s"><em>VS</em></div><div class="tm">Winner M22</div></div></div></div>
                 <div id="bracketView" hidden></div>
             </section>
             <section id="s" hidden></section>
@@ -1831,11 +1837,11 @@
                 const c = ref[0];
                 if (c == 'C' || c == 'R') {
                     const g = ref[1];
-                    return gDone(g) ? 'BRHS ' + rank(g)[c == 'C' ? 0 : 1].t : null
+                    return gDone(g) ? 'BRHS ' + rank(g)[c == 'C' ? 0 : 1].t : null
                 }
                 if (c == 'W')
                     return win(+ref.slice(1));
-                return 'BRHS ' + ref
+                return 'BRHS ' + ref
             }
             function nm(n, s, ign) {
                 const o = !ign && R[n] && R[n]['t' + s];
@@ -2183,7 +2189,7 @@
                     html += '<div class="sq-card">'
                         + '<div class="sq-top">'
                         + '<div>'
-                        + '<div class="sq-batch-title">BRHS ' + esc(batch) + '</div>'
+                        + '<div class="sq-batch-title">BRHS ' + esc(batch) + '</div>'
                         + '<div class="sq-grp-badge">Group ' + esc(grp) + '</div>'
                         + '</div>'
                         + '<div style="text-align:right">'
@@ -2349,7 +2355,7 @@
                 Object.keys(G).forEach(g => {
                     const r = rank(g)
                       , dn = gDone(g);
-                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td><button type="button" class="sq-jump-btn" data-b="' + esc(x.t) + '" title="View Batch ' + esc(x.t) + ' Squad">BRHS ' + esc(x.t) + ' <span class="sq-jump-icon">↗</span></button>' + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>';
+                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td><button type="button" class="sq-jump-btn" data-b="' + esc(x.t) + '" title="View Batch ' + esc(x.t) + ' Squad">BRHS ' + esc(x.t) + ' <span class="sq-jump-icon">↗</span></button>' + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>';
                     const tied = dn ? getTiedTeams(g) : null;
                     const tb = TB && TB[g];
                     if (tied) {
