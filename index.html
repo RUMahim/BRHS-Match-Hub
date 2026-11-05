@@ -1538,7 +1538,7 @@
             </div>
             <nav id="nav">
                 <button data-t="m" class="on">SCHEDULE</button>
-                <button data-t="s">SCORERS & ASSISTS</button>
+                <button data-t="s">LEADERBOARDS</button>
                 <button data-t="t">POINTS TABLE</button>
                 <button data-t="c">CARDS</button>
                 <button data-t="o">MOTM</button>
@@ -2137,7 +2137,7 @@
             }
 
             function getBatchStats(batch) {
-                let played = 0, wins = 0, draws = 0, losses = 0, gf = 0, ga2 = 0, goals = 0, assists = 0, yellows = 0, reds = 0, motm = 0;
+                let played = 0, wins = 0, draws = 0, losses = 0, gf = 0, ga2 = 0, cleanSheets = 0, goals = 0, assists = 0, yellows = 0, reds = 0, motm = 0;
                 FX.forEach((f, i) => {
                     const n = i + 1;
                     if (!done(n)) return;
@@ -2150,6 +2150,7 @@
                         const so = s === 'a' ? r.sb : r.sa;
                         gf += sf;
                         ga2 += so;
+                        if (so === 0) cleanSheets++;
                         if (sf > so || (sf === so && r.pw === s)) wins++;
                         else if (sf < so || (sf === so && r.pw && r.pw !== s)) losses++;
                         else draws++;
@@ -2170,7 +2171,7 @@
                         }
                     });
                 });
-                return { played, wins, draws, losses, gf, ga: ga2, goals, assists, yellows, reds, motm };
+                return { played, wins, draws, losses, gf, ga: ga2, cleanSheets, goals, assists, yellows, reds, motm };
             }
 
             function getPlayerBadges(batch, playerName) {
@@ -2247,9 +2248,10 @@
                             + '<div class="sq-stat-item"><b>' + stats.draws + '</b><span>D</span></div>'
                             + '<div class="sq-stat-item"><b>' + stats.losses + '</b><span>L</span></div>'
                             + '</div>'
-                            + '<div class="sq-stats-grid" style="grid-template-columns:repeat(' + (stats.assists > 0 ? 4 : 3) + ',1fr);margin-top:4px">'
+                            + '<div class="sq-stats-grid" style="grid-template-columns:repeat(' + (stats.assists > 0 ? 5 : 4) + ',1fr);margin-top:4px">'
                             + '<div class="sq-stat-item"><b>' + stats.goals + '</b><span>⚽ Goals</span></div>'
                             + (stats.assists > 0 ? '<div class="sq-stat-item"><b>' + stats.assists + '</b><span>🎯 Assists</span></div>' : '')
+                            + '<div class="sq-stat-item"><b>' + stats.cleanSheets + '</b><span>🧤 Clean</span></div>'
                             + '<div class="sq-stat-item"><b>' + stats.yellows + '</b><span>🟨 Cards</span></div>'
                             + '<div class="sq-stat-item"><b>' + stats.motm + '</b><span>★ MOTM</span></div>'
                             + '</div>';
@@ -2392,9 +2394,34 @@
                 const LA = Object.values(P).filter(p => p.a > 0).sort( (a, b) => b.a - a.a || b.g - a.g || a.n.localeCompare(b.n))
                   , mxA = LA.length ? LA[0].a : 1;
 
+                const allBatchesList = [...new Set(Object.values(G).flat())];
+                const CSList = [];
+                allBatchesList.forEach(b => {
+                    let cs = 0, played = 0, ga = 0;
+                    FX.forEach((f, i) => {
+                        const n = i + 1;
+                        if (!done(n)) return;
+                        const r = R[n];
+                        ['a', 'b'].forEach(s => {
+                            const t = nm(n, s);
+                            if (!t.includes(b) && f[s === 'a' ? 1 : 2] !== b) return;
+                            played++;
+                            const so = s === 'a' ? r.sb : r.sa;
+                            ga += so;
+                            if (so === 0) cs++;
+                        });
+                    });
+                    if (played > 0) {
+                        CSList.push({ b, cs, played, ga });
+                    }
+                });
+                CSList.sort((a, b) => b.cs - a.cs || a.ga - b.ga || b.played - a.played || a.b.localeCompare(b.b));
+                const mxCS = CSList.length ? Math.max(CSList[0].cs, 1) : 1;
+
                 let sHtml = '<div class="vt-bar" id="statsToggle" style="margin-bottom:14px">'
                     + '<button type="button" class="vt-btn ' + (statsTab === 'goals' ? 'on' : '') + '" data-st="goals">⚽ TOP SCORERS</button>'
                     + '<button type="button" class="vt-btn ' + (statsTab === 'assists' ? 'on' : '') + '" data-st="assists">🎯 TOP ASSISTS</button>'
+                    + '<button type="button" class="vt-btn ' + (statsTab === 'cleansheets' ? 'on' : '') + '" data-st="cleansheets">🧤 CLEAN SHEETS</button>'
                     + '</div>';
 
                 if (statsTab === 'goals') {
@@ -2402,11 +2429,16 @@
                         ? L.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '"><div class="rk">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag">GOLDEN BOOT</span>' : '') + '<small>' + esc(p.t) + (p.a ? ' · 🎯 ' + p.a + (p.a > 1 ? ' assists' : ' assist') : '') + '</small><div class="bar"><i style="width:' + Math.round(p.g / mx * 100) + '%"></i></div></div><div class="g">' + p.g + '</div></div>').join('') 
                             + '<button class="sb" id="shareScorersBtn" style="margin-top:14px;background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:12px;font-size:13px;width:100%">↗ SHARE TOP SCORERS POSTER</button>'
                         : '<div class="empty">No goals recorded yet.</div>';
-                } else {
+                } else if (statsTab === 'assists') {
                     sHtml += LA.length 
                         ? LA.map( (p, i) => '<div class="row' + (i == 0 ? ' boot' : '') + '" style="' + (i == 0 ? 'border-color:rgba(132,204,22,.45);background:linear-gradient(165deg,rgba(20,28,10,.94),rgba(10,14,6,.98))' : '') + '"><div class="rk" style="' + (i == 0 ? 'color:#a3e635' : '') + '">' + (i + 1) + '</div><div><b style="text-transform:uppercase">' + esc(p.n) + '</b>' + (i == 0 ? '<span class="tag" style="background:linear-gradient(180deg,#a3e635,#65a30d);color:#0a1a04">TOP PLAYMAKER</span>' : '') + '<small>' + esc(p.t) + (p.g ? ' · ⚽ ' + p.g + (p.g > 1 ? ' goals' : ' goal') : '') + '</small><div class="bar"><i style="width:' + Math.round(p.a / mxA * 100) + '%;background:linear-gradient(90deg,#a3e635,#65a30d)"></i></div></div><div class="g" style="color:#a3e635;border-color:rgba(132,204,22,.35)">' + p.a + '</div></div>').join('') 
                             + '<button class="sb" id="shareAssistsBtn" style="margin-top:14px;background:#10160a;border:1px solid #65a30d;color:#a3e635;padding:12px;font-size:13px;width:100%">↗ SHARE TOP ASSISTS POSTER</button>'
                         : '<div class="empty">No assists recorded yet.</div>';
+                } else {
+                    sHtml += CSList.length 
+                        ? CSList.map( (p, i) => '<div class="row' + (i == 0 && p.cs > 0 ? ' boot' : '') + '" style="' + (i == 0 && p.cs > 0 ? 'border-color:rgba(56,189,248,.45);background:linear-gradient(165deg,rgba(8,24,36,.94),rgba(4,14,22,.98))' : '') + '"><div class="rk" style="' + (i == 0 && p.cs > 0 ? 'color:#38bdf8' : '') + '">' + (i + 1) + '</div><div><b style="text-transform:uppercase">BRHS ' + esc(p.b) + '</b>' + (i == 0 && p.cs > 0 ? '<span class="tag" style="background:linear-gradient(180deg,#38bdf8,#0284c7);color:#03141f">GOLDEN GLOVE</span>' : '') + '<small>' + p.cs + (p.cs === 1 ? ' clean sheet' : ' clean sheets') + ' · ' + p.ga + ' goals conceded (' + p.played + (p.played === 1 ? ' match' : ' matches') + ')</small><div class="bar"><i style="width:' + Math.round(p.cs / mxCS * 100) + '%;background:linear-gradient(90deg,#38bdf8,#0284c7)"></i></div></div><div class="g" style="color:#38bdf8;border-color:rgba(56,189,248,.35)">' + p.cs + '</div></div>').join('') 
+                            + '<button class="sb" id="shareCleanSheetsBtn" style="margin-top:14px;background:#06131c;border:1px solid #0284c7;color:#38bdf8;padding:12px;font-size:13px;width:100%">↗ SHARE CLEAN SHEETS POSTER</button>'
+                        : '<div class="empty">No clean sheets recorded yet. (Teams with 0 goals conceded will be ranked here)</div>';
                 }
                 $('s').innerHTML = sHtml;
                 let t = '';
@@ -2582,6 +2614,11 @@
                 const sa = e.target.closest('#shareAssistsBtn');
                 if (sa) {
                     shareAssists();
+                    return;
+                }
+                const scs = e.target.closest('#shareCleanSheetsBtn');
+                if (scs) {
+                    shareCleanSheets();
                     return;
                 }
             };
@@ -3501,6 +3538,223 @@
                     shareAssists.busy = false;
                     const btn2 = $('shareAssistsBtn');
                     if (btn2) { btn2.disabled = false; btn2.textContent = '↗ SHARE TOP ASSISTS POSTER'; }
+                }
+            }
+
+            async function shareCleanSheets() {
+                if (shareCleanSheets.busy) return;
+                shareCleanSheets.busy = true;
+                const btn = $('shareCleanSheetsBtn');
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ GENERATING CLEAN SHEETS POSTER...'; }
+                try {
+                    const allBatches = [...new Set(Object.values(G).flat())];
+                    const CSList = [];
+                    allBatches.forEach(b => {
+                        let cs = 0, played = 0, ga = 0;
+                        FX.forEach((f, i) => {
+                            const n = i + 1;
+                            if (!done(n)) return;
+                            const r = R[n];
+                            ['a', 'b'].forEach(s => {
+                                const t = nm(n, s);
+                                if (!t.includes(b) && f[s === 'a' ? 1 : 2] !== b) return;
+                                played++;
+                                const so = s === 'a' ? r.sb : r.sa;
+                                ga += so;
+                                if (so === 0) cs++;
+                            });
+                        });
+                        if (played > 0) {
+                            CSList.push({ b, cs, played, ga });
+                        }
+                    });
+                    CSList.sort((a, b) => b.cs - a.cs || a.ga - b.ga || b.played - a.played || a.b.localeCompare(b.b));
+                    if (!CSList.length) {
+                        toast('No clean sheets recorded yet to share', false);
+                        return;
+                    }
+                    try {
+                        await Promise.all([document.fonts.load('120px Anton'), document.fonts.load('800 30px Montserrat')]);
+                    } catch (_) {}
+
+                    const S = 1080;
+                    const c = document.createElement('canvas');
+                    c.width = c.height = S;
+                    const x = c.getContext('2d');
+                    const AN = 'Anton, Impact, sans-serif';
+                    const MO = 'Montserrat, Arial, sans-serif';
+                    const CYAN = '#38bdf8';
+                    const CYAN2 = '#0284c7';
+
+                    const put = (t, px, y, size, col, al, sp, wt, fam, maxW) => {
+                        x.textAlign = al;
+                        x.textBaseline = 'alphabetic';
+                        x.fillStyle = col;
+                        let z = size;
+                        for (;;) {
+                            x.font = wt + ' ' + z + 'px ' + fam;
+                            if ('letterSpacing' in x) x.letterSpacing = sp + 'px';
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 11) break;
+                            z -= 1;
+                        }
+                        x.fillText(t, px, y);
+                        return x.measureText(t).width;
+                    };
+
+                    const rr = (px, py, w, h, rad) => {
+                        x.beginPath();
+                        x.moveTo(px + rad, py);
+                        x.arcTo(px + w, py, px + w, py + h, rad);
+                        x.arcTo(px + w, py + h, px, py + h, rad);
+                        x.arcTo(px, py + h, px, py, rad);
+                        x.arcTo(px, py, px + w, py, rad);
+                        x.closePath();
+                    };
+
+                    // Dark Pitch Background with Cyan Radial Glow
+                    x.fillStyle = '#03080e';
+                    x.fillRect(0, 0, S, S);
+                    const gr = x.createRadialGradient(S / 2, 380, 50, S / 2, 420, 680);
+                    gr.addColorStop(0, 'rgba(2,132,199,.28)');
+                    gr.addColorStop(1, 'rgba(2,132,199,0)');
+                    x.fillStyle = gr;
+                    x.fillRect(0, 0, S, S);
+
+                    // Tactical grid / pitch circle accents
+                    x.strokeStyle = 'rgba(56,189,248,.07)';
+                    x.lineWidth = 3;
+                    x.beginPath();
+                    x.arc(S / 2, 480, 240, 0, Math.PI * 2);
+                    x.stroke();
+
+                    // Elegant Outer Border
+                    x.strokeStyle = 'rgba(56,189,248,.35)';
+                    x.lineWidth = 2;
+                    x.strokeRect(20, 20, S - 40, S - 40);
+
+                    // Corner brackets
+                    x.strokeStyle = CYAN;
+                    x.lineWidth = 6;
+                    [[20, 20, 1, 1], [S - 20, 20, -1, 1], [20, S - 20, 1, -1], [S - 20, S - 20, -1, -1]].forEach(([cx, cy, dx, dy]) => {
+                        x.beginPath();
+                        x.moveTo(cx + dx * 40, cy);
+                        x.lineTo(cx, cy);
+                        x.lineTo(cx, cy + dy * 40);
+                        x.stroke();
+                    });
+
+                    // Tournament Header
+                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', S / 2, 70, 20, CYAN, 'center', 4, 800, MO, 920);
+
+                    // Clean Sheets Title Tag
+                    const tagTxt = '🧤 CLEAN SHEETS · BEST DEFENSE';
+                    x.font = '800 34px ' + MO;
+                    if ('letterSpacing' in x) x.letterSpacing = '4px';
+                    const tw = x.measureText(tagTxt).width + 72;
+                    rr((S - tw) / 2, 94, tw, 56, 28);
+                    x.fillStyle = CYAN2;
+                    x.fill();
+                    put(tagTxt, S / 2, 134, 34, '#ffffff', 'center', 4, 800, MO);
+
+                    // Top 1 Golden Glove Hero Banner
+                    const top1 = CSList[0];
+                    const hY = 178;
+                    rr(48, hY, S - 96, 178, 20);
+                    const heroGrad = x.createLinearGradient(48, hY, S - 48, hY + 178);
+                    heroGrad.addColorStop(0, 'rgba(8,30,48,.96)');
+                    heroGrad.addColorStop(1, 'rgba(3,12,20,.98)');
+                    x.fillStyle = heroGrad;
+                    x.fill();
+                    x.strokeStyle = 'rgba(56,189,248,.6)';
+                    x.lineWidth = 2;
+                    x.stroke();
+
+                    // Golden Glove Badge Pill
+                    rr(72, hY + 22, 220, 32, 16);
+                    x.fillStyle = CYAN;
+                    x.fill();
+                    put('★ GOLDEN GLOVE', 182, hY + 44, 13, '#03141f', 'center', 2, 800, MO);
+
+                    // Top Team Batch Name
+                    put('BRHS ' + top1.b, 72, hY + 106, 56, '#ffffff', 'left', 1, 800, MO, 640);
+                    put(top1.cs + (top1.cs === 1 ? ' Clean Sheet' : ' Clean Sheets') + ' · ' + top1.ga + ' Goals Conceded (' + top1.played + (top1.played === 1 ? ' Match' : ' Matches') + ')', 72, hY + 140, 20, '#94a3b8', 'left', 1, 600, MO, 640);
+
+                    // Right Clean Sheet Pill
+                    const pillW = 200, pillH = 125;
+                    const pillX = S - 48 - 24 - pillW, pillY = hY + 25;
+                    x.fillStyle = 'rgba(0,0,0,.6)';
+                    rr(pillX, pillY, pillW, pillH, 16);
+                    x.fill();
+                    x.strokeStyle = 'rgba(56,189,248,.4)';
+                    x.lineWidth = 2;
+                    x.stroke();
+
+                    put(String(top1.cs), pillX + pillW / 2, pillY + 86, 76, CYAN, 'center', 2, 400, AN);
+                    put(top1.cs === 1 ? 'CLEAN SHEET' : 'CLEAN SHEETS', pillX + pillW / 2, pillY + 112, 13, '#ffffff', 'center', 3, 800, MO);
+
+                    // Leaderboard list
+                    const rows = CSList.slice(1, 8);
+                    const listY = 380;
+                    const rowH = 68;
+
+                    rows.forEach((p, idx) => {
+                        const ry = listY + idx * (rowH + 10);
+                        rr(48, ry, S - 96, rowH, 14);
+                        x.fillStyle = idx % 2 === 0 ? 'rgba(255,255,255,.03)' : 'rgba(255,255,255,.015)';
+                        x.fill();
+                        x.strokeStyle = 'rgba(56,189,248,.12)';
+                        x.lineWidth = 1;
+                        x.stroke();
+
+                        // Rank
+                        put(String(idx + 2), 80, ry + 46, 26, CYAN, 'left', 0, 800, MO);
+
+                        // Batch Team
+                        put('BRHS ' + p.b, 130, ry + 44, 26, '#ffffff', 'left', 1, 800, MO, 400);
+
+                        // Conceded and matches
+                        put(p.ga + ' conceded (' + p.played + (p.played === 1 ? ' match' : ' matches') + ')', 480, ry + 44, 18, '#94a3b8', 'left', 1, 600, MO, 300);
+
+                        // Clean sheets count
+                        rr(S - 48 - 110, ry + 12, 86, 44, 10);
+                        x.fillStyle = 'rgba(56,189,248,.15)';
+                        x.fill();
+                        put(String(p.cs), S - 48 - 67, ry + 43, 30, CYAN, 'center', 1, 400, AN);
+                    });
+
+                    // Footer Branding
+                    const ftY = S - 46;
+                    x.fillStyle = 'rgba(255,255,255,.08)';
+                    x.fillRect(48, ftY - 26, S - 96, 1);
+                    put('LIVE MATCH PORTAL · brhs-match-hub.pages.dev', 52, ftY, 13, '#94a3b8', 'left', 1.5, 700, MO);
+                    put('ORGANIZED BY EX BRHSIANS', S - 52, ftY, 13, CYAN, 'right', 1.5, 800, MO);
+
+                    const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+                    const file = new File([blob], 'brhs-clean-sheets.png', { type: 'image/png' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Clean Sheets – BRHS Football Festival Season 03',
+                            text: 'Clean Sheets and Best Defense leaderboard of EX BRHSIAN Football Festival Season 03!'
+                        });
+                        toast('✓ Shared successfully!', true);
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = 'brhs-season03-clean-sheets.png';
+                        a.click();
+                        URL.revokeObjectURL(a.href);
+                        toast('✓ Clean Sheets poster downloaded!', true);
+                    }
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        toast('Could not generate clean sheets poster', false);
+                    }
+                } finally {
+                    shareCleanSheets.busy = false;
+                    const btn3 = $('shareCleanSheetsBtn');
+                    if (btn3) { btn3.disabled = false; btn3.textContent = '↗ SHARE CLEAN SHEETS POSTER'; }
                 }
             }
 function openEdit(n) {
