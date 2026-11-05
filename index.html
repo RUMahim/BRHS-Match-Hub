@@ -1691,6 +1691,66 @@
                     width: 100%;
                 }
             }
+        
+            /* ===== Score Stepper (+/- buttons) ===== */
+            .score-stepper {
+                display: flex;
+                align-items: stretch;
+                background: #090805;
+                border: 1px solid #352a10;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-top: 5px;
+                transition: border-color 0.15s, box-shadow 0.15s;
+            }
+            .score-stepper:focus-within {
+                border-color: var(--gold);
+                box-shadow: 0 0 0 3px rgba(201, 162, 39, .2);
+            }
+            .score-stepper input {
+                border: none !important;
+                background: transparent !important;
+                text-align: center;
+                font: 800 18px Montserrat, Arial, sans-serif;
+                color: var(--gold);
+                padding: 6px 2px;
+                min-height: 44px;
+                width: 100%;
+                box-shadow: none !important;
+                outline: none !important;
+                border-radius: 0 !important;
+                -moz-appearance: textfield;
+            }
+            .score-stepper input::-webkit-outer-spin-button,
+            .score-stepper input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .score-step-btn {
+                background: rgba(201, 162, 39, 0.12);
+                border: none;
+                color: var(--gold);
+                font: 800 20px Montserrat, Arial, sans-serif;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                transition: background 0.15s, transform 0.08s;
+                touch-action: manipulation;
+                padding: 0;
+                line-height: 1;
+            }
+            .score-step-btn:hover {
+                background: rgba(201, 162, 39, 0.25);
+                color: #fff;
+            }
+            .score-step-btn:active {
+                background: rgba(201, 162, 39, 0.4);
+                transform: scale(0.92);
+            }
         </style>
     </head>
     <body>
@@ -1808,10 +1868,20 @@
                     </div>
                     <div class="two">
                         <label>
-                            Score A<input name="sa" type="number" min="0" inputmode="numeric" required>
+                            <span id="lblScoreA">Score A</span>
+                            <div class="score-stepper">
+                                <button type="button" class="score-step-btn" data-step="sa" data-dir="-1" aria-label="Decrease Score A">−</button>
+                                <input name="sa" type="number" min="0" inputmode="numeric" required>
+                                <button type="button" class="score-step-btn" data-step="sa" data-dir="1" aria-label="Increase Score A">+</button>
+                            </div>
                         </label>
                         <label>
-                            Score B<input name="sb" type="number" min="0" inputmode="numeric" required>
+                            <span id="lblScoreB">Score B</span>
+                            <div class="score-stepper">
+                                <button type="button" class="score-step-btn" data-step="sb" data-dir="-1" aria-label="Decrease Score B">−</button>
+                                <input name="sb" type="number" min="0" inputmode="numeric" required>
+                                <button type="button" class="score-step-btn" data-step="sb" data-dir="1" aria-label="Increase Score B">+</button>
+                            </div>
                         </label>
                     </div>
                     <label>
@@ -4098,8 +4168,12 @@ function openEdit(n) {
                   , F = $('ef').elements;
                 $('sht').textContent = 'MATCH #' + String(n).padStart(2, '0');
                 $('shs').innerHTML = '<span>' + ST[f[0]] + '</span><span>' + f[3] + '</span>';
-                F.ta.value = nm(n, 'a');
-                F.tb.value = nm(n, 'b');
+                const nameA = nm(n, 'a');
+                const nameB = nm(n, 'b');
+                F.ta.value = nameA;
+                F.tb.value = nameB;
+                const la = $('lblScoreA'); if (la) la.textContent = 'Score – ' + nameA;
+                const lb = $('lblScoreB'); if (lb) lb.textContent = 'Score – ' + nameB;
                 F.sa.value = r.done || r.live ? r.sa : '';
                 F.sb.value = r.done || r.live ? r.sb : '';
                 F.ga.value = (r.ga || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
@@ -4129,6 +4203,22 @@ function openEdit(n) {
                 $('sh').hidden = true
             }
             ;
+                        document.querySelectorAll('.score-step-btn').forEach(btn => {
+                btn.onclick = e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fieldName = btn.getAttribute('data-step');
+                    const dir = parseInt(btn.getAttribute('data-dir'), 10);
+                    const input = $('ef').elements[fieldName];
+                    if (!input) return;
+                    let curVal = parseInt(input.value, 10);
+                    if (isNaN(curVal)) curVal = 0;
+                    const nextVal = Math.max(0, curVal + dir);
+                    input.value = nextVal;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                };
+            });
             $('cx').onclick = closeEdit;
             $('sh').onclick = e => {
                 if (e.target == $('sh'))
