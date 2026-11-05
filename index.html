@@ -2436,7 +2436,7 @@
                         : '<div class="empty">No assists recorded yet.</div>';
                 } else {
                     sHtml += CSList.length 
-                        ? CSList.map( (p, i) => '<div class="row' + (i == 0 && p.cs > 0 ? ' boot' : '') + '" style="' + (i == 0 && p.cs > 0 ? 'border-color:rgba(56,189,248,.45);background:linear-gradient(165deg,rgba(8,24,36,.94),rgba(4,14,22,.98))' : '') + '"><div class="rk" style="' + (i == 0 && p.cs > 0 ? 'color:#38bdf8' : '') + '">' + (i + 1) + '</div><div><b style="text-transform:uppercase">BRHS ' + esc(p.b) + '</b>' + (i == 0 && p.cs > 0 ? '<span class="tag" style="background:linear-gradient(180deg,#38bdf8,#0284c7);color:#03141f">GOLDEN GLOVE</span>' : '') + '<small>' + p.cs + (p.cs === 1 ? ' clean sheet' : ' clean sheets') + ' · ' + p.ga + ' goals conceded (' + p.played + (p.played === 1 ? ' match' : ' matches') + ')</small><div class="bar"><i style="width:' + Math.round(p.cs / mxCS * 100) + '%;background:linear-gradient(90deg,#38bdf8,#0284c7)"></i></div></div><div class="g" style="color:#38bdf8;border-color:rgba(56,189,248,.35)">' + p.cs + '</div></div>').join('') 
+                        ? CSList.map( (p, i) => '<div class="row' + (i == 0 && p.cs > 0 ? ' boot' : '') + '" style="' + (i == 0 && p.cs > 0 ? 'border-color:rgba(56,189,248,.45);background:linear-gradient(165deg,rgba(8,24,36,.94),rgba(4,14,22,.98))' : '') + '"><div class="rk" style="' + (i == 0 && p.cs > 0 ? 'color:#38bdf8' : '') + '">' + (i + 1) + '</div><div><b style="text-transform:uppercase">BRHS ' + esc(p.b) + '</b>' + (i == 0 && p.cs > 0 ? '<span class="tag" style="background:linear-gradient(180deg,#38bdf8,#0284c7);color:#03141f">MOST CLEAN SHEETS</span>' : '') + '<small>' + p.cs + (p.cs === 1 ? ' clean sheet' : ' clean sheets') + ' · ' + p.ga + ' goals conceded (' + p.played + (p.played === 1 ? ' match' : ' matches') + ')</small><div class="bar"><i style="width:' + Math.round(p.cs / mxCS * 100) + '%;background:linear-gradient(90deg,#38bdf8,#0284c7)"></i></div></div><div class="g" style="color:#38bdf8;border-color:rgba(56,189,248,.35)">' + p.cs + '</div></div>').join('') 
                             + '<button class="sb" id="shareCleanSheetsBtn" style="margin-top:14px;background:#06131c;border:1px solid #0284c7;color:#38bdf8;padding:12px;font-size:13px;width:100%">↗ SHARE CLEAN SHEETS POSTER</button>'
                         : '<div class="empty">No clean sheets recorded yet. (Teams with 0 goals conceded will be ranked here)</div>';
                 }
@@ -3656,7 +3656,7 @@
                     x.fill();
                     put(tagTxt, S / 2, 134, 34, '#ffffff', 'center', 4, 800, MO);
 
-                    // Top 1 Golden Glove Hero Banner
+                    // Top 1 Clean Sheet Hero Banner
                     const top1 = CSList[0];
                     const hY = 178;
                     rr(48, hY, S - 96, 178, 20);
@@ -3669,11 +3669,11 @@
                     x.lineWidth = 2;
                     x.stroke();
 
-                    // Golden Glove Badge Pill
+                    // Most Clean Sheets Badge Pill
                     rr(72, hY + 22, 220, 32, 16);
                     x.fillStyle = CYAN;
                     x.fill();
-                    put('★ GOLDEN GLOVE', 182, hY + 44, 13, '#03141f', 'center', 2, 800, MO);
+                    put('★ MOST CLEAN SHEETS', 182, hY + 44, 13, '#03141f', 'center', 2, 800, MO);
 
                     // Top Team Batch Name
                     put('BRHS ' + top1.b, 72, hY + 106, 56, '#ffffff', 'left', 1, 800, MO, 640);
