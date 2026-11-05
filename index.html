@@ -1203,6 +1203,38 @@
                 color: #fff
             }
 
+            .sq-jump-btn {
+                background: none;
+                border: none;
+                color: var(--gold);
+                font: 700 13px Montserrat,Arial,sans-serif;
+                cursor: pointer;
+                padding: 2px 4px;
+                border-radius: 4px;
+                transition: all .15s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+                vertical-align: middle
+            }
+
+            .sq-jump-btn:hover {
+                color: #fff;
+                background: rgba(201,162,39,.15);
+                text-decoration: underline
+            }
+
+            .sq-jump-icon {
+                font-size: 11px;
+                opacity: .7;
+                transition: opacity .15s, transform .15s
+            }
+
+            .sq-jump-btn:hover .sq-jump-icon {
+                opacity: 1;
+                transform: translate(1px, -1px)
+            }
+
             textarea {
                 background: #0b0a06;
                 border: 1px solid #3a2f12;
@@ -1494,8 +1526,10 @@
                 3: ['19', '20', '21', '22'],
                 4: ['09', '11', '13', '14']
             }
+              , SQ = {}
               , flt = 'all'
               , batchFlt = 'all'
+              , sqBatchFlt = 'all'
               , schedView = 'list'
               , cur = 0;
             let U0 = 0
@@ -1777,9 +1811,13 @@
                     + '</div>';
             }
 
-            /* === Squad Data: auto-discovered from match results + admin editable === */
-            let SQ = {}; // { '09': ['Player A', 'Player B', ...], ... }
-            try { SQ = JSON.parse(localStorage.getItem('brhsSquads') || '{}') } catch (_) {}
+            /* === Squad Data: auto-discovered from match results + Firestore synced === */
+            try {
+                const localSq = JSON.parse(localStorage.getItem('brhsSquads') || '{}');
+                if (localSq && Object.keys(localSq).length) {
+                    SQ = Object.assign({}, localSq, SQ);
+                }
+            } catch (_) {}
 
             function getSquadPlayers(batch) {
                 // Auto-discover players that appeared in goals, cards, MOTM for this batch
@@ -1790,7 +1828,7 @@
                     const r = R[n];
                     ['a', 'b'].forEach(s => {
                         const t = nm(n, s);
-                        if (!t.includes(batch)) return;
+                        if (!t.includes(batch) && f[s == 'a' ? 1 : 2] != batch) return;
                         // Goals
                         const ga = s === 'a' ? r.ga : r.gb;
                         (ga || []).forEach(g => { players[g[0].trim()] = true });
@@ -1820,8 +1858,7 @@
                     const r = R[n];
                     ['a', 'b'].forEach(s => {
                         const t = nm(n, s);
-                        if (!t.includes(batch)) return;
-                        const opp = s === 'a' ? 'b' : 'a';
+                        if (!t.includes(batch) && f[s == 'a' ? 1 : 2] != batch) return;
                         played++;
                         const sf = s === 'a' ? r.sa : r.sb;
                         const so = s === 'a' ? r.sb : r.sa;
@@ -1851,7 +1888,7 @@
                     const r = R[n];
                     ['a', 'b'].forEach(s => {
                         const t = nm(n, s);
-                        if (!t.includes(batch)) return;
+                        if (!t.includes(batch) && f[s == 'a' ? 1 : 2] != batch) return;
                         const g = s === 'a' ? r.ga : r.gb;
                         (g || []).forEach(x => { if (x[0].toLowerCase() === pn) goals += x[1] });
                         const y = s === 'a' ? r.ya : r.yb;
@@ -1879,9 +1916,16 @@
                 });
 
                 let html = '<div class="stg">BATCH SQUADS</div>'
-                    + '<p class="note" style="margin-bottom:14px">Player lists are automatically built from match data (goal scorers, card recipients, MOTM).' + (ADMIN ? ' You can also manually add players below each squad.' : '') + '</p>';
+                    + '<div class="bf-bar" style="margin:8px 0 14px">'
+                    + '<select id="sqBatchFlt" class="batch-select" aria-label="Filter squad by batch">'
+                    + '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>'
+                    + allBatches.map(b => '<option value="' + esc(b) + '"' + (sqBatchFlt === b ? ' selected' : '') + '>BRHS BATCH ' + esc(b) + ' (Group ' + (batchGroup[b] || '?') + ')</option>').join('')
+                    + '</select>'
+                    + '</div>';
 
-                allBatches.forEach(batch => {
+                const targetBatches = sqBatchFlt === 'all' ? allBatches : [sqBatchFlt];
+
+                targetBatches.forEach(batch => {
                     const auto = getSquadPlayers(batch);
                     const manual = (SQ[batch] || []).filter(p => !auto.map(a => a.toLowerCase()).includes(p.toLowerCase()));
                     const allPlayers = [...auto, ...manual];
@@ -1915,7 +1959,9 @@
                     }
 
                     if (allPlayers.length === 0) {
-                        html += '<div class="empty" style="padding:16px 0">No players recorded yet. Player names will appear here as matches are played.</div>';
+                        html += '<div class="empty" style="padding:16px 0">'
+                            + (ADMIN ? 'No players recorded yet. Type player names below and click Save.' : 'No squad roster listed yet for Batch ' + esc(batch) + '. Organizers will add it soon.')
+                            + '</div>';
                     } else {
                         allPlayers.forEach((p, idx) => {
                             const badges = getPlayerBadges(batch, p);
@@ -1936,9 +1982,10 @@
                     }
 
                     if (ADMIN) {
-                        html += '<div style="margin-top:10px">'
-                            + '<textarea class="sq-edit-area" data-batch="' + esc(batch) + '" placeholder="Add player names (comma separated)&#10;e.g. Mahim, Sakib, Rafiq">' + (SQ[batch] || []).join(', ') + '</textarea>'
-                            + '<button class="btn sq-save-btn" data-batch="' + esc(batch) + '" style="margin-top:6px;min-height:36px;font-size:11px">SAVE SQUAD · BRHS ' + esc(batch) + '</button>'
+                        html += '<div style="margin-top:12px;background:#100d06;border:1px dashed #4a3a10;border-radius:10px;padding:10px">'
+                            + '<label style="font-size:10px;color:var(--gold);margin-bottom:4px">✎ EDIT SQUAD (BRHS ' + esc(batch) + ')</label>'
+                            + '<textarea class="sq-edit-area" data-batch="' + esc(batch) + '" placeholder="Player names separated by commas or lines&#10;e.g. Mahim (C), Sakib, Rafiq">' + (SQ[batch] || []).join(', ') + '</textarea>'
+                            + '<button class="btn sq-save-btn" data-batch="' + esc(batch) + '" style="margin-top:6px;min-height:36px;font-size:11px">SAVE SQUAD & SYNC TO VISITORS</button>'
                             + '</div>';
                     }
 
@@ -1946,6 +1993,14 @@
                 });
 
                 $('q').innerHTML = html;
+
+                const sbf = $('sqBatchFlt');
+                if (sbf) {
+                    sbf.onchange = ev => {
+                        sqBatchFlt = ev.target.value;
+                        renderSquads();
+                    };
+                }
             }
 
             function render() {
@@ -2027,7 +2082,7 @@
                 Object.keys(G).forEach(g => {
                     const r = rank(g)
                       , dn = gDone(g);
-                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td>BRHS ' + esc(x.t) + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
+                    t += '<div class="gh">GROUP ' + g + (dn ? '<span class="tag">COMPLETE</span>' : '') + '</div><div class="sw"><table><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr>' + r.map( (x, i) => '<tr' + (dn && i < 2 ? ' class="q"' : '') + '><td>' + (i + 1) + '</td><td><button type="button" class="sq-jump-btn" data-b="' + esc(x.t) + '" title="View Batch ' + esc(x.t) + ' Squad">BRHS ' + esc(x.t) + ' <span class="sq-jump-icon">↗</span></button>' + (dn && i < 2 ? '<span class="q-badge" title="Qualified">Q</span>' : '') + '</td><td>' + x.p + '</td><td>' + x.w + '</td><td>' + x.d + '</td><td>' + x.l + '</td><td>' + x.gf + '</td><td>' + x.ga + '</td><td>' + (x.gf - x.ga > 0 ? '+' : '') + (x.gf - x.ga) + '</td><td>' + x.pt + '</td></tr>').join('') + '</table></div>' + (dn && tie(g) ? '<p class="note">⚠ Teams are level on points, goal difference and goals. Set the right team by editing the quarter-final match.</p>' : '')
                 }
                 );
                 t += '<p class="note"><span class="q-badge" style="margin-left:0;margin-right:4px">Q</span> Top 2 of each group qualify for the quarter finals. Win 3, draw 1. Ties: goal difference, then goals scored.</p>';
@@ -2047,6 +2102,7 @@
                     return;
                 document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x == b));
                 ['m', 's', 't', 'c', 'o', 'q'].forEach(k => $(k).hidden = k != b.dataset.t);
+                if (b.dataset.t === 'q') renderSquads();
                 scrollTo({
                     top: 0
                 })
@@ -2111,6 +2167,14 @@
                 }
             };
             $('t').onclick = e => {
+                const jb = e.target.closest('.sq-jump-btn');
+                if (jb) {
+                    const b = jb.dataset.b;
+                    sqBatchFlt = b;
+                    const sqBtn = document.querySelector('#nav button[data-t="q"]');
+                    if (sqBtn) sqBtn.click();
+                    return;
+                }
                 const sb = e.target.closest('#shareTableBtn');
                 if (sb) {
                     shareTable();
@@ -2123,11 +2187,13 @@
                 const batch = btn.dataset.batch;
                 const area = document.querySelector('.sq-edit-area[data-batch="' + batch + '"]');
                 if (!area) return;
-                const names = area.value.split(',').map(x => x.trim()).filter(Boolean);
+                const names = area.value.split(/[\n,]/).map(x => x.trim()).filter(Boolean);
+                const pv = snap();
                 SQ[batch] = names;
                 try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)) } catch (_) {}
                 renderSquads();
-                toast('Squad saved for BRHS ' + batch, true);
+                persistChange({ squads: SQ }, pv);
+                toast('✓ Squad saved & synced for BRHS ' + batch, true);
             }
             ;
             async function shareMatch(n) {
@@ -2662,7 +2728,8 @@
 
             const snap = () => JSON.stringify({
                 R,
-                G
+                G,
+                SQ
             });
             function toast(m, ok) {
                 const t = $('toast');
@@ -2675,7 +2742,7 @@
                 , 4500)
             }
             function hdr() {
-                $('adm').textContent = MODE === 'local' ? 'DEMO MODE · results save on this device only (add Firebase config to share live)' : ADMIN ? 'ADMIN MODE · tap a match to enter or edit its result' : '';
+                $('adm').textContent = MODE === 'local' ? 'DEMO MODE' : ADMIN ? 'ADMIN MODE' : '';
                 $('upd').textContent = U0 ? 'Last updated ' + new Date(U0).toLocaleString([], {
                     day: 'numeric',
                     month: 'short',
@@ -2689,7 +2756,7 @@
                 const u = Date.now();
                 if (MODE === 'local') {
                     try {
-                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G }));
+                        localStorage.setItem('brhsHubLocal', JSON.stringify({ R, G, SQ }));
                     } catch (e) { console.warn('Cache save failed:', e); }
                     U0 = u;
                     hdr();
@@ -2701,14 +2768,16 @@
                         const docSnap = await tx.get(docRef);
                         let remoteR = {};
                         let remoteG = G;
+                        let remoteSQ = SQ || {};
                         if (docSnap.exists()) {
                             try {
                                 const parsed = JSON.parse(docSnap.data().json);
                                 if (parsed.R) remoteR = parsed.R;
                                 if (parsed.G) remoteG = parsed.G;
+                                if (parsed.SQ) remoteSQ = parsed.SQ;
                             } catch (_) {}
                         }
-                        // Atomically merge the specific match or group changes
+                        // Atomically merge the specific match, group, or squad changes
                         if (change && change.matchId !== undefined) {
                             if (change.matchData === null) {
                                 delete remoteR[change.matchId];
@@ -2719,8 +2788,11 @@
                         if (change && change.groups) {
                             remoteG = change.groups;
                         }
+                        if (change && change.squads) {
+                            remoteSQ = change.squads;
+                        }
                         tx.set(docRef, {
-                            json: JSON.stringify({ R: remoteR, G: remoteG }),
+                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ }),
                             u
                         });
                     });
@@ -2730,6 +2802,7 @@
                         const p = JSON.parse(prev);
                         R = p.R;
                         G = p.G;
+                        SQ = p.SQ || {};
                     } catch (_) {}
                     render();
                     toast(e.code === 'permission-denied' ? 'Not allowed. Log in as admin.' : '✕ Not saved (' + (e.code || 'error') + '). Try again.', false);
@@ -2743,7 +2816,8 @@
                         const s = JSON.parse(localStorage.getItem('brhsHubLocal') || 'null');
                         if (s) {
                             R = s.R || {};
-                            G = s.G || G
+                            G = s.G || G;
+                            SQ = s.SQ || SQ || {};
                         }
                     } catch (e) { console.warn('Cache save failed:', e) }
                     render();
@@ -2776,11 +2850,15 @@
                                     G = st.G;
                                     if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
                                 }
+                                if (st.SQ) {
+                                    SQ = st.SQ;
+                                }
                                 U0 = s.data().u || 0;
                                 try {
                                     localStorage.setItem('brhsHubCache', JSON.stringify({
                                         R,
                                         G,
+                                        SQ,
                                         u: U0
                                     }))
                                 } catch (_) {}
@@ -2865,6 +2943,7 @@
                 if (c) {
                     R = c.R || {};
                     G = c.G || G;
+                    SQ = c.SQ || SQ || {};
                     U0 = c.u || 0
                 }
             } catch (e) {}
