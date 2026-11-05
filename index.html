@@ -1585,6 +1585,112 @@
             .goal-close:hover {
                 color: #fff;
             }
+        
+            /* ===== Header Admin Quick Bar (Responsive Mobile & Desktop) ===== */
+            .admin-quick-bar {
+                display: none;
+                background: linear-gradient(135deg, rgba(20, 16, 7, 0.96), rgba(12, 10, 5, 0.98));
+                border: 1px solid rgba(201, 162, 39, 0.45);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+                border-radius: 10px;
+                padding: 8px 12px;
+                margin-bottom: 12px;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+            .admin-quick-title {
+                font: 800 11px Montserrat, Arial, sans-serif;
+                color: var(--gold);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+                white-space: nowrap;
+            }
+            .admin-quick-actions {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .admin-btn {
+                background: #14110a;
+                border: 1px solid #C9A227;
+                color: var(--gold);
+                padding: 5px 10px;
+                font: 700 11px Montserrat, Arial, sans-serif;
+                border-radius: 6px;
+                cursor: pointer;
+                white-space: nowrap;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                transition: background 0.15s, transform 0.1s;
+                box-sizing: border-box;
+            }
+            .admin-btn:hover {
+                background: rgba(201, 162, 39, 0.2);
+            }
+            .admin-btn:active {
+                transform: scale(0.97);
+            }
+            .admin-btn-restore {
+                border-color: #5a481f;
+                color: #d1c7b0;
+            }
+            .admin-btn-logout {
+                background: rgba(224, 83, 60, 0.12);
+                border-color: rgba(224, 83, 60, 0.5);
+                color: #fca5a5;
+            }
+            .admin-btn-logout:hover {
+                background: rgba(224, 83, 60, 0.25);
+                color: #fff;
+            }
+            .top-login-btn {
+                background: rgba(201, 162, 39, 0.08);
+                border: 1px solid rgba(201, 162, 39, 0.35);
+                color: var(--gold);
+                padding: 4px 10px;
+                font: 700 11px Montserrat, Arial, sans-serif;
+                border-radius: 14px;
+                cursor: pointer;
+                margin-top: 4px;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                transition: background 0.15s;
+            }
+            .top-login-btn:hover {
+                background: rgba(201, 162, 39, 0.18);
+            }
+            @media (max-width: 520px) {
+                .admin-quick-bar {
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding: 9px 10px;
+                    gap: 8px;
+                }
+                .admin-quick-title {
+                    justify-content: center;
+                    padding-bottom: 2px;
+                }
+                .admin-quick-actions {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 6px;
+                    width: 100%;
+                }
+                .admin-quick-actions .admin-btn {
+                    justify-content: center;
+                    padding: 7px 6px;
+                    width: 100%;
+                }
+            }
         </style>
     </head>
     <body>
@@ -1598,21 +1704,19 @@
                     <div class="sub">SEASON 03 · RESULTS</div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
-                    <div id="adminHeaderBar" style="margin-top:6px">
-                        <div id="adminQuickBar" style="display:none;padding:6px 10px;background:rgba(201,162,39,.12);border:1px solid rgba(201,162,39,.4);border-radius:8px;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">
-                            <span style="font:800 11px Montserrat;color:var(--gold);display:flex;align-items:center;gap:4px">🛡️ ADMIN MODE</span>
-                            <div style="display:flex;gap:4px;align-items:center">
-                                <button type="button" id="topNoticeBtn" style="background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">📢 Notice</button>
-                                <button type="button" id="topExportBackupBtn" style="background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">💾 Backup</button>
-                                <button type="button" id="topImportBackupBtn" style="background:#14110a;border:1px solid #4a3b1a;color:#d1c7b0;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">⬆ Restore</button>
-                                <button type="button" id="topLogoutBtn" style="background:transparent;border:1px solid rgba(224,83,60,.4);color:#fca5a5;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">Logout</button>
-                            </div>
-                        </div>
-                        <button type="button" id="topLoginBtn" style="display:none;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.3);color:var(--gold);padding:4px 10px;font:700 11px Montserrat;border-radius:14px;cursor:pointer;margin-top:2px">🔒 Admin Login</button>
-                    </div>
+                    <button type="button" id="topLoginBtn" class="top-login-btn" style="display:none">🔒 Admin Login</button>
                     <button id="pwaBtn" class="pwa-btn" hidden>📲 INSTALL APP</button>
                 </div>
             </header>
+            <div id="adminQuickBar" class="admin-quick-bar" style="display:none">
+                <div class="admin-quick-title">🛡️ ADMIN MODE</div>
+                <div class="admin-quick-actions">
+                    <button type="button" id="topNoticeBtn" class="admin-btn">📢 Notice</button>
+                    <button type="button" id="topExportBackupBtn" class="admin-btn">💾 Backup</button>
+                    <button type="button" id="topImportBackupBtn" class="admin-btn admin-btn-restore">⬆ Restore</button>
+                    <button type="button" id="topLogoutBtn" class="admin-btn admin-btn-logout">Logout</button>
+                </div>
+            </div>
             <div id="anncBar" class="annc-bar" style="display:none;margin-bottom:14px;background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(161,98,7,.25));border:1px solid rgba(201,162,39,.55);border-radius:10px;padding:10px 14px;box-shadow:0 3px 12px rgba(0,0,0,.3)">
                 <div style="display:flex;align-items:flex-start;gap:10px">
                     <span style="font-size:18px;line-height:1.2">📢</span>
