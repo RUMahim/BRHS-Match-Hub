@@ -1519,6 +1519,17 @@
                     <div class="sub">SEASON 03 · RESULTS</div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
+                    <div id="adminHeaderBar" style="margin-top:6px">
+                        <div id="adminQuickBar" style="display:none;padding:6px 10px;background:rgba(201,162,39,.12);border:1px solid rgba(201,162,39,.4);border-radius:8px;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">
+                            <span style="font:800 11px Montserrat;color:var(--gold);display:flex;align-items:center;gap:4px">🛡️ ADMIN MODE</span>
+                            <div style="display:flex;gap:4px;align-items:center">
+                                <button type="button" id="topExportBackupBtn" style="background:#14110a;border:1px solid #C9A227;color:var(--gold);padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">💾 Backup</button>
+                                <button type="button" id="topImportBackupBtn" style="background:#14110a;border:1px solid #4a3b1a;color:#d1c7b0;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">⬆ Restore</button>
+                                <button type="button" id="topLogoutBtn" style="background:transparent;border:1px solid rgba(224,83,60,.4);color:#fca5a5;padding:4px 8px;font:700 11px Montserrat;border-radius:6px;cursor:pointer">Logout</button>
+                            </div>
+                        </div>
+                        <button type="button" id="topLoginBtn" style="display:none;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.3);color:var(--gold);padding:4px 10px;font:700 11px Montserrat;border-radius:14px;cursor:pointer;margin-top:2px">🔒 Admin Login</button>
+                    </div>
                     <button id="pwaBtn" class="pwa-btn" hidden>📲 INSTALL APP</button>
                 </div>
             </header>
@@ -3990,7 +4001,11 @@ function openEdit(n) {
                     minute: '2-digit'
                 }) : '';
                 $('lgl').hidden = MODE === 'local';
-                $('lgl').textContent = ADMIN ? 'Admin logout' : 'Admin login'
+                $('lgl').textContent = ADMIN ? 'Admin logout' : 'Admin login';
+                const qb = $('adminQuickBar');
+                if (qb) qb.style.display = ADMIN ? 'flex' : 'none';
+                const tlb = $('topLoginBtn');
+                if (tlb) tlb.style.display = (!ADMIN && MODE !== 'local') ? 'inline-block' : 'none';
             }
             async function persistChange(change, prev) {
                 const u = Date.now();
@@ -4177,7 +4192,26 @@ function openEdit(n) {
                     resetPwToggle();
                     $('lg').hidden = false
                 }
-            }
+            };
+            const tlb = $('topLoginBtn');
+            if (tlb) tlb.onclick = () => { resetPwToggle(); $('lg').hidden = false; };
+            const tlob = $('topLogoutBtn');
+            if (tlob) tlob.onclick = () => { if (AU && AUTH) AU.signOut(AUTH); };
+            const teb = $('topExportBackupBtn');
+            if (teb) teb.onclick = () => exportBackup();
+            const tib = $('topImportBackupBtn');
+            if (tib) tib.onclick = () => {
+                let fi = $('backupFileInput');
+                if (!fi) {
+                    fi = document.createElement('input');
+                    fi.type = 'file';
+                    fi.accept = '.json';
+                    fi.style.display = 'none';
+                    fi.onchange = handleBackupFile;
+                    document.body.appendChild(fi);
+                }
+                fi.click();
+            };
             ;
             $('lcx').onclick = () => {
                 resetPwToggle();
