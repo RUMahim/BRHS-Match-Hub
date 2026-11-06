@@ -1821,12 +1821,12 @@
                     <button type="button" id="topLogoutBtn" class="admin-btn admin-btn-logout">Logout</button>
                 </div>
             </div>
-            <div id="anncBar" class="annc-bar" style="display:none;margin-bottom:14px;background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(161,98,7,.25));border:1px solid rgba(201,162,39,.55);border-radius:10px;padding:10px 14px;box-shadow:0 3px 12px rgba(0,0,0,.3)">
+            <div id="anncBar" class="annc-bar" style="display:block;margin-bottom:14px;background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(161,98,7,.25));border:1px solid rgba(201,162,39,.55);border-radius:10px;padding:10px 14px;box-shadow:0 3px 12px rgba(0,0,0,.3)">
                 <div style="display:flex;align-items:flex-start;gap:10px">
                     <span style="font-size:18px;line-height:1.2">📢</span>
                     <div style="flex:1">
                         <div style="font:800 10px Montserrat;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px">IMPORTANT NOTICE (জরুরি ঘোষণা)</div>
-                        <div id="anncText" style="font-size:13px;color:#f3efe6;font-weight:600;line-height:1.45;word-break:break-word"></div>
+                        <div id="anncText" style="font-size:13px;color:#f3efe6;font-weight:600;line-height:1.45;word-break:break-word">EX-BRHSian Football Festival Season 03 এ অংশগ্রহণকারী সকল দলকে জানানো যাচ্ছে যে, ফিক্সচার অনুযায়ী নির্ধারিত সময়ে মাঠে উপস্থিত থাকার অনুরোধ করা হচ্ছে। খেলায় কোনো বিলম্ব বরদাশত করা হবে না।</div>
                     </div>
                     <button type="button" id="anncCloseBtn" style="background:transparent;border:none;color:var(--mut);font-size:16px;cursor:pointer;padding:0 4px;line-height:1" title="Dismiss notice">✕</button>
                 </div>
@@ -2131,7 +2131,7 @@
                 '"': '&quot;',
                 "'": '&#39;'
             }[c]));
-            let ANNC = ''
+            let ANNC = "EX-BRHSian Football Festival Season 03 এ অংশগ্রহণকারী সকল দলকে জানানো যাচ্ছে যে, ফিক্সচার অনুযায়ী নির্ধারিত সময়ে মাঠে উপস্থিত থাকার অনুরোধ করা হচ্ছে। খেলায় কোনো বিলম্ব বরদাশত করা হবে না।"
               , R = {}
               , G = {
                 1: ['23', '24', '25', '26'],
@@ -4896,7 +4896,7 @@ function hdr() {
                 }
             };
             const tlb = $('topLoginBtn');
-            if (tlb) tlb.onclick = () => { resetPwToggle(); $('lg').hidden = false; };
+            if (tlb) tlb.onclick = () => { if (window.ensureAuth) window.ensureAuth(); resetPwToggle(); $('lg').hidden = false; };
             const tlob = $('topLogoutBtn');
             if (tlob) tlob.onclick = () => { if (AU && AUTH) AU.signOut(AUTH); };
             
@@ -4964,6 +4964,7 @@ const teb = $('topExportBackupBtn');
             ;
             $('lf').onsubmit = async e => {
                 e.preventDefault();
+                if (!AUTH && window.ensureAuth) { await window.ensureAuth(); }
                 if (!AUTH) {
                     toast('Live service is not ready yet', false);
                     return
