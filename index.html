@@ -4776,28 +4776,63 @@ function hdr() {
                     const app = A.initializeApp(CFG);
                     
                     let authInitPromise = null;
-                    window.ensureAuth = async function() {
-                        if (AUTH) return AUTH;
+                    window.ensureAuth = function() {
+                        if (AUTH) return Promise.resolve(AUTH);
                         if (!authInitPromise) {
                             authInitPromise = import(B + 'firebase-auth.js').then(Au => {
                                 AU = Au;
                                 AUTH = Au.getAuth(app);
                                 AU.onAuthStateChanged(AUTH, u => {
-                                    ADMIN = !!u;
+                                    ADMIN = !!u && (!ADMIN_EMAILS.length || ADMIN_EMAILS.includes(u.email));
+                                    try {
+                                        if (ADMIN) {
+                                            localStorage.setItem('brhs_is_admin', '1');
+                                        } else {
+                                            localStorage.removeItem('brhs_is_admin');
+                                        }
+                                    } catch (_) {}
                                     hdr();
                                     render();
                                 });
                                 return AUTH;
-                            }).catch(err => { console.warn('Auth load failed:', err); });
+                            }).catch(err => {
+                                console.warn('Auth load failed:', err);
+                                toast('Login service is unavailable. Check your connection.', false);
+                            });
                         }
                         return authInitPromise;
                     };
 
-                    // Only load heavy auth iframe if device has an existing admin session
-                    const hasAdminSession = Object.keys(localStorage).some(k => k.startsWith('firebase:authUser'));
-                    if (hasAdminSession) {
-                        window.ensureAuth();
-                    }
+                    // Auto-restore admin session across refresh
+                    try {
+                        const hasAdmin = localStorage.getItem('brhs_is_admin') === '1' || Object.keys(localStorage).some(k => k.includes('firebase:authUser'));
+                        if (hasAdmin) {
+                            window.ensureAuth();
+                        } else if (window.indexedDB) {
+                            const req = indexedDB.open('firebaseLocalStorageDb');
+                            req.onsuccess = function(e) {
+                                const db = e.target.result;
+                                if (db.objectStoreNames.contains('firebaseLocalStorage')) {
+                                    try {
+                                        const tx = db.transaction('firebaseLocalStorage', 'readonly');
+                                        const store = tx.objectStore('firebaseLocalStorage');
+                                        const countReq = store.count();
+                                        countReq.onsuccess = function() {
+                                            if (countReq.result > 0) {
+                                                try { localStorage.setItem('brhs_is_admin', '1'); } catch (_) {}
+                                                window.ensureAuth();
+                                            }
+                                            db.close();
+                                        };
+                                        countReq.onerror = function() { db.close(); };
+                                    } catch(_) { db.close(); }
+                                } else {
+                                    db.close();
+                                }
+                            };
+                            req.onerror = function() {};
+                        }
+                    } catch (_) {}
                     try {
                         DB = Fs.initializeFirestore(app, {
                             localCache: Fs.persistentLocalCache({
@@ -4847,17 +4882,7 @@ function hdr() {
                         hdr()
                     }
                     , e => toast('Could not load results (' + (e.code || 'error') + ')', false));
-                    authP.then(Au => {
-                        AU = Au;
-                        AUTH = Au.getAuth(app);
-                        AU.onAuthStateChanged(AUTH, u => {
-                            ADMIN = !!u && (!ADMIN_EMAILS.length || ADMIN_EMAILS.includes(u.email));
-                            render();
-                            hdr()
-                        }
-                        )
-                    }
-                    ).catch( () => toast('Login service is unavailable. Check your connection.', false));
+// Auth lifecycle managed via ensureAuth()
                 } catch (e) {
                     toast('Live results are unavailable. Check your connection.', false)
                 }
@@ -4886,8 +4911,10 @@ function hdr() {
             }
             $('lgl').onclick = e => {
                 e.preventDefault();
-                if (ADMIN && AUTH)
+                if (ADMIN && AUTH) {
+                    try { localStorage.removeItem('brhs_is_admin'); } catch(_) {}
                     AU.signOut(AUTH);
+                }
                 else {
                     resetPwToggle();
                     $('lg').hidden = false
@@ -4896,7 +4923,7 @@ function hdr() {
             const tlb = $('topLoginBtn');
             if (tlb) tlb.onclick = () => { if (window.ensureAuth) window.ensureAuth(); resetPwToggle(); $('lg').hidden = false; };
             const tlob = $('topLogoutBtn');
-            if (tlob) tlob.onclick = () => { if (AU && AUTH) AU.signOut(AUTH); };
+            if (tlob) tlob.onclick = () => { try { localStorage.removeItem('brhs_is_admin'); } catch(_) {} if (AU && AUTH) AU.signOut(AUTH); };
             
             const tnb = $('topNoticeBtn');
             if (tnb) tnb.onclick = () => {
