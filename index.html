@@ -1488,6 +1488,10 @@
             }
         
             .tag.lvt{background:#d92b2b;color:#fff;animation:lvp 1.2s infinite}
+            .tag.ht{background:linear-gradient(180deg,#d97706,#b45309);color:#fff;border:1px solid #f59e0b}
+            .m.ht{border-color:#854d0e}
+            .m.ht::before{background:#f59e0b}
+            .bk-card.ht{border-color:#854d0e;background:linear-gradient(135deg,rgba(35,24,6,0.95),rgba(18,12,3,0.98))}
             .tag.ft{background:#2a2410;color:var(--gold);border:1px solid var(--line)}
             @keyframes lvp{50%{opacity:.5}}
             .m.lv{border-color:#6b1f1f}
@@ -1900,6 +1904,7 @@
                             <select name="st">
                                 <option value="ft">FULL TIME</option>
                                 <option value="live">LIVE (in progress)</option>
+                                <option value="ht">HALF TIME</option>
                             </select>
                         </label>
                         <label>
@@ -2382,19 +2387,21 @@
                   , r = R[n]
                   , d = done(n)
                   , lv = !!(r && r.live && !r.done)
+                  , ht = !!(r && r.ht && !r.done)
                   , sh = d || lv
                   , a = nm(n, 'a')
                   , b = nm(n, 'b')
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
             function renderBkCard(n, stageLabel) {
                 const f = FX[n - 1]
                   , r = R[n] || {}
                   , d = done(n)
                   , lv = !!(r.live && !r.done)
+                  , ht = !!(r.ht && !r.done)
                   , a = nm(n, 'a')
                   , b = nm(n, 'b')
                   , w = d ? win(n) : null;
@@ -2407,7 +2414,7 @@
                     + '<div class="bk-card-head">'
                     + '<span class="bk-badge">' + stageLabel + ' · #' + String(n).padStart(2, '0') + '</span>'
                     + '<span class="bk-time">' + f[3] + '</span>'
-                    + (lv ? '<span class="tag lvt">● LIVE</span>' : d ? '<span class="tag ft">FT</span>' : '')
+                    + (ht ? '<span class="tag ht">HT</span>' : lv ? '<span class="tag lvt">● LIVE</span>' : d ? '<span class="tag ft">FT</span>' : '')
                     + '<span class="bk-act" title="Share Match">↗</span>'
                     + '</div>'
                     + '<div class="bk-team-row' + (winA ? ' bk-win' : '') + '">'
@@ -2743,7 +2750,7 @@
                     return a.includes(target) || b.includes(target) || FX[n - 1][1] == batchFlt || FX[n - 1][2] == batchFlt;
                 });
                 if (LV.length)
-                    out = LV.map(n => '<div class="lvb"><span class="lvd"></span>LIVE NOW · ' + esc(nm(n, 'a')) + ' ' + R[n].sa + ' – ' + R[n].sb + ' ' + esc(nm(n, 'b')) + '</div>').join('') + out;
+                    out = LV.map(n => '<div class="lvb"><span class="lvd"></span>' + (R[n].ht ? 'HALF TIME' : 'LIVE NOW') + ' · ' + esc(nm(n, 'a')) + ' ' + R[n].sa + ' – ' + R[n].sb + ' ' + esc(nm(n, 'b')) + '</div>').join('') + out;
                 $('ml').innerHTML = out;
                 const sel = $('batchFlt');
                 if (sel && sel.options.length <= 1) {
@@ -3291,7 +3298,7 @@
                     }
                     );
                     put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 90, 24, GOLD2, 'center', 5, 800, MO, 900);
-                    const tag = lv ? '● LIVE' + (r.lm ? ' ' + r.lm : '') : d ? 'FULL TIME' : 'UPCOMING';
+                    const tag = (r.ht && !r.done) ? 'HALF TIME' : lv ? '● LIVE' + (r.lm ? ' ' + r.lm : '') : d ? 'FULL TIME' : 'UPCOMING';
                     x.font = '800 46px ' + MO;
                     if ('letterSpacing'in x)
                         x.letterSpacing = '6px';
@@ -4406,7 +4413,7 @@ function openEdit(n) {
                 if (F.ps) F.ps.value = r.ps || '';
                 $('pwl').hidden = f[0] == 'G';
                 $('clr').hidden = !(r.done || r.live);
-                F.st.value = r.live && !r.done ? 'live' : 'ft';
+                F.st.value = (r.live && !r.done) ? (r.ht ? 'ht' : 'live') : 'ft';
                 F.lm.value = r.lm || '';
                 $('sh').hidden = false
             }
@@ -4470,10 +4477,14 @@ function openEdit(n) {
                 e.preventDefault();
                 const F = e.target.elements
                   , n = cur
+                  , stVal = F.st.value
+                  , isHt = stVal === 'ht'
+                  , isLive = stVal === 'live' || isHt
                   , r = {
-                    done: F.st.value !== 'live',
-                    live: F.st.value === 'live',
-                    lm: F.st.value === 'live' ? F.lm.value.trim() : '',
+                    done: stVal === 'ft',
+                    live: isLive,
+                    ht: isHt,
+                    lm: isHt ? (F.lm.value.trim() || 'HT') : (stVal === 'live' ? F.lm.value.trim() : ''),
                     sa: +F.sa.value || 0,
                     sb: +F.sb.value || 0,
                     ga: parse(F.ga.value),
