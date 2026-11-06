@@ -1751,6 +1751,46 @@
                 background: rgba(201, 162, 39, 0.4);
                 transform: scale(0.92);
             }
+        
+            /* ===== Match Edit Field Headers & Quick Player Pickers ===== */
+            .field-hdr {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+                margin-bottom: 4px;
+            }
+            .field-hdr span {
+                font: 700 11px Montserrat, Arial, sans-serif;
+                color: var(--mut);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .player-picker {
+                background: rgba(201, 162, 39, 0.12) !important;
+                border: 1px solid rgba(201, 162, 39, 0.4) !important;
+                color: var(--gold) !important;
+                font: 700 10.5px Montserrat, Arial, sans-serif !important;
+                padding: 1px 6px !important;
+                border-radius: 6px !important;
+                min-height: 24px !important;
+                height: 24px !important;
+                max-width: 140px !important;
+                cursor: pointer;
+                outline: none;
+                transition: background 0.15s, border-color 0.15s;
+                text-overflow: ellipsis;
+            }
+            .player-picker:hover {
+                background: rgba(201, 162, 39, 0.22) !important;
+                border-color: var(--gold) !important;
+            }
+            .player-picker option, .player-picker optgroup {
+                background: #14110a;
+                color: #fff;
+                font: 600 12px Inter, Arial, sans-serif;
+            }
         </style>
     </head>
     <body>
@@ -1885,37 +1925,91 @@
                         </label>
                     </div>
                     <label>
-                        Scorers – Team A<input name="ga" placeholder="Isan 2, Rafi">
+                        <div class="field-hdr">
+                            <span id="lblScorerA">⚽ Scorers – Team A</span>
+                            <select class="player-picker" data-target="ga" data-side="a" aria-label="Pick Scorer Team A">
+                                <option value="">+ Pick Player</option>
+                            </select>
+                        </div>
+                        <input name="ga" placeholder="Isan 2, Rafi">
                     </label>
                     <label>
-                        Scorers – Team B<input name="gb" placeholder="Sumon, Tanvir 2">
+                        <div class="field-hdr">
+                            <span id="lblScorerB">⚽ Scorers – Team B</span>
+                            <select class="player-picker" data-target="gb" data-side="b" aria-label="Pick Scorer Team B">
+                                <option value="">+ Pick Player</option>
+                            </select>
+                        </div>
+                        <input name="gb" placeholder="Sumon, Tanvir 2">
                     </label>
                     <div class="two">
                         <label>
-                            🎯 Assists – Team A (optional)<input name="aa" placeholder="e.g. Mahim, Sakib">
+                            <div class="field-hdr">
+                                <span id="lblAssistA">🎯 Assists – Team A</span>
+                                <select class="player-picker" data-target="aa" data-side="a" aria-label="Pick Assist Team A">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="aa" placeholder="e.g. Mahim, Sakib">
                         </label>
                         <label>
-                            🎯 Assists – Team B (optional)<input name="ab" placeholder="e.g. Tanvir, Rafiq">
+                            <div class="field-hdr">
+                                <span id="lblAssistB">🎯 Assists – Team B</span>
+                                <select class="player-picker" data-target="ab" data-side="b" aria-label="Pick Assist Team B">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="ab" placeholder="e.g. Tanvir, Rafiq">
                         </label>
                     </div>
                     <div class="two">
                         <label>
-                            🟨 Yellow – Team A<input name="ya" placeholder="Rafi, Sumon 2">
+                            <div class="field-hdr">
+                                <span id="lblYellowA">🟨 Yellow – Team A</span>
+                                <select class="player-picker" data-target="ya" data-side="a" aria-label="Pick Yellow Card Team A">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="ya" placeholder="Rafi, Sumon 2">
                         </label>
                         <label>
-                            🟨 Yellow – Team B<input name="yb">
+                            <div class="field-hdr">
+                                <span id="lblYellowB">🟨 Yellow – Team B</span>
+                                <select class="player-picker" data-target="yb" data-side="b" aria-label="Pick Yellow Card Team B">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="yb">
                         </label>
                     </div>
                     <div class="two">
                         <label>
-                            🟥 Red – Team A<input name="ra" placeholder="Player name">
+                            <div class="field-hdr">
+                                <span id="lblRedA">🟥 Red – Team A</span>
+                                <select class="player-picker" data-target="ra" data-side="a" aria-label="Pick Red Card Team A">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="ra" placeholder="Player name">
                         </label>
                         <label>
-                            🟥 Red – Team B<input name="rb">
+                            <div class="field-hdr">
+                                <span id="lblRedB">🟥 Red – Team B</span>
+                                <select class="player-picker" data-target="rb" data-side="b" aria-label="Pick Red Card Team B">
+                                    <option value="">+ Pick Player</option>
+                                </select>
+                            </div>
+                            <input name="rb">
                         </label>
                     </div>
                     <label>
-                        Man of the match<input name="mo" placeholder="Player name">
+                        <div class="field-hdr">
+                            <span>🌟 Man of the match</span>
+                            <select class="player-picker" data-target="mo" data-side="both" aria-label="Pick Man of the match">
+                                <option value="">+ Pick Player</option>
+                            </select>
+                        </div>
+                        <input name="mo" placeholder="Player name">
                     </label>
                     <label>
                         Man of the match – team
@@ -4159,6 +4253,114 @@
                     if (btn3) { btn3.disabled = false; btn3.textContent = '↗ SHARE CLEAN SHEETS POSTER'; }
                 }
             }
+
+            function getMatchBatch(n, side) {
+                const f = FX[n - 1];
+                if (!f) return '';
+                const ref = f[side === 'a' ? 1 : 2];
+                if (typeof ref === 'string' && /^\d+$/.test(ref.trim())) return ref.trim();
+                const teamName = nm(n, side) || '';
+                const m = teamName.match(/\b(\d{2,4})\b/);
+                if (m) return m[1];
+                return teamName.trim();
+            }
+
+            function getTeamPlayers(batchOrTeam) {
+                if (!batchOrTeam) return [];
+                const m = String(batchOrTeam).match(/\b(\d{2,4})\b/);
+                const batch = m ? m[1] : String(batchOrTeam);
+                const auto = typeof getSquadPlayers === 'function' ? getSquadPlayers(batch) : [];
+                const manual = ((typeof SQ !== 'undefined' && SQ && SQ[batch]) || []).filter(p => !auto.map(a => a.toLowerCase()).includes(p.toLowerCase()));
+                return [...new Set([...auto, ...manual])].sort((a, b) => a.localeCompare(b));
+            }
+
+            function appendOrIncrementPlayer(currentStr, playerName) {
+                const list = parse(currentStr || '');
+                let found = false;
+                for (let item of list) {
+                    if (item[0].toLowerCase() === playerName.toLowerCase()) {
+                        item[1] += 1;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    list.push([playerName, 1]);
+                }
+                return list.map(item => item[0] + (item[1] > 1 ? ' ' + item[1] : '')).join(', ');
+            }
+
+            function populatePlayerPickers(n) {
+                const batchA = getMatchBatch(n, 'a');
+                const batchB = getMatchBatch(n, 'b');
+                const playersA = getTeamPlayers(batchA);
+                const playersB = getTeamPlayers(batchB);
+
+                document.querySelectorAll('.player-picker').forEach(sel => {
+                    const side = sel.getAttribute('data-side');
+                    sel.innerHTML = '<option value="">+ Pick Player</option>';
+                    if (side === 'a') {
+                        if (playersA.length === 0) {
+                            sel.innerHTML += '<option value="" disabled>(No squad players)</option>';
+                        } else {
+                            playersA.forEach(p => {
+                                const opt = document.createElement('option');
+                                opt.value = p;
+                                opt.textContent = p;
+                                sel.appendChild(opt);
+                            });
+                        }
+                    } else if (side === 'b') {
+                        if (playersB.length === 0) {
+                            sel.innerHTML += '<option value="" disabled>(No squad players)</option>';
+                        } else {
+                            playersB.forEach(p => {
+                                const opt = document.createElement('option');
+                                opt.value = p;
+                                opt.textContent = p;
+                                sel.appendChild(opt);
+                            });
+                        }
+                    } else if (side === 'both') {
+                        const teamNameA = nm(n, 'a') || 'Team A';
+                        const teamNameB = nm(n, 'b') || 'Team B';
+                        
+                        const grpA = document.createElement('optgroup');
+                        grpA.label = teamNameA;
+                        if (playersA.length === 0) {
+                            const opt = document.createElement('option');
+                            opt.disabled = true;
+                            opt.textContent = '(No squad players)';
+                            grpA.appendChild(opt);
+                        } else {
+                            playersA.forEach(p => {
+                                const opt = document.createElement('option');
+                                opt.value = 'a:' + p;
+                                opt.textContent = p + ' (' + teamNameA + ')';
+                                grpA.appendChild(opt);
+                            });
+                        }
+                        sel.appendChild(grpA);
+
+                        const grpB = document.createElement('optgroup');
+                        grpB.label = teamNameB;
+                        if (playersB.length === 0) {
+                            const opt = document.createElement('option');
+                            opt.disabled = true;
+                            opt.textContent = '(No squad players)';
+                            grpB.appendChild(opt);
+                        } else {
+                            playersB.forEach(p => {
+                                const opt = document.createElement('option');
+                                opt.value = 'b:' + p;
+                                opt.textContent = p + ' (' + teamNameB + ')';
+                                grpB.appendChild(opt);
+                            });
+                        }
+                        sel.appendChild(grpB);
+                    }
+                });
+            }
 function openEdit(n) {
                 if (!ADMIN)
                     return;
@@ -4174,6 +4376,15 @@ function openEdit(n) {
                 F.tb.value = nameB;
                 const la = $('lblScoreA'); if (la) la.textContent = 'Score – ' + nameA;
                 const lb = $('lblScoreB'); if (lb) lb.textContent = 'Score – ' + nameB;
+                const lsa = $('lblScorerA'); if (lsa) lsa.textContent = '⚽ Scorers – ' + nameA;
+                const lsb = $('lblScorerB'); if (lsb) lsb.textContent = '⚽ Scorers – ' + nameB;
+                const laa = $('lblAssistA'); if (laa) laa.textContent = '🎯 Assists – ' + nameA;
+                const lab = $('lblAssistB'); if (lab) lab.textContent = '🎯 Assists – ' + nameB;
+                const lya = $('lblYellowA'); if (lya) lya.textContent = '🟨 Yellow – ' + nameA;
+                const lyb = $('lblYellowB'); if (lyb) lyb.textContent = '🟨 Yellow – ' + nameB;
+                const lra = $('lblRedA'); if (lra) lra.textContent = '🟥 Red – ' + nameA;
+                const lrb = $('lblRedB'); if (lrb) lrb.textContent = '🟥 Red – ' + nameB;
+                populatePlayerPickers(n);
                 F.sa.value = r.done || r.live ? r.sa : '';
                 F.sb.value = r.done || r.live ? r.sb : '';
                 F.ga.value = (r.ga || []).map(g => g[0] + (g[1] > 1 ? ' ' + g[1] : '')).join(', ');
@@ -4217,6 +4428,31 @@ function openEdit(n) {
                     input.value = nextVal;
                     input.dispatchEvent(new Event('input', { bubbles: true }));
                     input.dispatchEvent(new Event('change', { bubbles: true }));
+                };
+            });
+            
+            document.querySelectorAll('.player-picker').forEach(sel => {
+                sel.onchange = e => {
+                    const val = sel.value;
+                    if (!val) return;
+                    const targetName = sel.getAttribute('data-target');
+                    const input = $('ef').elements[targetName];
+                    if (!input) return;
+
+                    if (targetName === 'mo') {
+                        const parts = val.split(':');
+                        const side = parts[0];
+                        const pName = parts.slice(1).join(':');
+                        input.value = pName;
+                        if ($('ef').elements.mt) $('ef').elements.mt.value = side;
+                    } else {
+                        input.value = appendOrIncrementPlayer(input.value, val);
+                    }
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+                    // Reset dropdown back to default placeholder
+                    sel.value = '';
                 };
             });
             $('cx').onclick = closeEdit;
