@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brhs-match-hub-v2';
+const CACHE_NAME = 'brhs-match-hub-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -31,38 +31,39 @@ self.addEventListener('fetch', (event) => {
   if (
     event.request.url.includes('firestore.googleapis.com') ||
     event.request.url.includes('identitytoolkit.googleapis.com') ||
+    event.request.url.includes('gstatic.com') ||
     event.request.method !== 'GET'
   ) {
     return;
   }
 
+  // Network-First for HTML navigation so updates are seen instantly online, with offline fallback
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const resClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+        }
+        return networkResponse;
+      }).catch(async () => {
+        const cached = await caches.match(event.request) || await caches.match('./index.html') || await caches.match('./');
+        return cached;
+      })
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for local static assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cache & fetch update in background
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
-          }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse.clone()));
         }
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
         return networkResponse;
-      }).catch(() => {
-        // Offline fallback for navigation
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
+      }).catch(() => cachedResponse);
+      return cachedResponse || fetchPromise;
     })
   );
 });

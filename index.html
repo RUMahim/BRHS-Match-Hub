@@ -4797,6 +4797,7 @@ function hdr() {
                                 return AUTH;
                             }).catch(err => {
                                 console.warn('Auth load failed:', err);
+                                authInitPromise = null;
                                 toast('Login service is unavailable. Check your connection.', false);
                             });
                         }
@@ -4884,6 +4885,7 @@ function hdr() {
                     , e => toast('Could not load results (' + (e.code || 'error') + ')', false));
 // Auth lifecycle managed via ensureAuth()
                 } catch (e) {
+                    console.error('Firebase initialization error:', e);
                     toast('Live results are unavailable. Check your connection.', false)
                 }
             }
@@ -5063,7 +5065,7 @@ const teb = $('topExportBackupBtn');
             });
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW error:', err));
+                    navigator.serviceWorker.register('./sw.js').then(reg => { reg.update(); }).catch(err => console.warn('SW error:', err));
                 });
             }
         </script>
