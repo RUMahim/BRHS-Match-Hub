@@ -16,6 +16,7 @@
         <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://firestore.googleapis.com">
         <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
         <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@1,600&family=Montserrat:wght@500;700;800&display=swap">
@@ -4773,10 +4774,32 @@ function hdr() {
                 }
                 const B = 'https://www.gstatic.com/firebasejs/10.12.2/';
                 try {
-                    const authP = import(B + 'firebase-auth.js');
-                    authP.catch( () => {});
                     const [A,Fs] = await Promise.all([import(B + 'firebase-app.js'), import(B + 'firebase-firestore.js')]);
                     const app = A.initializeApp(CFG);
+                    
+                    let authInitPromise = null;
+                    window.ensureAuth = async function() {
+                        if (AUTH) return AUTH;
+                        if (!authInitPromise) {
+                            authInitPromise = import(B + 'firebase-auth.js').then(Au => {
+                                AU = Au;
+                                AUTH = Au.getAuth(app);
+                                AU.onAuthStateChanged(AUTH, u => {
+                                    ADMIN = !!u;
+                                    hdr();
+                                    render();
+                                });
+                                return AUTH;
+                            }).catch(err => { console.warn('Auth load failed:', err); });
+                        }
+                        return authInitPromise;
+                    };
+
+                    // Only load heavy auth iframe if device has an existing admin session
+                    const hasAdminSession = Object.keys(localStorage).some(k => k.startsWith('firebase:authUser'));
+                    if (hasAdminSession) {
+                        window.ensureAuth();
+                    }
                     try {
                         DB = Fs.initializeFirestore(app, {
                             localCache: Fs.persistentLocalCache({
@@ -4964,9 +4987,11 @@ const teb = $('topExportBackupBtn');
                     G = c.G || G;
                     SQ = c.SQ || SQ || {};
                     TB = c.TB || TB || {};
+                    if (c.annc !== undefined) ANNC = c.annc;
                     U0 = c.u || 0
                 }
             } catch (e) {}
+            renderAnnc();
             render();
             hdr();
             if ('requestIdleCallback' in window) {
