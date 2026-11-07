@@ -620,6 +620,26 @@
                 font-weight: 700;
                 letter-spacing: .06em
             }
+            .m-note {
+                margin-top: 8px;
+                padding: 6px 10px;
+                background: rgba(201,162,39,.08);
+                border: 1px dashed rgba(201,162,39,.35);
+                border-radius: 6px;
+                font-size: 11px;
+                color: #e6dfd1;
+                font-style: italic;
+                line-height: 1.4;
+                word-break: break-word
+            }
+            .bk-note {
+                margin-top: 3px;
+                font-size: 10px;
+                color: var(--gold);
+                font-style: italic;
+                line-height: 1.3;
+                word-break: break-word
+            }
 
             .sh {
                 position: fixed;
@@ -2036,6 +2056,10 @@
                             <input name="ps" placeholder="e.g. 4-3, 5-4" maxlength="15">
                         </label>
                     </div>
+                    <label>
+                        📝 Match Note / Remark (ঐচ্ছিক মন্তব্য)
+                        <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Match delayed" maxlength="80">
+                    </label>
                     <button class="btn" type="submit">SAVE RESULT</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
                     <button class="btn g2" type="button" id="cx">CANCEL</button>
@@ -2392,7 +2416,7 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
             }
             function renderBkCard(n, stageLabel) {
                 const f = FX[n - 1]
@@ -2423,7 +2447,7 @@
                     + '<span class="bk-team-name">' + esc(b) + '</span>'
                     + '<span class="bk-team-score">' + scB + '</span>'
                     + '</div>'
-                    + pen
+                    + pen + ((r && r.nt) ? '<div class="bk-note">📝 ' + esc(r.nt) + '</div>' : '')
                     + (ADMIN ? '<button class="bk-edit-btn" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '')
                     + '</div>';
             }
@@ -4413,6 +4437,7 @@ function openEdit(n) {
                 $('clr').hidden = !(r.done || r.live);
                 F.st.value = (r.live && !r.done) ? (r.ht ? 'ht' : 'live') : 'ft';
                 F.lm.value = r.lm || '';
+                F.nt.value = r.nt || '';
                 $('sh').hidden = false
             }
             const closeEdit = () => {
@@ -4496,7 +4521,8 @@ function openEdit(n) {
                     mo: F.mo.value.trim(),
                     mt: F.mt.value,
                     pw: F.pw ? F.pw.value : '',
-                    ps: (F.ps && F.ps.value.trim()) ? F.ps.value.trim() : ''
+                    ps: (F.ps && F.ps.value.trim()) ? F.ps.value.trim() : '',
+                    nt: (F.nt && F.nt.value.trim()) ? F.nt.value.trim() : ''
                 };
                 const ta = F.ta.value.trim()
                   , tb = F.tb.value.trim();
