@@ -2058,7 +2058,7 @@
                     </div>
                     <label>
                         📝 Match Note / Remark (ঐচ্ছিক মন্তব্য)
-                        <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Match delayed" maxlength="80">
+                        <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Match delayed" maxlength="120">
                     </label>
                     <button class="btn" type="submit">SAVE RESULT</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
@@ -3271,7 +3271,7 @@
                             x.font = wt + ' ' + z + 'px ' + fam;
                             if ('letterSpacing'in x)
                                 x.letterSpacing = sp + 'px';
-                            if (!maxW || x.measureText(t).width <= maxW || z <= 14)
+                            if (!maxW || x.measureText(t).width <= maxW || z <= 12)
                                 break;
                             z -= 2
                         }
@@ -3397,7 +3397,7 @@
                         x.strokeStyle = 'rgba(201,162,39,.55)';
                         x.lineWidth = 2;
                         x.stroke();
-                        put('NOTE: ' + r.nt.toUpperCase(), mid, 960, 24, GOLD, 'center', 2, 800, MO, 800);
+                        put('NOTE: ' + r.nt, mid, 960, 22, GOLD, 'center', 1, 700, MO, 820);
                     } else if (sh && r.mo) {
                         rr(150, 916, 780, 66, 16);
                         x.fillStyle = '#1d1706';
@@ -3413,7 +3413,7 @@
                         x.strokeStyle = 'rgba(201,162,39,.55)';
                         x.lineWidth = 2;
                         x.stroke();
-                        put('NOTE: ' + r.nt.toUpperCase(), mid, 956, 28, GOLD, 'center', 2, 800, MO, 800);
+                        put('NOTE: ' + r.nt, mid, 956, 24, GOLD, 'center', 1, 700, MO, 820);
                     }
                     const bg = x.createLinearGradient(24, 0, S - 24, 0);
                     bg.addColorStop(0, GOLD2);
