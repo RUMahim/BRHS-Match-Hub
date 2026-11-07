@@ -3382,14 +3382,38 @@
                         put('KICK-OFF', mid, 740, 24, GOLD2, 'center', 8, 800, MO);
                         put(f[3], mid, 820, 56, GOLD, 'center', 3, 800, MO, 900)
                     }
-                    if (sh && r.mo) {
+                    if (sh && r.mo && r.nt) {
+                        rr(150, 860, 780, 54, 14);
+                        x.fillStyle = '#1d1706';
+                        x.fill();
+                        x.strokeStyle = '#4a3a10';
+                        x.lineWidth = 2;
+                        x.stroke();
+                        put('MAN OF THE MATCH: ' + r.mo.toUpperCase(), mid, 896, 24, GOLD, 'center', 2, 800, MO, 740);
+
+                        rr(120, 924, 840, 54, 14);
+                        x.fillStyle = 'rgba(201,162,39,.14)';
+                        x.fill();
+                        x.strokeStyle = 'rgba(201,162,39,.55)';
+                        x.lineWidth = 2;
+                        x.stroke();
+                        put('NOTE: ' + r.nt.toUpperCase(), mid, 960, 24, GOLD, 'center', 2, 800, MO, 800);
+                    } else if (sh && r.mo) {
                         rr(150, 916, 780, 66, 16);
                         x.fillStyle = '#1d1706';
                         x.fill();
                         x.strokeStyle = '#4a3a10';
                         x.lineWidth = 2;
                         x.stroke();
-                        put('MAN OF THE MATCH: ' + r.mo.toUpperCase(), mid, 958, 28, GOLD, 'center', 2, 800, MO, 740)
+                        put('MAN OF THE MATCH: ' + r.mo.toUpperCase(), mid, 958, 28, GOLD, 'center', 2, 800, MO, 740);
+                    } else if (sh && r.nt) {
+                        rr(120, 914, 840, 66, 16);
+                        x.fillStyle = 'rgba(201,162,39,.14)';
+                        x.fill();
+                        x.strokeStyle = 'rgba(201,162,39,.55)';
+                        x.lineWidth = 2;
+                        x.stroke();
+                        put('NOTE: ' + r.nt.toUpperCase(), mid, 956, 28, GOLD, 'center', 2, 800, MO, 800);
                     }
                     const bg = x.createLinearGradient(24, 0, S - 24, 0);
                     bg.addColorStop(0, GOLD2);
@@ -3397,7 +3421,7 @@
                     x.fillStyle = bg;
                     x.fillRect(24, 996, S - 48, 60);
                     put('FULL RESULTS · https://' + location.host.toLowerCase(), mid, 1036, 28, '#1a1204', 'center', 3, 800, MO, 960);
-                    const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + '\nEX BRHSIAN Football Festival · Season 03 Match Portal'
+                    const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + ((r && r.nt) ? '\n📝 Note: ' + r.nt : '') + '\nEX BRHSIAN Football Festival · Season 03 Match Portal'
                       , url = location.origin + location.pathname
                       , blob = await new Promise(res => c.toBlob(res, 'image/png'));
                     if (!blob) {
