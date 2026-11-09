@@ -1707,11 +1707,169 @@
                     gap: 6px;
                     width: 100%;
                 }
+                .admin-btn-new {
+                    grid-column: 1 / -1;
+                }
                 .admin-quick-actions .admin-btn {
                     justify-content: center;
                     padding: 7px 6px;
                     width: 100%;
                 }
+            }
+            .admin-btn-new {
+                background: linear-gradient(135deg, rgba(201,162,39,.25), rgba(161,98,7,.35));
+                border-color: rgba(201,162,39,.65);
+                color: var(--gold);
+                font-weight: 800;
+            }
+            .tourn-picker-wrap {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                margin-top: 6px;
+                margin-bottom: 2px;
+                background: linear-gradient(135deg, rgba(201,162,39,.12), rgba(161,98,7,.18));
+                border: 1px solid rgba(201,162,39,.4);
+                padding: 3px 8px;
+                border-radius: 8px;
+            }
+            .tourn-picker-icon {
+                font-size: 13px;
+                line-height: 1;
+            }
+            .tourn-picker-select {
+                background: transparent;
+                border: none;
+                color: var(--gold);
+                font: 700 12px Montserrat, sans-serif;
+                letter-spacing: .04em;
+                cursor: pointer;
+                outline: none;
+                padding-right: 4px;
+            }
+            .tourn-picker-select option {
+                background: #14110a;
+                color: #fff;
+            }
+            .nt-group-box {
+                background: #100e08;
+                border: 1px solid var(--line);
+                border-radius: 6px;
+                padding: 8px 10px;
+                margin-bottom: 6px;
+            }
+            .nt-group-hdr {
+                font: 700 11px Montserrat, sans-serif;
+                color: var(--gold);
+                margin-bottom: 4px;
+                text-transform: uppercase;
+            }
+            .nt-fix-item {
+                background: #14110a;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                padding: 8px 10px;
+                margin-bottom: 8px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                transition: border-color .15s;
+            }
+            .nt-fix-item:hover, .nt-fix-item:focus-within {
+                border-color: rgba(201,162,39,.45);
+            }
+            .nt-fix-hdr-row {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 11px;
+            }
+            .nt-fix-num {
+                font: 800 11px Montserrat, sans-serif;
+                color: var(--gold);
+                min-width: 26px;
+            }
+            .nt-fix-stage-sel {
+                background: #1c180f;
+                border: 1px solid rgba(255,255,255,.12);
+                color: #fff;
+                border-radius: 5px;
+                padding: 4px 6px;
+                font: 700 11px Montserrat, sans-serif;
+                outline: none;
+                cursor: pointer;
+            }
+            .nt-fix-time-inp {
+                background: #1c180f;
+                border: 1px solid rgba(255,255,255,.12);
+                color: var(--gold);
+                border-radius: 5px;
+                padding: 4px 6px;
+                font: 700 11px Montserrat, sans-serif;
+                width: 82px;
+                outline: none;
+            }
+            .nt-fix-venue-inp {
+                background: #1c180f;
+                border: 1px solid rgba(255,255,255,.12);
+                color: var(--mut);
+                border-radius: 5px;
+                padding: 4px 6px;
+                font: 500 11px Inter, sans-serif;
+                flex: 1;
+                min-width: 60px;
+                outline: none;
+            }
+            .nt-fix-del-btn {
+                background: rgba(239,68,68,.12);
+                border: 1px solid rgba(239,68,68,.3);
+                color: #f87171;
+                border-radius: 5px;
+                width: 26px;
+                height: 24px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                font-weight: 700;
+                line-height: 1;
+                padding: 0;
+            }
+            .nt-fix-del-btn:hover {
+                background: rgba(239,68,68,.3);
+                color: #fff;
+            }
+            .nt-fix-teams-row {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .nt-fix-team-inp {
+                flex: 1;
+                background: #0d0b06;
+                border: 1px solid rgba(201,162,39,.3);
+                color: #fff;
+                border-radius: 6px;
+                padding: 6px 8px;
+                font: 700 12px Montserrat, sans-serif;
+                outline: none;
+            }
+            .nt-fix-team-inp:focus {
+                border-color: var(--gold);
+                box-shadow: 0 0 0 2px rgba(201,162,39,.2);
+            }
+            .nt-fix-vs {
+                font: 800 10px Montserrat, sans-serif;
+                color: var(--gold);
+                opacity: .7;
+                padding: 0 2px;
+            }
+            .nt-tools-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-top: 8px;
             }
         
             /* ===== Score Stepper (+/- buttons) ===== */
@@ -1823,7 +1981,13 @@
                     <h1>
                         Match <b>Portal</b>
                     </h1>
-                    <div class="sub">SEASON 03 · RESULTS</div>
+                    <div class="sub" id="portalSub">SEASON 03 · RESULTS</div>
+                    <div class="tourn-picker-wrap">
+                        <span class="tourn-picker-icon">🏆</span>
+                        <select id="tournSelect" class="tourn-picker-select" aria-label="Select Tournament">
+                            <option value="season3">Season 03</option>
+                        </select>
+                    </div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
                     <button type="button" id="topLoginBtn" class="top-login-btn" style="display:none">🔒 Admin Login</button>
@@ -1833,6 +1997,8 @@
             <div id="adminQuickBar" class="admin-quick-bar" style="display:none">
                 <div class="admin-quick-title">🛡️ ADMIN MODE</div>
                 <div class="admin-quick-actions">
+                    <button type="button" id="topNewTournBtn" class="admin-btn admin-btn-new">➕ New Tournament</button>
+                    <button type="button" id="topManageTournBtn" class="admin-btn">⚙️ Manage Season</button>
                     <button type="button" id="topNoticeBtn" class="admin-btn">📢 Notice</button>
                     <button type="button" id="topExportBackupBtn" class="admin-btn">💾 Backup</button>
                     <button type="button" id="topImportBackupBtn" class="admin-btn admin-btn-restore">⬆ Restore</button>
@@ -1910,10 +2076,28 @@
                 <form id="ef">
                     <div class="two">
                         <label>
-                            Team A<input name="ta">
+                            Team A
+                            <div style="display:flex;gap:4px">
+                                <input name="ta" list="knockoutOptionsList" placeholder="Team A / e.g. C1, W17">
+                                <button type="button" id="btnAutoTeamA" style="background:#1f1b11;border:1px solid rgba(201,162,39,.35);color:var(--gold);border-radius:5px;font:700 10px Montserrat;padding:0 6px;cursor:pointer" title="Reset to auto formula">Auto</button>
+                            </div>
                         </label>
                         <label>
-                            Team B<input name="tb">
+                            Team B
+                            <div style="display:flex;gap:4px">
+                                <input name="tb" list="knockoutOptionsList" placeholder="Team B / e.g. R2, W18">
+                                <button type="button" id="btnAutoTeamB" style="background:#1f1b11;border:1px solid rgba(201,162,39,.35);color:var(--gold);border-radius:5px;font:700 10px Montserrat;padding:0 6px;cursor:pointer" title="Reset to auto formula">Auto</button>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="two">
+                        <label>
+                            Match Time
+                            <input name="tm" placeholder="e.g. 3:00 PM">
+                        </label>
+                        <label>
+                            Venue / Ground
+                            <input name="vn" placeholder="e.g. বড় মাঠ, ছোট মাঠ">
                         </label>
                     </div>
                     <div class="two">
@@ -2114,6 +2298,219 @@
             </div>
         </div>
         
+                <div class="sh" id="ntm" hidden>
+            <div class="sheet" style="max-width:620px;max-height:92vh;overflow-y:auto">
+                <div class="lgh">🏆</div>
+                <h2 class="lgt">CREATE NEW TOURNAMENT</h2>
+                <p class="lgs">Configure a custom season with groups, teams, and auto-generated fixtures.</p>
+                <form id="ntf">
+                    <div class="two">
+                        <label>
+                            Tournament Full Name *
+                            <input name="tname" id="ntTitle" placeholder="e.g. EX BRHSIAN Football Festival – Season 04" required>
+                        </label>
+                        <label>
+                            Short Badge / Season *
+                            <input name="tshort" id="ntShort" placeholder="e.g. Season 04" required>
+                        </label>
+                    </div>
+                    <div class="two">
+                        <label>
+                            Tournament ID / Slug *
+                            <input name="tid" id="ntId" placeholder="e.g. season4" pattern="[a-zA-Z0-9_\-]+" required>
+                        </label>
+                        <label>
+                            Visibility (প্রাইভেসি)
+                            <select id="ntVisibilitySel">
+                                <option value="public">🌍 Public (সবাই দেখতে পাবে)</option>
+                                <option value="private">🔒 Private (শুধু অ্যাডমিন দেখবে)</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div style="margin:16px 0 8px;border-top:1px solid var(--line);padding-top:12px">
+                        <h3 style="font:700 12px Montserrat;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">👥 Teams & Group Format</h3>
+                        <p style="font-size:11px;color:var(--mut);margin-bottom:8px">Enter teams/batches separated by commas or new lines:</p>
+                        <label>
+                            Teams List *
+                            <textarea id="ntTeamsInput" rows="3" placeholder="23, 24, 25, 26, 15, 16, 17, 18, 19, 20, 21, 22, 09, 11, 13, 14" required style="width:100%;background:#14110a;border:1px solid var(--line);border-radius:8px;color:#fff;padding:10px;font:500 13px Inter,sans-serif"></textarea>
+                        </label>
+                        <datalist id="ntTeamsDatalist"></datalist>
+                        <div class="two" style="margin-top:8px">
+                            <label>
+                                Number of Groups
+                                <select id="ntGroupCount">
+                                    <option value="4">4 Groups (A, B, C, D)</option>
+                                    <option value="2">2 Groups (A, B)</option>
+                                    <option value="1">1 Single League Group</option>
+                                </select>
+                            </label>
+                            <label>
+                                Advancing per Group
+                                <select id="ntAdvanceCount">
+                                    <option value="2">Top 2 (Champion & Runner-up)</option>
+                                    <option value="1">Top 1 (Champion only)</option>
+                                </select>
+                            </label>
+                        </div>
+                        <button type="button" id="btnPreviewGroups" class="btn g2" style="margin-top:8px;padding:8px 12px;font-size:11px">🎲 Distribute Teams into Groups</button>
+                    </div>
+
+                    <div id="ntGroupPreview" style="margin-bottom:12px"></div>
+
+                    <div style="margin:16px 0 8px;border-top:1px solid var(--line);padding-top:12px">
+                        <h3 style="font:700 12px Montserrat;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">📅 Fixtures & Schedule (Auto + Manual)</h3>
+                        <div class="two">
+                            <label>
+                                Group Match Format / Style
+                                <select id="ntGroupMatchModel">
+                                    <option value="lottery_2">🎟️ Lottery / Limited (প্রতি দল ২টি করে ম্যাচ)</option>
+                                    <option value="round_robin">🔄 Full Round-Robin (সবাই সবার সাথে ম্যাচ)</option>
+                                    <option value="lottery_1">🎯 Single Match (প্রতি দল ১টি করে ম্যাচ)</option>
+                                    <option value="manual_only">✍️ Manual Fixtures (নিজে ম্যাচ যোগ করব)</option>
+                                </select>
+                            </label>
+                            <label>
+                                Knockout Stage
+                                <select id="ntKnockoutModel">
+                                    <option value="auto">🏆 Auto Knockouts (QF / SF / Final)</option>
+                                    <option value="none">📋 No Knockouts (League Only)</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="two" style="margin-top:8px">
+                            <label>
+                                First Match Time
+                                <input id="ntStartTime" value="3:00 PM" placeholder="e.g. 3:00 PM">
+                            </label>
+                            <label>
+                                Match Interval (Minutes)
+                                <input id="ntInterval" type="number" min="5" max="180" value="30">
+                            </label>
+                        </div>
+                        <label style="margin-top:8px">
+                            Venues / Grounds (Comma separated)
+                            <input id="ntVenues" value="বড় মাঠ, ছোট মাঠ" placeholder="e.g. বড় মাঠ, ছোট মাঠ">
+                        </label>
+
+                        <div class="nt-tools-row">
+                            <button type="button" id="btnGenFixtures" class="btn g2" style="flex:1;min-width:130px;padding:8px 10px;font-size:11px">⚡ Auto-Generate</button>
+                            <button type="button" id="btnAddManualMatch" class="btn g2" style="flex:1;min-width:130px;padding:8px 10px;font-size:11px;color:var(--gold);border-color:rgba(201,162,39,.5)">➕ Add Match</button>
+                            <button type="button" id="btnRecalcTimes" class="btn g2" style="padding:8px 10px;font-size:11px" title="Auto-recalculate times for all matches based on start time + interval">🕒 Spacing</button>
+                            <button type="button" id="btnClearFixtures" class="btn g2" style="padding:8px 10px;font-size:11px;color:#f87171" title="Clear all fixtures">🗑️ Clear</button>
+                        </div>
+                    </div>
+
+                    <div id="ntFixturesPreview" style="margin-bottom:14px;max-height:280px;overflow-y:auto;background:#0d0b06;border:1px solid var(--line);border-radius:6px;padding:8px">
+                        <div style="font-size:11px;color:var(--mut);text-align:center;padding:12px">Click "Auto-Generate" or "Add Match" to set up fixtures</div>
+                    </div>
+
+                    <div style="display:flex;gap:10px;margin-top:14px">
+                        <button class="btn" type="submit" id="ntSubmitBtn">🚀 CREATE & LAUNCH TOURNAMENT</button>
+                        <button class="btn g2" type="button" id="ntCancelBtn">CANCEL</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <datalist id="knockoutOptionsList"></datalist>
+
+        <div class="sh" id="sfm" hidden>
+            <div class="sheet" style="max-width:680px;max-height:92vh;overflow-y:auto">
+                <div class="lgh">📅</div>
+                <h2 class="lgt">EDIT TOURNAMENT SCHEDULE</h2>
+                <p class="lgs">Change match times, venues, and team pairings (Auto progression or manual team assignment) anytime.</p>
+                <form id="sff">
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+                        <button type="button" id="sfmAddMatchBtn" class="btn g2" style="flex:1;min-width:130px;padding:8px 10px;font-size:11px;color:var(--gold);border-color:rgba(201,162,39,.5)">➕ Add Match</button>
+                        <button type="button" id="sfmRecalcTimesBtn" class="btn g2" style="padding:8px 10px;font-size:11px" title="Recalculate times sequentially">🕒 Auto Spacing</button>
+                        <button type="button" id="sfmGenKnockoutsBtn" class="btn g2" style="padding:8px 10px;font-size:11px" title="Auto add QF/SF/Final brackets">🏆 Auto Knockouts</button>
+                    </div>
+
+                    <div id="sfmFixturesList" style="margin-bottom:14px;max-height:360px;overflow-y:auto;background:#0d0b06;border:1px solid var(--line);border-radius:6px;padding:8px">
+                    </div>
+
+                    <div style="display:flex;gap:10px;margin-top:14px">
+                        <button class="btn" type="submit" id="sfmSaveBtn">💾 SAVE & UPDATE SCHEDULE</button>
+                        <button class="btn g2" type="button" id="sfmCancelBtn">CANCEL</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="sh" id="mtm" hidden>
+            <div class="sheet" style="max-width:520px;max-height:92vh;overflow-y:auto">
+                <div class="lgh">⚙️</div>
+                <h2 class="lgt">MANAGE TOURNAMENT</h2>
+                <p class="lgs">Edit tournament info, download backup, or delete custom tournaments.</p>
+                <form id="mtf">
+                    <label>
+                        Tournament Full Name *
+                        <input id="mtTitle" required placeholder="Full tournament title">
+                    </label>
+                    <div class="two" style="margin-top:8px">
+                        <label>
+                            Short Badge / Season *
+                            <input id="mtShort" required placeholder="Short name">
+                        </label>
+                        <label>
+                            Tournament Slug / ID
+                            <input id="mtId" disabled style="opacity:0.6;cursor:not-allowed">
+                        </label>
+                    </div>
+
+                    <div style="margin:14px 0 8px;background:#14110a;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px">
+                        <div style="font:700 11px Montserrat, sans-serif;color:var(--gold);text-transform:uppercase;margin-bottom:6px">📊 Current Tournament Stats</div>
+                        <div style="display:flex;justify-content:space-between;color:var(--mut);margin-bottom:4px">
+                            <span>Matches Configured:</span>
+                            <b id="mtMatchesCount" style="color:#fff">0</b>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;color:var(--mut);margin-bottom:4px">
+                            <span>Total Groups:</span>
+                            <b id="mtGroupsCount" style="color:#fff">0</b>
+                        </div>
+                    </div>
+                    <div class="two" style="margin-top:8px">
+                        <label>
+                            Visibility (প্রাইভেসি)
+                            <select id="mtVisibilitySel">
+                                <option value="public">🌍 Public (সবাই দেখতে পাবে)</option>
+                                <option value="private">🔒 Private (শুধু অ্যাডমিন দেখবে)</option>
+                            </select>
+                        </label>
+                        <label>
+                            Status (আর্কাইভ বা অ্যাক্টিভ)
+                            <select id="mtStatusSel">
+                                <option value="active">🟢 Active (চলমান)</option>
+                                <option value="archived">📦 Archived (আর্কাইভড)</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                        <button class="btn" type="submit" id="mtSaveBtn" style="flex:1;min-width:140px">💾 SAVE INFO</button>
+                        <button class="btn g2" type="button" id="mtExportBtn" style="padding:10px 12px">📥 BACKUP</button>
+                        <button class="btn g2" type="button" id="mtEditScheduleBtn" style="width:100%;border-color:rgba(201,162,39,.55);color:var(--gold);font-weight:700;margin-top:2px">📅 EDIT FULL SCHEDULE & FIXTURES</button>
+                    </div>
+
+                    <div style="margin-top:18px;border-top:1px solid rgba(239,68,68,.3);padding-top:14px">
+                        <div style="font:800 11px Montserrat, sans-serif;color:#f87171;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">⚠️ DANGER ZONE</div>
+                        <div id="mtDeleteSafeNotice" style="font-size:11px;color:var(--mut);display:none;line-height:1.4">
+                            🔒 <b>Season 03 is protected</b> as the official historical archive and cannot be deleted.
+                        </div>
+                        <div id="mtDeleteActionBox">
+                            <p style="font-size:11px;color:var(--mut);margin-bottom:8px">Permanently remove this tournament, its match results, squads, and points table.</p>
+                            <button class="btn" type="button" id="mtDeleteBtn" style="background:rgba(239,68,68,.18);border-color:#ef4444;color:#fca5a5;width:100%;font-weight:700">🗑️ DELETE TOURNAMENT</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:14px;text-align:right">
+                        <button class="btn g2" type="button" id="mtCloseBtn" style="width:100%">CLOSE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div id="goalAlert" class="goal-alert" role="alert" aria-live="assertive">
             <div class="goal-alert-inner" id="goalAlertBox">
                 <div class="goal-ball">⚽</div>
@@ -2137,8 +2534,31 @@
                 appId: "1:351667766049:web:2602a04b9b365e9e28f460"
             };
             const ADMIN_EMAILS = ['rakibmahim164@gmail.com'];
-            // optional, e.g. ["you@gmail.com"]
-            const FX = [['G', '23', '24', '3:00 PM', 'বড় মাঠ'], ['G', '15', '18', '3:00 PM', 'ছোট মাঠ'], ['G', '25', '26', '3:30 PM', 'বড় মাঠ'], ['G', '19', '20', '3:30 PM', 'ছোট মাঠ'], ['G', '13', '14', '4:00 PM', 'বড় মাঠ'], ['G', '16', '17', '4:00 PM', 'ছোট মাঠ'], ['G', '09', '11', '4:30 PM', 'বড় মাঠ'], ['G', '21', '22', '4:30 PM', 'ছোট মাঠ'], ['G', '17', '18', '5:00 PM', 'বড় মাঠ'], ['G', '23', '25', '5:00 PM', 'ছোট মাঠ'], ['G', '19', '22', '5:30 PM', 'বড় মাঠ'], ['G', '24', '26', '5:30 PM', 'ছোট মাঠ'], ['G', '20', '21', '6:00 PM', 'বড় মাঠ'], ['G', '11', '13', '6:00 PM', 'ছোট মাঠ'], ['G', '15', '16', '6:30 PM', 'বড় মাঠ'], ['G', '09', '14', '6:30 PM', 'ছোট মাঠ'], ['Q', 'C2', 'R3', '7:00 PM', ''], ['Q', 'C3', 'R2', '7:00 PM', ''], ['Q', 'C4', 'R1', '7:30 PM', ''], ['Q', 'C1', 'R4', '7:30 PM', ''], ['S', 'W18', 'W20', '8:00 PM', ''], ['S', 'W17', 'W19', '8:30 PM', ''], ['F', 'W21', 'W22', '9:00 PM', '']];
+            const DEFAULT_TOURNAMENT_ID = 'season3';
+            const DEFAULT_TOURNAMENT_NAME = 'EX BRHSIAN Football Festival – Season 03';
+            const DEFAULT_TOURNAMENT_SHORT = 'Season 03';
+            const DEFAULT_FX = [['G', '23', '24', '3:00 PM', 'বড় মাঠ'], ['G', '15', '18', '3:00 PM', 'ছোট মাঠ'], ['G', '25', '26', '3:30 PM', 'বড় মাঠ'], ['G', '19', '20', '3:30 PM', 'ছোট মাঠ'], ['G', '13', '14', '4:00 PM', 'বড় মাঠ'], ['G', '16', '17', '4:00 PM', 'ছোট মাঠ'], ['G', '09', '11', '4:30 PM', 'বড় মাঠ'], ['G', '21', '22', '4:30 PM', 'ছোট মাঠ'], ['G', '17', '18', '5:00 PM', 'বড় মাঠ'], ['G', '23', '25', '5:00 PM', 'ছোট মাঠ'], ['G', '19', '22', '5:30 PM', 'বড় মাঠ'], ['G', '24', '26', '5:30 PM', 'ছোট মাঠ'], ['G', '20', '21', '6:00 PM', 'বড় মাঠ'], ['G', '11', '13', '6:00 PM', 'ছোট মাঠ'], ['G', '15', '16', '6:30 PM', 'বড় মাঠ'], ['G', '09', '14', '6:30 PM', 'ছোট মাঠ'], ['Q', 'C2', 'R3', '7:00 PM', ''], ['Q', 'C3', 'R2', '7:00 PM', ''], ['Q', 'C4', 'R1', '7:30 PM', ''], ['Q', 'C1', 'R4', '7:30 PM', ''], ['S', 'W18', 'W20', '8:00 PM', ''], ['S', 'W17', 'W19', '8:30 PM', ''], ['F', 'W21', 'W22', '9:00 PM', '']];
+            const DEFAULT_G = {
+                1: ['23', '24', '25', '26'],
+                2: ['15', '16', '17', '18'],
+                3: ['19', '20', '21', '22'],
+                4: ['09', '11', '13', '14']
+            };
+            const DEFAULT_ANNC = "EX-BRHSian Football Festival Season 03 এ অংশগ্রহণকারী সকল দলকে জানানো যাচ্ছে যে, ফিক্সচার অনুযায়ী নির্ধারিত সময়ে মাঠে উপস্থিত থাকার অনুরোধ করা হচ্ছে। খেলায় কোনো বিলম্ব বরদাশত করা হবে না।";
+
+            let CURRENT_TID = DEFAULT_TOURNAMENT_ID;
+            let TOURNAMENT_NAME = DEFAULT_TOURNAMENT_NAME;
+            let TOURNAMENT_SHORT = DEFAULT_TOURNAMENT_SHORT;
+            let TOURNAMENTS = [
+                { id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true }
+            ];
+
+            let FX = DEFAULT_FX;
+            let G = DEFAULT_G;
+            let unsubTournDoc = null;
+            let generatedPreviewFX = [];
+            let generatedPreviewG = {};
+
             const ST = {
                 G: 'Group stage',
                 Q: 'Quarter final',
@@ -2153,14 +2573,8 @@
                 '"': '&quot;',
                 "'": '&#39;'
             }[c]));
-            let ANNC = "EX-BRHSian Football Festival Season 03 এ অংশগ্রহণকারী সকল দলকে জানানো যাচ্ছে যে, ফিক্সচার অনুযায়ী নির্ধারিত সময়ে মাঠে উপস্থিত থাকার অনুরোধ করা হচ্ছে। খেলায় কোনো বিলম্ব বরদাশত করা হবে না।"
+            let ANNC = DEFAULT_ANNC
               , R = {}
-              , G = {
-                1: ['23', '24', '25', '26'],
-                2: ['15', '16', '17', '18'],
-                3: ['19', '20', '21', '22'],
-                4: ['09', '11', '13', '14']
-            }
               , SQ = {}
               , TB = {}
               , flt = 'all'
@@ -2294,22 +2708,40 @@
                 return !!getGroupTie(g);
             }
             function lab(ref) {
+                if (!ref) return '';
                 if (ref[0] == 'C')
                     return 'Group ' + ref[1] + ' Champion';
                 if (ref[0] == 'R')
                     return 'Group ' + ref[1] + ' Runner-up';
-                const n = +ref.slice(1);
-                return n > 20 ? 'SF' + (n - 20) + ' Winner' : 'QF' + (n - 16) + ' Winner'
+                if (ref[0] == 'W') {
+                    const n = +ref.slice(1);
+                    if (FX && FX[n - 1]) {
+                        const st = FX[n - 1][0];
+                        if (st === 'Q') return 'Winner QF' + (n >= 17 && n <= 20 ? (n - 16) : (' (M#' + n + ')'));
+                        if (st === 'S') return 'Winner SF' + (n >= 21 && n <= 22 ? (n - 20) : (' (M#' + n + ')'));
+                        return 'Winner Match #' + n;
+                    }
+                    return 'Winner Match #' + n;
+                }
+                return teamDisp(ref);
+            }
+            function teamDisp(t) {
+                if (!t) return '';
+                const s = String(t).trim();
+                return (s.startsWith('BRHS') || isNaN(s)) ? s : ('BRHS ' + s);
             }
             function resolve(ref) {
+                if (!ref) return '';
                 const c = ref[0];
                 if (c == 'C' || c == 'R') {
                     const g = ref[1];
-                    return gDone(g) ? 'BRHS ' + rank(g)[c == 'C' ? 0 : 1].t : null
+                    const r = rank(g);
+                    const teamObj = r ? r[c == 'C' ? 0 : 1] : null;
+                    return (gDone(g) && teamObj) ? teamDisp(teamObj.t) : null;
                 }
                 if (c == 'W')
                     return win(+ref.slice(1));
-                return 'BRHS ' + ref
+                return teamDisp(ref);
             }
             function nm(n, s, ign) {
                 const o = !ign && R[n] && R[n]['t' + s];
@@ -2452,16 +2884,22 @@
                     + '</div>';
             }
 
-            function renderBracket() {
+function renderBracket() {
                 const bv = $('bracketView');
                 if (!bv) return;
-                const ch = win(23);
+
+                const qf = FX.map((f, i) => [f, i + 1]).filter(([f]) => f[0] === 'Q');
+                const sf = FX.map((f, i) => [f, i + 1]).filter(([f]) => f[0] === 'S');
+                const fn = FX.map((f, i) => [f, i + 1]).filter(([f]) => f[0] === 'F');
+
+                const finalMatchIdx = fn.length ? fn[0][1] : (CURRENT_TID === 'season3' ? 23 : null);
+                const ch = finalMatchIdx ? win(finalMatchIdx) : null;
                 const champHtml = ch
                     ? '<div class="bk-champ-card">'
                         + '<div class="bk-champ-trophy">🏆</div>'
-                        + '<div class="bk-champ-title">CHAMPIONS 2026</div>'
+                        + '<div class="bk-champ-title">CHAMPIONS ' + esc((TOURNAMENT_SHORT || '2026').toUpperCase()) + '</div>'
                         + '<div class="bk-champ-name">' + esc(ch) + '</div>'
-                        + '<div class="bk-champ-sub">BRHS FESTIVAL S03</div>'
+                        + '<div class="bk-champ-sub">' + esc((TOURNAMENT_NAME || 'BRHS FESTIVAL').toUpperCase()) + '</div>'
                         + '</div>'
                     : '<div class="bk-champ-card pending">'
                         + '<div class="bk-champ-trophy" style="opacity:0.35">🏆</div>'
@@ -2470,55 +2908,82 @@
                         + '<div class="bk-champ-sub">GRAND FINAL WINNER</div>'
                         + '</div>';
 
-                bv.innerHTML = '<div class="bk-wrap">'
-                    + '<div class="bk-scroll-hint">⇄ Swipe horizontally to view full tournament bracket</div>'
-                    + '<div class="bk-tree">'
-                    + '<div class="bk-col">'
-                    + '<div class="bk-col-hdr">QUARTER FINALS</div>'
-                    + '<div class="bk-col-body">'
-                    + '<div class="bk-pair">' + renderBkCard(18, 'QF 2') + renderBkCard(20, 'QF 4') + '</div>'
-                    + '<div class="bk-pair">' + renderBkCard(17, 'QF 1') + renderBkCard(19, 'QF 3') + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-conn-col">'
-                    + '<div class="bk-col-hdr-spacer"></div>'
-                    + '<div class="bk-conn-body">'
-                    + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
-                    + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-col">'
-                    + '<div class="bk-col-hdr">SEMI FINALS</div>'
-                    + '<div class="bk-col-body">'
-                    + '<div class="bk-item-wrap">' + renderBkCard(21, 'SF 1') + '</div>'
-                    + '<div class="bk-item-wrap">' + renderBkCard(22, 'SF 2') + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-conn-col">'
-                    + '<div class="bk-col-hdr-spacer"></div>'
-                    + '<div class="bk-conn-body">'
-                    + '<svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-col">'
-                    + '<div class="bk-col-hdr">GRAND FINAL</div>'
-                    + '<div class="bk-col-body">'
-                    + '<div class="bk-item-wrap">' + renderBkCard(23, 'FINAL') + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-conn-col" style="width:24px">'
-                    + '<div class="bk-col-hdr-spacer"></div>'
-                    + '<div class="bk-conn-body">'
-                    + '<svg class="bk-svg" viewBox="0 0 24 100" preserveAspectRatio="none"><path d="M 0 50 H 18" fill="none" stroke="#C9A227" stroke-width="2" vector-effect="non-scaling-stroke"/><polygon points="18,46 24,50 18,54" fill="#C9A227"/></svg>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="bk-col bk-col-champ">'
+                if (!qf.length && !sf.length && !fn.length) {
+                    bv.innerHTML = '<div style="text-align:center;padding:32px 14px;color:var(--mut);background:#100e08;border:1px solid var(--line);border-radius:10px;margin:10px 0"><div style="font-size:24px;margin-bottom:6px">📋</div><b style="color:var(--gold);font-size:14px">LEAGUE TOURNAMENT FORMAT</b><p style="margin:6px 0 0;font-size:12px">Points Table standings decide the tournament champion. (No knockout bracket configured for this tournament)</p></div>';
+                    return;
+                }
+
+                let treeCols = '';
+
+                // Quarter Finals Column (if QF matches exist)
+                if (qf.length >= 4) {
+                    const qf2 = qf[1] ? qf[1][1] : 18;
+                    const qf4 = qf[3] ? qf[3][1] : 20;
+                    const qf1 = qf[0] ? qf[0][1] : 17;
+                    const qf3 = qf[2] ? qf[2][1] : 19;
+                    treeCols += '<div class="bk-col">'
+                        + '<div class="bk-col-hdr">QUARTER FINALS</div>'
+                        + '<div class="bk-col-body">'
+                        + '<div class="bk-pair">' + renderBkCard(qf2, 'QF 2') + renderBkCard(qf4, 'QF 4') + '</div>'
+                        + '<div class="bk-pair">' + renderBkCard(qf1, 'QF 1') + renderBkCard(qf3, 'QF 3') + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="bk-conn-col">'
+                        + '<div class="bk-col-hdr-spacer"></div>'
+                        + '<div class="bk-conn-body">'
+                        + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
+                        + '<div class="bk-conn-half"><svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>'
+                        + '</div>'
+                        + '</div>';
+                }
+
+                // Semi Finals Column
+                if (sf.length >= 2) {
+                    const sf1 = sf[0] ? sf[0][1] : 21;
+                    const sf2 = sf[1] ? sf[1][1] : 22;
+                    treeCols += '<div class="bk-col">'
+                        + '<div class="bk-col-hdr">SEMI FINALS</div>'
+                        + '<div class="bk-col-body">'
+                        + '<div class="bk-item-wrap">' + renderBkCard(sf1, 'SF 1') + '</div>'
+                        + '<div class="bk-item-wrap">' + renderBkCard(sf2, 'SF 2') + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="bk-conn-col">'
+                        + '<div class="bk-col-hdr-spacer"></div>'
+                        + '<div class="bk-conn-body">'
+                        + '<svg class="bk-svg" viewBox="0 0 28 100" preserveAspectRatio="none"><path d="M 0 25 H 14 V 75 H 0 M 14 50 H 28" fill="none" stroke="#6b531b" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>'
+                        + '</div>'
+                        + '</div>';
+                }
+
+                // Grand Final Column
+                if (fn.length >= 1) {
+                    const fn1 = fn[0] ? fn[0][1] : 23;
+                    treeCols += '<div class="bk-col">'
+                        + '<div class="bk-col-hdr">GRAND FINAL</div>'
+                        + '<div class="bk-col-body">'
+                        + '<div class="bk-item-wrap">' + renderBkCard(fn1, 'FINAL') + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="bk-conn-col" style="width:24px">'
+                        + '<div class="bk-col-hdr-spacer"></div>'
+                        + '<div class="bk-conn-body">'
+                        + '<svg class="bk-svg" viewBox="0 0 24 100" preserveAspectRatio="none"><path d="M 0 50 H 18" fill="none" stroke="#C9A227" stroke-width="2" vector-effect="non-scaling-stroke"/><polygon points="18,46 24,50 18,54" fill="#C9A227"/></svg>'
+                        + '</div>'
+                        + '</div>';
+                }
+
+                // Champion Trophy Column
+                treeCols += '<div class="bk-col bk-col-champ">'
                     + '<div class="bk-col-hdr" style="background:rgba(201,162,39,.18);border-color:#C9A227;color:#fff">🏆 CHAMPION</div>'
                     + '<div class="bk-col-body">'
                     + '<div class="bk-item-wrap">' + champHtml + '</div>'
                     + '</div>'
-                    + '</div>'
-                    + '</div>'
+                    + '</div>';
+
+                bv.innerHTML = '<div class="bk-wrap">'
+                    + '<div class="bk-scroll-hint">⇄ Swipe horizontally to view full tournament bracket</div>'
+                    + '<div class="bk-tree">' + treeCols + '</div>'
                     + '</div>';
             }
 
@@ -2732,6 +3197,12 @@
             }
 
             function render() {
+                const curMeta = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                if (!ADMIN && curMeta && curMeta.isPrivate) {
+                    $('ml').innerHTML = '<div style="text-align:center;padding:48px 16px;color:var(--mut);background:#100e08;border:1px solid var(--line);border-radius:12px;margin:20px 0"><div style="font-size:36px;margin-bottom:8px">🔒</div><b style="color:var(--gold);font-size:15px">PRIVATE TOURNAMENT</b><p style="margin:8px 0 0;font-size:12px">This tournament is currently private. Only administrators can view its matches and results.</p></div>';
+                    if ($('bracketView')) $('bracketView').innerHTML = '';
+                    return;
+                }
                 let nx = 0;
                 for (let n = 1; n <= FX.length; n++)
                     if (!done(n) && !(R[n] && R[n].live)) {
@@ -2775,10 +3246,10 @@
                     out = LV.map(n => '<div class="lvb"><span class="lvd"></span>' + (R[n].ht ? 'HALF TIME' : 'LIVE NOW') + ' · ' + esc(nm(n, 'a')) + ' ' + R[n].sa + ' – ' + R[n].sb + ' ' + esc(nm(n, 'b')) + '</div>').join('') + out;
                 $('ml').innerHTML = out;
                 const sel = $('batchFlt');
-                if (sel && sel.options.length <= 1) {
+                if (sel && (!sel.options || sel.options.length <= 1)) {
                     const curSel = sel.value || batchFlt;
                     const allB = [...new Set(Object.values(G).flat())].sort((a,b) => a.localeCompare(b));
-                    sel.innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>' + allB.map(b => '<option value="' + esc(b) + '">Batch ' + esc(b) + '</option>').join('');
+                    sel.innerHTML = '<option value="all">🔍 ALL TEAMS / BATCHES</option>' + allB.map(b => '<option value="' + esc(b) + '">' + esc(teamDisp(b)) + '</option>').join('');
                     sel.value = curSel;
                 }
                 const P = {};
@@ -4427,6 +4898,26 @@ function openEdit(n) {
                 const nameB = nm(n, 'b');
                 F.ta.value = nameA;
                 F.tb.value = nameB;
+                if (F.tm) F.tm.value = f[3] || '3:00 PM';
+                if (F.vn) F.vn.value = f[4] || '';
+                updateKnockoutOptionsDatalist();
+
+                const btnAutoA = $('btnAutoTeamA');
+                if (btnAutoA) {
+                    btnAutoA.onclick = () => {
+                        const rawRef = f[1];
+                        F.ta.value = rawRef;
+                        toast('Team A reset to formula: ' + rawRef, true);
+                    };
+                }
+                const btnAutoB = $('btnAutoTeamB');
+                if (btnAutoB) {
+                    btnAutoB.onclick = () => {
+                        const rawRef = f[2];
+                        F.tb.value = rawRef;
+                        toast('Team B reset to formula: ' + rawRef, true);
+                    };
+                }
                 const la = $('lblScoreA'); if (la) la.textContent = 'Score – ' + nameA;
                 const lb = $('lblScoreB'); if (lb) lb.textContent = 'Score – ' + nameB;
                 const lsa = $('lblScorerA'); if (lsa) lsa.textContent = '⚽ Scorers – ' + nameA;
@@ -4554,11 +5045,40 @@ function openEdit(n) {
                     r.ta = ta;
                 if (tb && tb !== nm(n, 'b', true))
                     r.tb = tb;
+
+                let fxChanged = false;
+                if (F.tm && F.tm.value.trim() && F.tm.value.trim() !== FX[n - 1][3]) {
+                    FX[n - 1][3] = F.tm.value.trim();
+                    fxChanged = true;
+                }
+                if (F.vn && F.vn.value.trim() !== (FX[n - 1][4] || '')) {
+                    FX[n - 1][4] = F.vn.value.trim();
+                    fxChanged = true;
+                }
+                // If knockout or manual team reference explicitly updated in fixture
+                if (ta && (ta.startsWith('C') || ta.startsWith('R') || ta.startsWith('W') || ta !== FX[n - 1][1])) {
+                    if (ta.startsWith('C') || ta.startsWith('R') || ta.startsWith('W')) {
+                        FX[n - 1][1] = ta;
+                        delete r.ta;
+                        fxChanged = true;
+                    }
+                }
+                if (tb && (tb.startsWith('C') || tb.startsWith('R') || tb.startsWith('W') || tb !== FX[n - 1][2])) {
+                    if (tb.startsWith('C') || tb.startsWith('R') || tb.startsWith('W')) {
+                        FX[n - 1][2] = tb;
+                        delete r.tb;
+                        fxChanged = true;
+                    }
+                }
+
                 const pv = snap();
                 R[n] = r;
                 render();
+                hdr();
                 closeEdit();
-                persistChange({ matchId: n, matchData: r }, pv)
+                const changePayload = { matchId: n, matchData: r };
+                if (fxChanged) changePayload.fixtures = FX;
+                persistChange(changePayload, pv)
             }
             ;
             $('clr').onclick = () => {
@@ -4722,7 +5242,370 @@ function hdr() {
                 if (qb) qb.style.display = ADMIN ? 'flex' : 'none';
                 const tlb = $('topLoginBtn');
                 if (tlb) tlb.style.display = (!ADMIN && MODE !== 'local') ? 'inline-block' : 'none';
+                renderTournDropdown();
             }
+            
+            function renderTournDropdown() {
+                const sel = $('tournSelect');
+                if (!sel) return;
+                const visibleList = TOURNAMENTS.filter(t => ADMIN || !t.isPrivate);
+
+                // If currently active tournament is private and viewer is not admin, fallback to first visible
+                if (!ADMIN && TOURNAMENTS.some(t => t.id === CURRENT_TID && t.isPrivate)) {
+                    if (visibleList.length) {
+                        switchTournament(visibleList[0].id);
+                        return;
+                    }
+                }
+
+                const wrap = $('tournPickerWrap');
+                if (wrap) {
+                    wrap.style.display = (visibleList.length > 1 || ADMIN) ? 'inline-flex' : 'none';
+                }
+
+                sel.innerHTML = visibleList.map(t => {
+                    const isSel = t.id === CURRENT_TID ? ' selected' : '';
+                    let badge = '';
+                    if (t.isPrivate) badge += ' 🔒 [Private]';
+                    else if (t.archived) badge += ' [Archived]';
+                    return '<option value="' + esc(t.id) + '"' + isSel + '>' + esc(t.shortName || t.name) + badge + '</option>';
+                }).join('');
+            }
+
+            function updateTournamentHeader() {
+                const pSub = $('portalSub');
+                const tMeta = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                const isArchived = tMeta && tMeta.archived;
+                const isPrivate = tMeta && tMeta.isPrivate;
+                if (pSub) {
+                    let badge = isPrivate ? ' · 🔒 PRIVATE' : (isArchived ? ' · ARCHIVE' : ' · RESULTS');
+                    pSub.textContent = (TOURNAMENT_SHORT || 'SEASON 03').toUpperCase() + badge;
+                }
+                document.title = (TOURNAMENT_NAME || 'EX BRHSIAN Football Festival – Season 03') + ' Match Portal';
+                renderTournDropdown();
+            }
+
+            function switchTournament(tid) {
+                if (!tid) return;
+                CURRENT_TID = tid;
+                try { localStorage.setItem('brhs_active_tournament', tid); } catch (_) {}
+                try {
+                    const newHash = '#t=' + tid;
+                    if (location.hash !== newHash) history.replaceState(null, '', newHash);
+                } catch (_) {}
+
+                const sel = $('tournSelect');
+                if (sel && sel.value !== tid) sel.value = tid;
+
+                const tMeta = TOURNAMENTS.find(t => t.id === tid) || { id: tid, name: 'Tournament ' + tid, shortName: tid };
+                TOURNAMENT_NAME = tMeta.name || (tid === 'season3' ? DEFAULT_TOURNAMENT_NAME : 'Tournament ' + tid);
+                TOURNAMENT_SHORT = tMeta.shortName || (tid === 'season3' ? DEFAULT_TOURNAMENT_SHORT : tid);
+
+                // Load from cache if available
+                try {
+                    const cachedRaw = localStorage.getItem('brhsHubCache_' + tid)
+                        || (tid === 'season3' ? localStorage.getItem('brhsHubCache') : null)
+                        || localStorage.getItem('brhsHubLocal_' + tid);
+                    if (cachedRaw) {
+                        const c = JSON.parse(cachedRaw);
+                        R = c.R || {};
+                        G = c.G || (tid === 'season3' ? DEFAULT_G : {});
+                        FX = c.FX || (tid === 'season3' ? DEFAULT_FX : []);
+                        SQ = c.SQ || {};
+                        TB = c.TB || {};
+                        ANNC = c.annc !== undefined ? c.annc : (tid === 'season3' ? DEFAULT_ANNC : '');
+                        if (c.name) TOURNAMENT_NAME = c.name;
+                        if (c.shortName) TOURNAMENT_SHORT = c.shortName;
+                        U0 = c.u || 0;
+                    } else if (tid === 'season3') {
+                        R = {};
+                        G = DEFAULT_G;
+                        FX = DEFAULT_FX;
+                        SQ = {};
+                        TB = {};
+                        ANNC = DEFAULT_ANNC;
+                    } else {
+                        R = {};
+                        G = {};
+                        FX = [];
+                        SQ = {};
+                        TB = {};
+                        ANNC = '';
+                    }
+                } catch (e) { console.warn('Cache load failed:', e); }
+
+                updateTournamentHeader();
+                renderAnnc();
+                if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
+                render();
+                hdr();
+
+                if (DB && F) {
+                    subscribeTournamentDoc(tid);
+                }
+            }
+
+            function subscribeTournamentDoc(tid) {
+                if (unsubTournDoc) {
+                    try { unsubTournDoc(); } catch (_) {}
+                    unsubTournDoc = null;
+                }
+                if (!DB || !F) return;
+
+                unsubTournDoc = F.onSnapshot(F.doc(DB, 'hub', tid), s => {
+                    if (s.exists()) {
+                        try {
+                            const st = JSON.parse(s.data().json);
+                            R = st.R || {};
+                            if (st.G) G = st.G;
+                            else if (tid === 'season3') G = DEFAULT_G;
+
+                            if (st.FX) FX = st.FX;
+                            else if (tid === 'season3') FX = DEFAULT_FX;
+
+                            if (st.name) TOURNAMENT_NAME = st.name;
+                            if (st.shortName) TOURNAMENT_SHORT = st.shortName;
+                            if (st.SQ) SQ = st.SQ; else SQ = {};
+                            if (st.TB) TB = st.TB; else TB = {};
+                            if (st.annc !== undefined) ANNC = st.annc;
+                            else if (tid === 'season3') ANNC = DEFAULT_ANNC;
+
+                            U0 = s.data().u || 0;
+                            try {
+                                localStorage.setItem('brhsHubCache_' + tid, JSON.stringify({
+                                    name: TOURNAMENT_NAME,
+                                    shortName: TOURNAMENT_SHORT,
+                                    FX,
+                                    R,
+                                    G,
+                                    SQ,
+                                    TB,
+                                    annc: ANNC,
+                                    u: U0
+                                }));
+                                if (tid === 'season3') {
+                                    localStorage.setItem('brhsHubCache', JSON.stringify({ R, G, SQ, TB, u: U0, annc: ANNC }));
+                                }
+                            } catch (_) {}
+                        } catch (e) { console.warn('Cache save failed:', e); }
+                    } else if (tid === 'season3') {
+                        G = DEFAULT_G;
+                        FX = DEFAULT_FX;
+                        TOURNAMENT_NAME = DEFAULT_TOURNAMENT_NAME;
+                        TOURNAMENT_SHORT = DEFAULT_TOURNAMENT_SHORT;
+                    }
+                    updateTournamentHeader();
+                    renderAnnc();
+                    if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
+                    checkScoreChanges(R);
+                    render();
+                    hdr();
+                }, e => toast('Could not load results (' + (e.code || 'error') + ')', false));
+            }
+
+            function parseCustomTime(tStr) {
+                const match = (tStr || '3:00 PM').trim().match(/^(\d+):(\d+)\s*(AM|PM)?$/i);
+                if (!match) return { h: 15, m: 0 };
+                let h = parseInt(match[1], 10);
+                const m = parseInt(match[2], 10);
+                const ampm = (match[3] || (h < 8 || h === 12 ? 'PM' : 'AM')).toUpperCase();
+                if (ampm === 'PM' && h < 12) h += 12;
+                if (ampm === 'AM' && h === 12) h = 0;
+                return { h, m };
+            }
+
+            function formatCustomTime(totalMins) {
+                let h = Math.floor(totalMins / 60) % 24;
+                let m = totalMins % 60;
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                let h12 = h % 12;
+                if (h12 === 0) h12 = 12;
+                return h12 + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+            }
+
+            function generateTournamentFixtures(groups, venues, startTimeStr, intervalMinutes, advanceCount, matchModel = 'round_robin', knockoutModel = 'auto') {
+                if (matchModel === 'manual_only') return [];
+
+                const groupKeys = Object.keys(groups);
+                const numGroups = groupKeys.length;
+                
+                const groupRounds = {};
+                groupKeys.forEach(g => {
+                    const teams = [...groups[g]];
+                    if (teams.length % 2 !== 0) teams.push('BYE');
+                    const n = teams.length;
+                    const rounds = [];
+                    for (let r = 0; r < n - 1; r++) {
+                        const roundMatches = [];
+                        for (let i = 0; i < n / 2; i++) {
+                            const t1 = teams[i];
+                            const t2 = teams[n - 1 - i];
+                            if (t1 !== 'BYE' && t2 !== 'BYE') {
+                                roundMatches.push(['G', t1, t2]);
+                            }
+                        }
+                        rounds.push(roundMatches);
+                        teams.splice(1, 0, teams.pop());
+                    }
+                    groupRounds[g] = rounds;
+                });
+
+                let maxRounds = Math.max(...Object.values(groupRounds).map(r => r.length), 0);
+                if (matchModel === 'lottery_2') {
+                    maxRounds = Math.min(maxRounds, 2);
+                } else if (matchModel === 'lottery_1') {
+                    maxRounds = Math.min(maxRounds, 1);
+                }
+
+                const allGroupMatches = [];
+                for (let r = 0; r < maxRounds; r++) {
+                    groupKeys.forEach(g => {
+                        const round = groupRounds[g] ? groupRounds[g][r] : null;
+                        if (round) {
+                            round.forEach(m => allGroupMatches.push(m));
+                        }
+                    });
+                }
+
+                const parsed = parseCustomTime(startTimeStr || '3:00 PM');
+                let currentMins = parsed.h * 60 + parsed.m;
+                const numVenues = Math.max(1, (venues && venues.length) ? venues.length : 1);
+
+                const generated = [];
+                allGroupMatches.forEach((m, idx) => {
+                    const venueIdx = idx % numVenues;
+                    const venue = (venues && venues[venueIdx]) ? venues[venueIdx].trim() : '';
+                    const time = formatCustomTime(currentMins);
+                    generated.push(['G', m[1], m[2], time, venue]);
+                    if (venueIdx === numVenues - 1 || idx === allGroupMatches.length - 1) {
+                        currentMins += intervalMinutes;
+                    }
+                });
+
+                if (knockoutModel === 'auto') {
+                    if (numGroups === 4 && advanceCount >= 2) {
+                        const qfStart = generated.length + 1;
+                        generated.push(['Q', 'C2', 'R3', formatCustomTime(currentMins), '']);
+                        generated.push(['Q', 'C3', 'R2', formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        generated.push(['Q', 'C4', 'R1', formatCustomTime(currentMins), '']);
+                        generated.push(['Q', 'C1', 'R4', formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        const sf1 = generated.length + 1;
+                        generated.push(['S', 'W' + (qfStart), 'W' + (qfStart + 1), formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        const sf2 = generated.length + 1;
+                        generated.push(['S', 'W' + (qfStart + 2), 'W' + (qfStart + 3), formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        generated.push(['F', 'W' + sf1, 'W' + sf2, formatCustomTime(currentMins), '']);
+                    } else if (numGroups === 2 && advanceCount >= 2) {
+                        const sf1 = generated.length + 1;
+                        generated.push(['S', 'C1', 'R2', formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        const sf2 = generated.length + 1;
+                        generated.push(['S', 'C2', 'R1', formatCustomTime(currentMins), '']);
+                        currentMins += intervalMinutes;
+                        generated.push(['F', 'W' + sf1, 'W' + sf2, formatCustomTime(currentMins), '']);
+                    } else if (numGroups >= 1 && advanceCount >= 2) {
+                        generated.push(['F', 'C1', 'R1', formatCustomTime(currentMins), '']);
+                    }
+                }
+
+                return generated;
+            }
+
+            function updateTeamsDatalist(teams) {
+                const dl = $('ntTeamsDatalist');
+                if (!dl) return;
+                const set = [...new Set(teams || [])].filter(Boolean);
+                dl.innerHTML = set.map(t => '<option value="' + esc(t) + '">' + esc(teamDisp(t)) + '</option>').join('');
+            }
+
+            function syncFixturesFromUI() {
+                const box = $('ntFixturesPreview');
+                if (!box) return generatedPreviewFX;
+                const items = box.querySelectorAll('.nt-fix-item');
+                if (!items || !items.length) return generatedPreviewFX;
+                const syncd = [];
+                items.forEach((item, idx) => {
+                    const stage = item.querySelector('.nt-fix-stage-sel')?.value || 'G';
+                    const t1 = (item.querySelector('.nt-fix-t1')?.value || '').trim();
+                    const t2 = (item.querySelector('.nt-fix-t2')?.value || '').trim();
+                    const time = (item.querySelector('.nt-fix-time-inp')?.value || '').trim() || '3:00 PM';
+                    const venue = (item.querySelector('.nt-fix-venue-inp')?.value || '').trim();
+                    syncd.push([stage, t1, t2, time, venue]);
+                });
+                generatedPreviewFX = syncd;
+                return syncd;
+            }
+
+            function renderGroupPreview(groups) {
+                const box = $('ntGroupPreview');
+                if (!box) return;
+                const allTeams = Object.values(groups).flat();
+                updateTeamsDatalist(allTeams);
+                box.innerHTML = Object.keys(groups).map(g => {
+                    return '<div class="nt-group-box"><div class="nt-group-hdr">Group ' + g + ' (' + groups[g].length + ' teams)</div><div style="font-size:12px;color:#fff">' + groups[g].map(esc).join(' · ') + '</div></div>';
+                }).join('');
+            }
+
+            function renderFixturesPreview(fixtures) {
+                const box = $('ntFixturesPreview');
+                if (!box) return;
+                if (!fixtures || !fixtures.length) {
+                    box.innerHTML = '<div style="font-size:11px;color:var(--mut);text-align:center;padding:16px"><div style="font-size:20px;margin-bottom:4px">📅</div>No fixtures yet. Click <b>"⚡ Auto-Generate"</b> or <b>"➕ Add Match"</b> to schedule matches.</div>';
+                    return;
+                }
+                box.innerHTML = fixtures.map((f, i) => {
+                    const st = f[0] || 'G';
+                    return '<div class="nt-fix-item" data-idx="' + i + '">'
+                        + '<div class="nt-fix-hdr-row">'
+                        + '<span class="nt-fix-num">#' + String(i + 1).padStart(2, '0') + '</span>'
+                        + '<select class="nt-fix-stage-sel" aria-label="Stage">'
+                        + '<option value="G"' + (st === 'G' ? ' selected' : '') + '>Group Match</option>'
+                        + '<option value="Q"' + (st === 'Q' ? ' selected' : '') + '>Quarter Final</option>'
+                        + '<option value="S"' + (st === 'S' ? ' selected' : '') + '>Semi Final</option>'
+                        + '<option value="F"' + (st === 'F' ? ' selected' : '') + '>Grand Final</option>'
+                        + '</select>'
+                        + '<input class="nt-fix-time-inp" placeholder="Time" value="' + esc(f[3] || '3:00 PM') + '" aria-label="Match time">'
+                        + '<input class="nt-fix-venue-inp" placeholder="Venue / Field" value="' + esc(f[4] || '') + '" aria-label="Venue">'
+                        + '<button type="button" class="nt-fix-del-btn" title="Remove match" data-del="' + i + '">✕</button>'
+                        + '</div>'
+                        + '<div class="nt-fix-teams-row">'
+                        + '<input class="nt-fix-team-inp nt-fix-t1" placeholder="Team 1 / Batch" list="ntTeamsDatalist" value="' + esc(f[1] || '') + '" aria-label="Team 1">'
+                        + '<span class="nt-fix-vs">VS</span>'
+                        + '<input class="nt-fix-team-inp nt-fix-t2" placeholder="Team 2 / Batch" list="ntTeamsDatalist" value="' + esc(f[2] || '') + '" aria-label="Team 2">'
+                        + '</div>'
+                        + '</div>';
+                }).join('');
+
+                box.querySelectorAll('.nt-fix-del-btn').forEach(btn => {
+                    btn.onclick = () => {
+                        syncFixturesFromUI();
+                        const idx = parseInt(btn.dataset.del, 10);
+                        if (!isNaN(idx) && idx >= 0 && idx < generatedPreviewFX.length) {
+                            generatedPreviewFX.splice(idx, 1);
+                            renderFixturesPreview(generatedPreviewFX);
+                        }
+                    };
+                });
+
+                box.querySelectorAll('input, select').forEach(el => {
+                    el.oninput = () => { syncFixturesFromUI(); };
+                    el.onchange = () => { syncFixturesFromUI(); };
+                });
+            }
+
+            function resetNewTournForm() {
+                const f = $('ntf');
+                if (f) f.reset();
+                $('ntId').dataset.manual = '';
+                $('ntGroupPreview').innerHTML = '';
+                $('ntFixturesPreview').innerHTML = '<div style="font-size:11px;color:var(--mut);text-align:center;padding:16px"><div style="font-size:20px;margin-bottom:4px">📅</div>Click <b>"⚡ Auto-Generate"</b> or <b>"➕ Add Match"</b> to set up fixtures.</div>';
+                generatedPreviewFX = [];
+                generatedPreviewG = {};
+            }
+
             async function persistChange(change, prev) {
                 const u = Date.now();
                 if (MODE === 'local') {
@@ -4735,13 +5618,17 @@ function hdr() {
                 }
                 try {
                     await F.runTransaction(DB, async (tx) => {
-                        const docRef = F.doc(DB, 'hub', 'season3');
+                        const tid = CURRENT_TID || 'season3';
+                        const docRef = F.doc(DB, 'hub', tid);
                         const docSnap = await tx.get(docRef);
                         let remoteR = {};
                         let remoteG = G;
+                        let remoteFX = FX;
                         let remoteSQ = SQ || {};
                         let remoteTB = TB || {};
                         let remoteANNC = ANNC || '';
+                        let remoteName = TOURNAMENT_NAME;
+                        let remoteShort = TOURNAMENT_SHORT;
                         if (docSnap.exists()) {
                             try {
                                 const parsed = JSON.parse(docSnap.data().json);
@@ -4775,6 +5662,9 @@ function hdr() {
                         }
                         if (change && change.annc !== undefined) {
                             remoteANNC = change.annc;
+                        }
+                        if (change && change.fixtures) {
+                            remoteFX = change.fixtures;
                         }
                         if (change && change.restoreAll) {
                             const backup = change.restoreAll;
@@ -4895,44 +5785,27 @@ function hdr() {
                         DB = Fs.getFirestore(app)
                     }
                     F = Fs;
-                    F.onSnapshot(F.doc(DB, 'hub', 'season3'), s => {
+
+                    // Realtime sync for tournaments registry list
+                    F.onSnapshot(F.doc(DB, 'hub', 'tournaments'), s => {
                         if (s.exists()) {
                             try {
-                                const st = JSON.parse(s.data().json);
-                                R = st.R || {};
-                                if (st.G) {
-                                    G = st.G;
-                                    if ($('batchFlt')) $('batchFlt').innerHTML = '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>';
+                                const data = s.data();
+                                if (data && Array.isArray(data.list) && data.list.length > 0) {
+                                    let list = data.list;
+                                    if (!list.some(t => t.id === 'season3')) {
+                                        list.unshift({ id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true });
+                                    }
+                                    TOURNAMENTS = list;
+                                    try { localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS)); } catch(_) {}
+                                    renderTournDropdown();
                                 }
-                                if (st.SQ) {
-                                    SQ = st.SQ;
-                                }
-                                if (st.TB) {
-                                    TB = st.TB;
-                                } else {
-                                    TB = {};
-                                }
-                                if (st.annc !== undefined) {
-                                    ANNC = st.annc;
-                                }
-                                renderAnnc();
-                                U0 = s.data().u || 0;
-                                try {
-                                    localStorage.setItem('brhsHubCache', JSON.stringify({
-                                        R,
-                                        G,
-                                        SQ,
-                                        TB,
-                                        u: U0
-                                    }))
-                                } catch (_) {}
-                            } catch (e) { console.warn('Cache save failed:', e) }
+                            } catch (e) { console.warn('Tournament list parse failed:', e); }
                         }
-                        checkScoreChanges(R);
-                        render();
-                        hdr()
-                    }
-                    , e => toast('Could not load results (' + (e.code || 'error') + ')', false));
+                    }, err => console.warn('Tournaments list listen error:', err));
+
+                    // Connect to active tournament doc
+                    subscribeTournamentDoc(CURRENT_TID);
 // Auth lifecycle managed via ensureAuth()
                 } catch (e) {
                     console.error('Firebase initialization error:', e);
@@ -5069,6 +5942,693 @@ const teb = $('topExportBackupBtn');
                     U0 = c.u || 0
                 }
             } catch (e) {}
+            // Initial load from URL hash or storage
+            try {
+                const hashMatch = (location.hash || '').match(/#t=([a-zA-Z0-9_\-]+)/);
+                if (hashMatch) {
+                    CURRENT_TID = hashMatch[1];
+                } else {
+                    const storedTid = localStorage.getItem('brhs_active_tournament');
+                    if (storedTid) CURRENT_TID = storedTid;
+                }
+                const storedTourns = localStorage.getItem('brhs_tournaments');
+                if (storedTourns) {
+                    const parsed = JSON.parse(storedTourns);
+                    if (Array.isArray(parsed) && parsed.length) TOURNAMENTS = parsed;
+                }
+            } catch (_) {}
+
+            const tSel = $('tournSelect');
+            if (tSel) {
+                tSel.onchange = e => { switchTournament(e.target.value); };
+            }
+
+            const tnBtn = $('topNewTournBtn');
+            if (tnBtn) {
+                tnBtn.onclick = () => {
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    resetNewTournForm();
+                    $('ntm').hidden = false;
+                };
+            }
+
+            const ntcBtn = $('ntCancelBtn');
+            if (ntcBtn) {
+                ntcBtn.onclick = () => { $('ntm').hidden = true; };
+            }
+
+            const ntShortInp = $('ntShort');
+            if (ntShortInp) {
+                ntShortInp.oninput = e => {
+                    const v = e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const idInp = $('ntId');
+                    if (v && idInp && !idInp.dataset.manual) {
+                        idInp.value = v;
+                    }
+                };
+            }
+            if ($('ntId')) {
+                $('ntId').oninput = () => { $('ntId').dataset.manual = '1'; };
+            }
+
+            const btnPrevGrp = $('btnPreviewGroups');
+            if (btnPrevGrp) {
+                btnPrevGrp.onclick = () => {
+                    const raw = ($('ntTeamsInput').value || '').trim();
+                    const teams = raw.split(/[\n,]/).map(t => t.trim()).filter(Boolean);
+                    if (teams.length < 2) {
+                        toast('Please enter at least 2 teams', false);
+                        return;
+                    }
+                    const gCount = parseInt($('ntGroupCount').value, 10) || 1;
+                    const distributed = {};
+                    for (let i = 1; i <= gCount; i++) distributed[i] = [];
+                    teams.forEach((tm, idx) => {
+                        const gNum = (idx % gCount) + 1;
+                        distributed[gNum].push(tm);
+                    });
+                    generatedPreviewG = distributed;
+                    renderGroupPreview(distributed);
+                    toast('✓ Teams distributed into ' + gCount + ' groups', true);
+                };
+            }
+
+            function updateKnockoutOptionsDatalist() {
+                const dl = $('knockoutOptionsList');
+                if (!dl) return;
+                const allTeams = [...new Set(Object.values(G).flat())].filter(Boolean);
+                let optionsHtml = '';
+                // 1. All registered teams
+                optionsHtml += allTeams.map(t => '<option value="' + esc(t) + '">Team ' + esc(teamDisp(t)) + '</option>').join('');
+                // 2. Auto group rankings
+                Object.keys(G).forEach(g => {
+                    optionsHtml += '<option value="C' + g + '">Auto: Group ' + g + ' Champion (1st)</option>';
+                    optionsHtml += '<option value="R' + g + '">Auto: Group ' + g + ' Runner-up (2nd)</option>';
+                });
+                // 3. Match winners for knockouts
+                FX.forEach((f, i) => {
+                    const n = i + 1;
+                    const st = f[0];
+                    if (st === 'Q') optionsHtml += '<option value="W' + n + '">Auto: Winner QF Match #' + n + '</option>';
+                    else if (st === 'S') optionsHtml += '<option value="W' + n + '">Auto: Winner SF Match #' + n + '</option>';
+                    else if (st === 'G') optionsHtml += '<option value="W' + n + '">Auto: Winner Group Match #' + n + '</option>';
+                });
+                dl.innerHTML = optionsHtml;
+            }
+
+            let tempEditingFX = [];
+
+            function renderScheduleEditorList() {
+                const box = $('sfmFixturesList');
+                if (!box) return;
+                updateKnockoutOptionsDatalist();
+
+                if (!tempEditingFX.length) {
+                    box.innerHTML = '<div style="font-size:11px;color:var(--mut);text-align:center;padding:16px"><div style="font-size:20px;margin-bottom:4px">📅</div>No matches in schedule. Click <b>"➕ Add Match"</b> to add matches.</div>';
+                    return;
+                }
+
+                box.innerHTML = tempEditingFX.map((f, i) => {
+                    const st = f[0] || 'G';
+                    return '<div class="nt-fix-item" data-idx="' + i + '">'
+                        + '<div class="nt-fix-hdr-row">'
+                        + '<span class="nt-fix-num">#' + String(i + 1).padStart(2, '0') + '</span>'
+                        + '<select class="nt-fix-stage-sel sfm-stage" aria-label="Stage">'
+                        + '<option value="G"' + (st === 'G' ? ' selected' : '') + '>Group Match</option>'
+                        + '<option value="Q"' + (st === 'Q' ? ' selected' : '') + '>Quarter Final</option>'
+                        + '<option value="S"' + (st === 'S' ? ' selected' : '') + '>Semi Final</option>'
+                        + '<option value="F"' + (st === 'F' ? ' selected' : '') + '>Grand Final</option>'
+                        + '</select>'
+                        + '<input class="nt-fix-time-inp sfm-time" placeholder="Time" value="' + esc(f[3] || '3:00 PM') + '" aria-label="Match time">'
+                        + '<input class="nt-fix-venue-inp sfm-venue" placeholder="Venue / Field" value="' + esc(f[4] || '') + '" aria-label="Venue">'
+                        + '<button type="button" class="nt-fix-del-btn sfm-del-btn" title="Remove match" data-del="' + i + '">✕</button>'
+                        + '</div>'
+                        + '<div class="nt-fix-teams-row">'
+                        + '<input class="nt-fix-team-inp sfm-t1" placeholder="Team 1 / Auto (e.g. C1, W17)" list="knockoutOptionsList" value="' + esc(f[1] || '') + '" aria-label="Team 1">'
+                        + '<span class="nt-fix-vs">VS</span>'
+                        + '<input class="nt-fix-team-inp sfm-t2" placeholder="Team 2 / Auto (e.g. R2, W18)" list="knockoutOptionsList" value="' + esc(f[2] || '') + '" aria-label="Team 2">'
+                        + '</div>'
+                        + '</div>';
+                }).join('');
+
+                box.querySelectorAll('.sfm-del-btn').forEach(btn => {
+                    btn.onclick = () => {
+                        syncScheduleEditorFromUI();
+                        const idx = parseInt(btn.dataset.del, 10);
+                        if (!isNaN(idx) && idx >= 0 && idx < tempEditingFX.length) {
+                            tempEditingFX.splice(idx, 1);
+                            renderScheduleEditorList();
+                        }
+                    };
+                });
+
+                box.querySelectorAll('input, select').forEach(el => {
+                    el.oninput = () => { syncScheduleEditorFromUI(); };
+                    el.onchange = () => { syncScheduleEditorFromUI(); };
+                });
+            }
+
+            function syncScheduleEditorFromUI() {
+                const box = $('sfmFixturesList');
+                if (!box) return tempEditingFX;
+                const items = box.querySelectorAll('.nt-fix-item');
+                if (!items || !items.length) return tempEditingFX;
+                const syncd = [];
+                items.forEach(item => {
+                    const st = item.querySelector('.sfm-stage')?.value || 'G';
+                    const t1 = (item.querySelector('.sfm-t1')?.value || '').trim();
+                    const t2 = (item.querySelector('.sfm-t2')?.value || '').trim();
+                    const tm = (item.querySelector('.sfm-time')?.value || '').trim() || '3:00 PM';
+                    const vn = (item.querySelector('.sfm-venue')?.value || '').trim();
+                    syncd.push([st, t1, t2, tm, vn]);
+                });
+                tempEditingFX = syncd;
+                return syncd;
+            }
+
+            function openScheduleEditor() {
+                if (!ADMIN) { toast('Admin login required', false); return; }
+                $('mtm').hidden = true;
+                tempEditingFX = JSON.parse(JSON.stringify(FX));
+                renderScheduleEditorList();
+                $('sfm').hidden = false;
+            }
+
+            if ($('mtEditScheduleBtn')) {
+                $('mtEditScheduleBtn').onclick = openScheduleEditor;
+            }
+
+            if ($('sfmCancelBtn')) {
+                $('sfmCancelBtn').onclick = () => { $('sfm').hidden = true; };
+            }
+
+            if ($('sfmAddMatchBtn')) {
+                $('sfmAddMatchBtn').onclick = () => {
+                    syncScheduleEditorFromUI();
+                    let nextTime = '3:00 PM';
+                    let nextVenue = '';
+                    if (tempEditingFX.length) {
+                        const last = tempEditingFX[tempEditingFX.length - 1];
+                        const parsed = parseCustomTime(last[3] || '3:00 PM');
+                        nextTime = formatCustomTime(parsed.h * 60 + parsed.m + 30);
+                        nextVenue = last[4] || '';
+                    }
+                    tempEditingFX.push(['G', '', '', nextTime, nextVenue]);
+                    renderScheduleEditorList();
+                    const allItems = $('sfmFixturesList').querySelectorAll('.nt-fix-item');
+                    if (allItems.length) {
+                        const lastItem = allItems[allItems.length - 1];
+                        const t1 = lastItem.querySelector('.sfm-t1');
+                        if (t1) t1.focus();
+                    }
+                };
+            }
+
+            if ($('sfmRecalcTimesBtn')) {
+                $('sfmRecalcTimesBtn').onclick = () => {
+                    syncScheduleEditorFromUI();
+                    if (!tempEditingFX.length) { toast('No matches in schedule', false); return; }
+                    const startStr = prompt('Enter first match time (e.g. 3:00 PM):', tempEditingFX[0][3] || '3:00 PM');
+                    if (!startStr) return;
+                    const intervalStr = prompt('Enter minutes interval between matches (e.g. 30):', '30');
+                    const interval = parseInt(intervalStr, 10) || 30;
+                    const parsed = parseCustomTime(startStr);
+                    let currentMins = parsed.h * 60 + parsed.m;
+
+                    tempEditingFX.forEach(m => {
+                        m[3] = formatCustomTime(currentMins);
+                        currentMins += interval;
+                    });
+                    renderScheduleEditorList();
+                    toast('✓ Schedule times recalculated!', true);
+                };
+            }
+
+            if ($('sfmGenKnockoutsBtn')) {
+                $('sfmGenKnockoutsBtn').onclick = () => {
+                    syncScheduleEditorFromUI();
+                    const numGroups = Object.keys(G).length;
+                    let lastTimeMins = 18 * 60; // 6:00 PM default
+                    if (tempEditingFX.length) {
+                        const p = parseCustomTime(tempEditingFX[tempEditingFX.length - 1][3]);
+                        lastTimeMins = p.h * 60 + p.m + 30;
+                    }
+
+                    if (numGroups === 4) {
+                        const qfStart = tempEditingFX.length + 1;
+                        tempEditingFX.push(['Q', 'C2', 'R3', formatCustomTime(lastTimeMins), '']);
+                        tempEditingFX.push(['Q', 'C3', 'R2', formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        tempEditingFX.push(['Q', 'C4', 'R1', formatCustomTime(lastTimeMins), '']);
+                        tempEditingFX.push(['Q', 'C1', 'R4', formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        const sf1 = tempEditingFX.length + 1;
+                        tempEditingFX.push(['S', 'W' + qfStart, 'W' + (qfStart + 1), formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        const sf2 = tempEditingFX.length + 1;
+                        tempEditingFX.push(['S', 'W' + (qfStart + 2), 'W' + (qfStart + 3), formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        tempEditingFX.push(['F', 'W' + sf1, 'W' + sf2, formatCustomTime(lastTimeMins), '']);
+                    } else if (numGroups === 2) {
+                        const sf1 = tempEditingFX.length + 1;
+                        tempEditingFX.push(['S', 'C1', 'R2', formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        const sf2 = tempEditingFX.length + 1;
+                        tempEditingFX.push(['S', 'C2', 'R1', formatCustomTime(lastTimeMins), '']);
+                        lastTimeMins += 30;
+                        tempEditingFX.push(['F', 'W' + sf1, 'W' + sf2, formatCustomTime(lastTimeMins), '']);
+                    } else {
+                        tempEditingFX.push(['F', 'C1', 'R1', formatCustomTime(lastTimeMins), '']);
+                    }
+
+                    renderScheduleEditorList();
+                    toast('✓ Knockout bracket matches generated! You can also edit pairings.', true);
+                };
+            }
+
+            const sffForm = $('sff');
+            if (sffForm) {
+                sffForm.onsubmit = async e => {
+                    e.preventDefault();
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    syncScheduleEditorFromUI();
+                    if (!tempEditingFX.length) {
+                        toast('Schedule cannot be empty', false);
+                        return;
+                    }
+                    const blankIdx = tempEditingFX.findIndex(m => !m[1] && !m[2]);
+                    if (blankIdx !== -1) {
+                        toast('Match #' + (blankIdx + 1) + ' is missing teams', false);
+                        return;
+                    }
+
+                    const saveBtn = $('sfmSaveBtn');
+                    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '⏳ SAVING...'; }
+
+                    try {
+                        const pv = snap();
+                        FX = JSON.parse(JSON.stringify(tempEditingFX));
+                        render();
+                        renderBracket();
+                        hdr();
+                        $('sfm').hidden = true;
+                        await persistChange({ fixtures: FX }, pv);
+                        toast('✓ Tournament schedule updated successfully!', true);
+                    } catch (err) {
+                        console.error('Save schedule failed:', err);
+                        toast('Failed to update schedule (' + (err.code || err.message || 'error') + ')', false);
+                    } finally {
+                        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾 SAVE & UPDATE SCHEDULE'; }
+                    }
+                };
+            }
+
+            function openManageTournament() {
+                if (!ADMIN) { toast('Admin login required', false); return; }
+                const mtm = $('mtm');
+                if (!mtm) return;
+                $('mtTitle').value = TOURNAMENT_NAME || '';
+                $('mtShort').value = TOURNAMENT_SHORT || '';
+                $('mtId').value = CURRENT_TID || 'season3';
+                $('mtMatchesCount').textContent = FX.length + ' matches';
+                $('mtGroupsCount').textContent = Object.keys(G).length + ' groups';
+                const curMeta = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                if ($('mtStatusSel')) $('mtStatusSel').value = (curMeta && curMeta.archived) ? 'archived' : 'active';
+                if ($('mtVisibilitySel')) $('mtVisibilitySel').value = (curMeta && curMeta.isPrivate) ? 'private' : 'public';
+
+                const isProtected = (CURRENT_TID === 'season3');
+                const safeNotice = $('mtDeleteSafeNotice');
+                const actionBox = $('mtDeleteActionBox');
+                if (safeNotice && actionBox) {
+                    if (isProtected) {
+                        safeNotice.style.display = 'block';
+                        actionBox.style.display = 'none';
+                    } else {
+                        safeNotice.style.display = 'none';
+                        actionBox.style.display = 'block';
+                    }
+                }
+                mtm.hidden = false;
+            }
+
+            if ($('topManageTournBtn')) {
+                $('topManageTournBtn').onclick = openManageTournament;
+            }
+
+            if ($('mtCloseBtn')) {
+                $('mtCloseBtn').onclick = () => { $('mtm').hidden = true; };
+            }
+
+            if ($('mtExportBtn')) {
+                $('mtExportBtn').onclick = () => {
+                    const payload = {
+                        id: CURRENT_TID,
+                        name: TOURNAMENT_NAME,
+                        shortName: TOURNAMENT_SHORT,
+                        FX, G, SQ, TB, R,
+                        annc: ANNC,
+                        exportedAt: new Date().toISOString()
+                    };
+                    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'tournament_' + CURRENT_TID + '_backup.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    toast('✓ Tournament backup downloaded!', true);
+                };
+            }
+
+            const mtfForm = $('mtf');
+            if (mtfForm) {
+                mtfForm.onsubmit = async e => {
+                    e.preventDefault();
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    const newTitle = ($('mtTitle').value || '').trim();
+                    const newShort = ($('mtShort').value || '').trim();
+                    if (!newTitle || !newShort) {
+                        toast('Please fill all required fields', false);
+                        return;
+                    }
+
+                    const saveBtn = $('mtSaveBtn');
+                    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '⏳ SAVING...'; }
+
+                    try {
+                        TOURNAMENT_NAME = newTitle;
+                        TOURNAMENT_SHORT = newShort;
+                        const isArchived = $('mtStatusSel') ? ($('mtStatusSel').value === 'archived') : false;
+                        const isPrivate = $('mtVisibilitySel') ? ($('mtVisibilitySel').value === 'private') : false;
+
+                        // Update in local array
+                        const tObj = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                        if (tObj) {
+                            tObj.name = newTitle;
+                            tObj.shortName = newShort;
+                            tObj.archived = isArchived;
+                            tObj.isPrivate = isPrivate;
+                        } else {
+                            TOURNAMENTS.push({ id: CURRENT_TID, name: newTitle, shortName: newShort, archived: isArchived, isPrivate: isPrivate });
+                        }
+
+                        if (MODE === 'local') {
+                            try {
+                                localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS));
+                                const cached = JSON.parse(localStorage.getItem('brhsHubLocal_' + CURRENT_TID) || '{}');
+                                cached.name = newTitle;
+                                cached.shortName = newShort;
+                                localStorage.setItem('brhsHubLocal_' + CURRENT_TID, JSON.stringify(cached));
+                            } catch (_) {}
+                        } else {
+                            // Update Firestore tournament doc & registry with all reads first
+                            const docRef = F.doc(DB, 'hub', CURRENT_TID);
+                            const regRef = F.doc(DB, 'hub', 'tournaments');
+                            await F.runTransaction(DB, async tx => {
+                                // 1. ALL READS FIRST (Strict Firestore rule)
+                                const docSnap = await tx.get(docRef);
+                                const regSnap = await tx.get(regRef);
+
+                                // 2. ALL WRITES AFTER READS
+                                let docData = {};
+                                if (docSnap.exists()) {
+                                    try { docData = JSON.parse(docSnap.data().json); } catch (_) {}
+                                }
+                                docData.name = newTitle;
+                                docData.shortName = newShort;
+                                docData.archived = isArchived;
+                                docData.isPrivate = isPrivate;
+                                tx.set(docRef, { json: JSON.stringify(docData), u: Date.now() }, { merge: true });
+
+                                let currentList = [...TOURNAMENTS];
+                                if (regSnap.exists() && Array.isArray(regSnap.data().list)) {
+                                    currentList = regSnap.data().list;
+                                }
+                                const regObj = currentList.find(t => t.id === CURRENT_TID);
+                                if (regObj) {
+                                    regObj.name = newTitle;
+                                    regObj.shortName = newShort;
+                                    regObj.archived = isArchived;
+                                    regObj.isPrivate = isPrivate;
+                                } else {
+                                    currentList.push({ id: CURRENT_TID, name: newTitle, shortName: newShort, archived: isArchived, isPrivate: isPrivate });
+                                }
+                                tx.set(regRef, { list: currentList, u: Date.now() });
+                                TOURNAMENTS = currentList;
+                            });
+                        }
+
+                        updateTournamentHeader();
+                        renderTournDropdown();
+                        $('mtm').hidden = true;
+                        toast('✓ Tournament settings saved!', true);
+                    } catch (err) {
+                        console.error('Save tournament failed:', err);
+                        toast('Failed to save tournament (' + (err.code || err.message || 'error') + ')', false);
+                    } finally {
+                        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾 SAVE CHANGES'; }
+                    }
+                };
+            }
+
+            if ($('mtDeleteBtn')) {
+                $('mtDeleteBtn').onclick = async () => {
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    if (CURRENT_TID === 'season3') {
+                        toast('Season 03 archive cannot be deleted', false);
+                        return;
+                    }
+                    if (!confirm('⚠️ PERMANENT DELETION WARNING:\n\nAre you sure you want to completely delete tournament "' + TOURNAMENT_NAME + '"?\n\nAll match fixtures, scores, squads, and points table for this tournament will be permanently deleted.')) {
+                        return;
+                    }
+
+                    const delBtn = $('mtDeleteBtn');
+                    if (delBtn) { delBtn.disabled = true; delBtn.textContent = '⏳ DELETING...'; }
+
+                    try {
+                        const tidToDelete = CURRENT_TID;
+                        TOURNAMENTS = TOURNAMENTS.filter(t => t.id !== tidToDelete);
+
+                        if (MODE === 'local') {
+                            try {
+                                localStorage.removeItem('brhsHubLocal_' + tidToDelete);
+                                localStorage.removeItem('brhsHubCache_' + tidToDelete);
+                                localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS));
+                            } catch (_) {}
+                        } else {
+                            // Delete document from Firestore
+                            await F.deleteDoc(F.doc(DB, 'hub', tidToDelete));
+
+                            // Update registry in Firestore
+                            const regRef = F.doc(DB, 'hub', 'tournaments');
+                            await F.runTransaction(DB, async tx => {
+                                const regSnap = await tx.get(regRef);
+                                let currentList = [];
+                                if (regSnap.exists() && Array.isArray(regSnap.data().list)) {
+                                    currentList = regSnap.data().list.filter(t => t.id !== tidToDelete);
+                                }
+                                tx.set(regRef, { list: currentList, u: Date.now() });
+                                TOURNAMENTS = currentList;
+                            });
+                        }
+
+                        try {
+                            localStorage.removeItem('brhsHubCache_' + tidToDelete);
+                            localStorage.removeItem('brhsHubLocal_' + tidToDelete);
+                        } catch (_) {}
+
+                        $('mtm').hidden = true;
+                        toast('✓ Tournament deleted permanently', true);
+                        switchTournament('season3');
+                    } catch (err) {
+                        console.error('Delete tournament failed:', err);
+                        toast('Failed to delete tournament (' + (err.code || err.message || 'error') + ')', false);
+                    } finally {
+                        if (delBtn) { delBtn.disabled = false; delBtn.textContent = '🗑️ DELETE TOURNAMENT'; }
+                    }
+                };
+            }
+
+            const btnGenFix = $('btnGenFixtures');
+            if (btnGenFix) {
+                btnGenFix.onclick = () => {
+                    if (!Object.keys(generatedPreviewG).length) {
+                        if ($('btnPreviewGroups')) $('btnPreviewGroups').click();
+                    }
+                    if (!Object.keys(generatedPreviewG).length) {
+                        toast('Please configure teams and groups first', false);
+                        return;
+                    }
+                    const venues = ($('ntVenues').value || '').split(',').map(v => v.trim()).filter(Boolean);
+                    const startTime = ($('ntStartTime').value || '3:00 PM').trim();
+                    const interval = parseInt($('ntInterval').value, 10) || 30;
+                    const adv = parseInt($('ntAdvanceCount').value, 10) || 2;
+                    const matchModel = $('ntGroupMatchModel') ? $('ntGroupMatchModel').value : 'lottery_2';
+                    const koModel = $('ntKnockoutModel') ? $('ntKnockoutModel').value : 'auto';
+                    generatedPreviewFX = generateTournamentFixtures(generatedPreviewG, venues, startTime, interval, adv, matchModel, koModel);
+                    renderFixturesPreview(generatedPreviewFX);
+                    toast('✓ Generated ' + generatedPreviewFX.length + ' match fixtures!', true);
+                };
+            }
+
+            if ($('btnAddManualMatch')) {
+                $('btnAddManualMatch').onclick = () => {
+                    syncFixturesFromUI();
+                    const venues = ($('ntVenues').value || '').split(',').map(s => s.trim()).filter(Boolean);
+                    const interval = parseInt($('ntInterval').value, 10) || 30;
+                    let nextTime = '3:00 PM';
+                    if (generatedPreviewFX.length) {
+                        const lastMatch = generatedPreviewFX[generatedPreviewFX.length - 1];
+                        const parsed = parseCustomTime(lastMatch[3] || '3:00 PM');
+                        nextTime = formatCustomTime(parsed.h * 60 + parsed.m + interval);
+                    } else if ($('ntStartTime')) {
+                        nextTime = $('ntStartTime').value || '3:00 PM';
+                    }
+                    const nextVenue = venues.length ? venues[generatedPreviewFX.length % venues.length] : '';
+                    generatedPreviewFX.push(['G', '', '', nextTime, nextVenue]);
+                    renderFixturesPreview(generatedPreviewFX);
+                    const allItems = $('ntFixturesPreview').querySelectorAll('.nt-fix-item');
+                    if (allItems.length) {
+                        const lastItem = allItems[allItems.length - 1];
+                        const t1Inp = lastItem.querySelector('.nt-fix-t1');
+                        if (t1Inp) t1Inp.focus();
+                    }
+                };
+            }
+
+            if ($('btnRecalcTimes')) {
+                $('btnRecalcTimes').onclick = () => {
+                    syncFixturesFromUI();
+                    if (!generatedPreviewFX.length) {
+                        toast('No matches to recalculate times for', false);
+                        return;
+                    }
+                    const venues = ($('ntVenues').value || '').split(',').map(s => s.trim()).filter(Boolean);
+                    const startTime = $('ntStartTime').value || '3:00 PM';
+                    const interval = parseInt($('ntInterval').value, 10) || 30;
+                    const numVenues = Math.max(1, venues.length);
+                    const parsed = parseCustomTime(startTime);
+                    let currentMins = parsed.h * 60 + parsed.m;
+
+                    generatedPreviewFX.forEach((m, idx) => {
+                        const venueIdx = idx % numVenues;
+                        if (venues.length) m[4] = venues[venueIdx];
+                        m[3] = formatCustomTime(currentMins);
+                        if (venueIdx === numVenues - 1 || idx === generatedPreviewFX.length - 1) {
+                            currentMins += interval;
+                        }
+                    });
+                    renderFixturesPreview(generatedPreviewFX);
+                    toast('✓ Match schedule times updated!', true);
+                };
+            }
+
+            if ($('btnClearFixtures')) {
+                $('btnClearFixtures').onclick = () => {
+                    if (generatedPreviewFX.length && !confirm('Clear all fixtures?')) return;
+                    generatedPreviewFX = [];
+                    renderFixturesPreview(generatedPreviewFX);
+                    toast('Fixtures cleared', true);
+                };
+            }
+
+            const ntfForm = $('ntf');
+            if (ntfForm) {
+                ntfForm.onsubmit = async e => {
+                    e.preventDefault();
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    const tid = ($('ntId').value || '').trim().toLowerCase().replace(/[^a-z0-9_\-]/g, '');
+                    const tName = ($('ntTitle').value || '').trim();
+                    const tShort = ($('ntShort').value || '').trim();
+                    if (!tid || !tName || !tShort) {
+                        toast('Please fill all required tournament fields', false);
+                        return;
+                    }
+                    if (tid === 'season3' && !confirm('Are you sure you want to re-initialize Season 03?')) {
+                        return;
+                    }
+                    syncFixturesFromUI();
+                    if (!generatedPreviewFX.length) {
+                        if ($('btnGenFixtures')) $('btnGenFixtures').click();
+                        syncFixturesFromUI();
+                    }
+                    if (!generatedPreviewFX.length) {
+                        toast('Please add or generate at least 1 match fixture.', false);
+                        return;
+                    }
+                    const invalidMatchIdx = generatedPreviewFX.findIndex(m => !m[1] && !m[2]);
+                    if (invalidMatchIdx !== -1) {
+                        toast('Match #' + (invalidMatchIdx + 1) + ' is missing team names', false);
+                        return;
+                    }
+
+                    const btn = $('ntSubmitBtn');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = '⏳ CREATING...';
+                    }
+
+                    try {
+                        const isNewPrivate = $('ntVisibilitySel') ? ($('ntVisibilitySel').value === 'private') : false;
+                        const newPayload = {
+                            name: tName,
+                            shortName: tShort,
+                            isPrivate: isNewPrivate,
+                            FX: generatedPreviewFX,
+                            G: generatedPreviewG,
+                            SQ: {},
+                            TB: {},
+                            R: {},
+                            annc: ''
+                        };
+
+                        if (MODE === 'local') {
+                            if (!TOURNAMENTS.some(t => t.id === tid)) {
+                                TOURNAMENTS.push({ id: tid, name: tName, shortName: tShort });
+                            }
+                            try {
+                                localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS));
+                                localStorage.setItem('brhsHubLocal_' + tid, JSON.stringify(newPayload));
+                            } catch (_) {}
+                        } else {
+                            await F.setDoc(F.doc(DB, 'hub', tid), {
+                                json: JSON.stringify(newPayload),
+                                u: Date.now()
+                            });
+
+                            const regRef = F.doc(DB, 'hub', 'tournaments');
+                            await F.runTransaction(DB, async tx => {
+                                const regSnap = await tx.get(regRef);
+                                let currentList = [...TOURNAMENTS];
+                                if (regSnap.exists() && Array.isArray(regSnap.data().list)) {
+                                    currentList = regSnap.data().list;
+                                }
+                                if (!currentList.some(t => t.id === tid)) {
+                                    currentList.push({ id: tid, name: tName, shortName: tShort, isPrivate: isNewPrivate, createdAt: Date.now() });
+                                }
+                                tx.set(regRef, { list: currentList, u: Date.now() });
+                                TOURNAMENTS = currentList;
+                            });
+                        }
+
+                        $('ntm').hidden = true;
+                        toast('✓ Tournament "' + tShort + '" launched successfully!', true);
+                        switchTournament(tid);
+                    } catch (err) {
+                        console.error('Create tournament failed:', err);
+                        toast('Failed to create tournament (' + (err.code || err.message || 'error') + ')', false);
+                    } finally {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.textContent = '🚀 CREATE & LAUNCH TOURNAMENT';
+                        }
+                    }
+                };
+            }
+
+            renderTournDropdown();
             renderAnnc();
             render();
             hdr();
