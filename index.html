@@ -3063,7 +3063,7 @@
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
-                            + '<button type="button" class="del-card-btn" data-n="' + n + '" onclick="window.deleteMatch(' + n + ')" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171;font:800 11px Montserrat;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px" title="Delete this friendly match">🗑️ DELETE</button>'
+                            + '<button type="button" class="del-card-btn" data-n="' + n + '" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171;font:800 11px Montserrat;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px" title="Delete this friendly match">🗑️ DELETE</button>'
                           + '</div>'
                         : '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
                 ) : '') + '</div>'
@@ -3732,6 +3732,8 @@ function renderBracket() {
             $('ml').onclick = e => {
                 const delBtn = e.target.closest('.del-card-btn');
                 if (delBtn) {
+                    e.stopPropagation();
+                    e.preventDefault();
                     deleteMatch(+delBtn.dataset.n);
                     return;
                 }
@@ -5617,29 +5619,39 @@ function hdr() {
                 };
             }
 
+            let isDeletingMatch = false;
             async function deleteMatch(matchNum) {
+                if (isDeletingMatch) return;
                 if (!ADMIN) { toast('Admin login required', false); return; }
                 if (!matchNum || matchNum < 1 || matchNum > FX.length) return;
-                const f = FX[matchNum - 1];
-                const matchTitle = 'Match #' + String(matchNum).padStart(2, '0') + (f ? ' (' + f[1] + ' vs ' + f[2] + ')' : '');
-                if (!confirm('Are you sure you want to completely delete ' + matchTitle + '?')) return;
+                isDeletingMatch = true;
+                try {
+                    const f = FX[matchNum - 1];
+                    const matchTitle = 'Match #' + String(matchNum).padStart(2, '0') + (f ? ' (' + f[1] + ' vs ' + f[2] + ')' : '');
+                    if (!confirm('Are you sure you want to completely delete ' + matchTitle + '?')) return;
 
-                const pv = snap();
-                const matchIdx = matchNum - 1;
-                FX.splice(matchIdx, 1);
-                delete R[matchNum];
-                const newR = {};
-                Object.keys(R).forEach(k => {
-                    const num = parseInt(k, 10);
-                    if (num < matchNum) newR[num] = R[num];
-                    else if (num > matchNum) newR[num - 1] = R[num];
-                });
-                R = newR;
-                closeEdit();
-                render();
-                hdr();
-                await persistChange({ fixtures: FX, replaceR: newR }, pv);
-                toast('✓ ' + matchTitle + ' deleted successfully', true);
+                    const pv = snap();
+                    const matchIdx = matchNum - 1;
+                    FX.splice(matchIdx, 1);
+                    delete R[matchNum];
+                    const newR = {};
+                    Object.keys(R).forEach(k => {
+                        const num = parseInt(k, 10);
+                        if (num < matchNum) newR[num] = R[num];
+                        else if (num > matchNum) newR[num - 1] = R[num];
+                    });
+                    R = newR;
+                    closeEdit();
+                    render();
+                    hdr();
+                    await persistChange({ fixtures: FX, replaceR: newR }, pv);
+                    toast('✓ ' + matchTitle + ' deleted successfully', true);
+                } catch (err) {
+                    console.error('Delete match error:', err);
+                    toast('Failed to delete match (' + (err.message || 'error') + ')', false);
+                } finally {
+                    setTimeout(() => { isDeletingMatch = false; }, 300);
+                }
             }
 
 
