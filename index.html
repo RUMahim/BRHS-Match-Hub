@@ -3060,7 +3060,14 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>' : '') + '</div>'
+                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
+                    CURRENT_TID === 'friendlies'
+                        ? '<div style="display:flex;gap:6px;margin-top:10px">'
+                            + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
+                            + '<button type="button" class="del-card-btn" data-n="' + n + '" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171;font:800 11px Montserrat;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px" title="Delete this friendly match">🗑️ DELETE</button>'
+                          + '</div>'
+                        : '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
+                ) : '') + '</div>'
             }
             function renderBkCard(n, stageLabel) {
                 const f = FX[n - 1]
@@ -5607,28 +5614,34 @@ function hdr() {
                 };
             }
 
+            async function deleteMatch(matchNum) {
+                if (!ADMIN) { toast('Admin login required', false); return; }
+                if (!matchNum || matchNum < 1 || matchNum > FX.length) return;
+                const f = FX[matchNum - 1];
+                const matchTitle = 'Match #' + String(matchNum).padStart(2, '0') + (f ? ' (' + f[1] + ' vs ' + f[2] + ')' : '');
+                if (!confirm('Are you sure you want to completely delete ' + matchTitle + '?')) return;
+
+                const pv = snap();
+                const matchIdx = matchNum - 1;
+                FX.splice(matchIdx, 1);
+                delete R[matchNum];
+                const newR = {};
+                Object.keys(R).forEach(k => {
+                    const num = parseInt(k, 10);
+                    if (num < matchNum) newR[num] = R[num];
+                    else if (num > matchNum) newR[num - 1] = R[num];
+                });
+                R = newR;
+                closeEdit();
+                render();
+                hdr();
+                await persistChange({ fixtures: FX, replaceR: newR }, pv);
+                toast('✓ ' + matchTitle + ' deleted successfully', true);
+            }
+
             if ($('delMatchBtn')) {
-                $('delMatchBtn').onclick = async () => {
-                    if (!ADMIN) return;
-                    if (!cur) return;
-                    if (!confirm('Are you sure you want to completely delete Match #' + cur + '?')) return;
-                    const pv = snap();
-                    const matchIdx = cur - 1;
-                    if (matchIdx < 0 || matchIdx >= FX.length) return;
-                    FX.splice(matchIdx, 1);
-                    delete R[cur];
-                    const newR = {};
-                    Object.keys(R).forEach(k => {
-                        const num = parseInt(k, 10);
-                        if (num < cur) newR[num] = R[num];
-                        else if (num > cur) newR[num - 1] = R[num];
-                    });
-                    R = newR;
-                    closeEdit();
-                    render();
-                    hdr();
-                    await persistChange({ fixtures: FX, R }, pv);
-                    toast('✓ Match #' + cur + ' deleted completely', true);
+                $('delMatchBtn').onclick = () => {
+                    if (cur) deleteMatch(cur);
                 };
             }
 
@@ -6336,6 +6349,9 @@ function hdr() {
                         }
                         if (change && change.fixtures) {
                             remoteFX = change.fixtures;
+                        }
+                        if (change && change.replaceR) {
+                            remoteR = change.replaceR;
                         }
                         if (change && change.restoreAll) {
                             const backup = change.restoreAll;
