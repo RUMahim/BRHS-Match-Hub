@@ -3724,16 +3724,20 @@ function renderBracket() {
             }
             ;
             $('ml').onclick = e => {
+                const delBtn = e.target.closest('.del-card-btn');
+                if (delBtn) {
+                    deleteMatch(+delBtn.dataset.n);
+                    return;
+                }
                 const sb = e.target.closest('.sb');
                 if (sb) {
                     shareMatch(+sb.dataset.s);
-                    return
+                    return;
                 }
                 const b = e.target.closest('.eb');
                 if (b)
-                    openEdit(+b.dataset.n)
-            }
-            ;
+                    openEdit(+b.dataset.n);
+            };
             $('viewToggle').onclick = e => {
                 const b = e.target.closest('button');
                 if (!b) return;
