@@ -2287,7 +2287,6 @@
                         <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Match delayed" maxlength="120">
                     </label>
                     <button class="btn" type="submit">SAVE RESULT</button>
-                    <button class="btn g2" type="button" id="delMatchBtn" style="color:#f87171;border-color:rgba(239,68,68,.3)" title="Delete this match completely">🗑️ DELETE MATCH</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
                     <button class="btn g2" type="button" id="cx">CANCEL</button>
                 </form>
@@ -5643,11 +5642,7 @@ function hdr() {
                 toast('✓ ' + matchTitle + ' deleted successfully', true);
             }
 
-            if ($('delMatchBtn')) {
-                $('delMatchBtn').onclick = () => {
-                    if (cur) deleteMatch(cur);
-                };
-            }
+
 
             window.deleteMatch = deleteMatch;
             
