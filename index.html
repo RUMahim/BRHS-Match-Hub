@@ -3064,7 +3064,7 @@
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
-                            + '<button type="button" class="del-card-btn" data-n="' + n + '" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171;font:800 11px Montserrat;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px" title="Delete this friendly match">🗑️ DELETE</button>'
+                            + '<button type="button" class="del-card-btn" data-n="' + n + '" onclick="window.deleteMatch(' + n + ')" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171;font:800 11px Montserrat;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px" title="Delete this friendly match">🗑️ DELETE</button>'
                           + '</div>'
                         : '<button class="eb" data-n="' + n + '">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
                 ) : '') + '</div>'
@@ -5527,7 +5527,9 @@ function hdr() {
                 if (qb) qb.style.display = ADMIN ? 'flex' : 'none';
                 const tlb = $('topLoginBtn');
                 if (tlb) tlb.style.display = (!ADMIN && MODE !== 'local') ? 'inline-block' : 'none';
-                // Friendly Match Handlers
+            }
+
+            // Friendly Match Handlers
             function updateFriendlyTeamsDatalist() {
                 const dl = $('friendlyTeamsList');
                 if (!dl) return;
@@ -5645,9 +5647,7 @@ function hdr() {
                 };
             }
 
-            // Protect friendlies in Manage modal
-                        renderTournDropdown();
-            }
+            window.deleteMatch = deleteMatch;
             
             function renderTournDropdown() {
                 const sel = $('tournSelect');
