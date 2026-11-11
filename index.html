@@ -5749,10 +5749,37 @@ function hdr() {
 
                 // Load from cache if available
                 try {
-                    const cachedRaw = localStorage.getItem('brhsHubCache_' + tid)
-                        || (tid === 'season3' ? localStorage.getItem('brhsHubCache') : null)
-                        || localStorage.getItem('brhsHubLocal_' + tid);
-                    if (cachedRaw) {
+                    const cachedRaw = (tid === 'season3')
+                        ? (localStorage.getItem('brhsHubCache_season3') || localStorage.getItem('brhsHubCache') || localStorage.getItem('brhsHubLocal_season3'))
+                        : (localStorage.getItem('brhsHubCache_' + tid) || localStorage.getItem('brhsHubLocal_' + tid));
+
+                    if (tid === 'friendlies') {
+                        const frMatches = [];
+                        const newR = {};
+                        if (cachedRaw) {
+                            try {
+                                const c = JSON.parse(cachedRaw);
+                                (c.FX || []).forEach((f, idx) => {
+                                    const oldIdx = idx + 1;
+                                    if (f && f[0] === 'FR') {
+                                        frMatches.push(f);
+                                        const newIdx = frMatches.length;
+                                        if (c.R && c.R[oldIdx]) newR[newIdx] = c.R[oldIdx];
+                                    }
+                                });
+                            } catch (_) {}
+                        }
+                        FX = frMatches;
+                        R = newR;
+                        G = {};
+                        SQ = {};
+                        TB = {};
+                        ANNC = '';
+                        TOURNAMENT_NAME = DEFAULT_FRIENDLIES_NAME;
+                        TOURNAMENT_SHORT = DEFAULT_FRIENDLIES_SHORT;
+                        TOURNAMENT_PREFIX = '';
+                        U0 = 0;
+                    } else if (cachedRaw) {
                         const c = JSON.parse(cachedRaw);
                         R = c.R || {};
                         G = c.G || (tid === 'season3' ? DEFAULT_G : {});
@@ -5771,26 +5798,7 @@ function hdr() {
                         SQ = {};
                         TB = {};
                         ANNC = DEFAULT_ANNC;
-                    } else if (tid === 'friendlies') {
-                        const frMatches = [];
-                        const newR = {};
-                        ((c && c.FX) || []).forEach((f, idx) => {
-                            const oldIdx = idx + 1;
-                            if (f && f[0] === 'FR') {
-                                frMatches.push(f);
-                                const newIdx = frMatches.length;
-                                if (c.R && c.R[oldIdx]) newR[newIdx] = c.R[oldIdx];
-                            }
-                        });
-                        FX = frMatches;
-                        R = newR;
-                        G = {};
-                        SQ = {};
-                        TB = {};
-                        ANNC = (c && c.annc) || '';
-                        TOURNAMENT_NAME = DEFAULT_FRIENDLIES_NAME;
-                        TOURNAMENT_SHORT = DEFAULT_FRIENDLIES_SHORT;
-                        TOURNAMENT_PREFIX = '';
+                        TOURNAMENT_PREFIX = 'BRHS ';
                     } else {
                         R = {};
                         G = {};
@@ -6606,6 +6614,17 @@ const teb = $('topExportBackupBtn');
                     const parsed = JSON.parse(storedTourns);
                     if (Array.isArray(parsed) && parsed.length) TOURNAMENTS = parsed;
                 }
+                // Purge any dirty/leaked cache from previous builds
+                try {
+                    const rawF = localStorage.getItem('brhsHubCache_friendlies');
+                    if (rawF) {
+                        const c = JSON.parse(rawF);
+                        if (c.FX && c.FX.some(f => f[0] !== 'FR')) {
+                            localStorage.removeItem('brhsHubCache_friendlies');
+                        }
+                    }
+                } catch (_) {}
+
                 if (CURRENT_TID && CURRENT_TID !== 'season3') {
                     if (CURRENT_TID === 'friendlies') {
                         FX = [];
