@@ -5381,6 +5381,7 @@ function openEdit(n) {
             const snap = () => JSON.stringify({
                 R,
                 G,
+                FX,
                 SQ,
                 TB
             });
@@ -5584,11 +5585,13 @@ function hdr() {
                         hdr();
                         $('fmm').hidden = true;
                         fmfForm.reset();
-                        const changePayload = { fixtures: FX, G };
-                        if (note) {
-                            changePayload.matchId = newMatchIdx;
-                            changePayload.matchData = R[newMatchIdx];
-                        }
+                        if (!R[newMatchIdx]) R[newMatchIdx] = {};
+                        if (note) R[newMatchIdx].nt = note;
+                        const changePayload = {
+                            fixtures: FX,
+                            matchId: newMatchIdx,
+                            matchData: R[newMatchIdx]
+                        };
                         await persistChange(changePayload, pv);
                         toast('✓ Friendly Match #' + String(newMatchIdx).padStart(2, '0') + ' published successfully!', true);
                     } catch (err) {
@@ -5734,6 +5737,14 @@ function hdr() {
             function switchTournament(tid) {
                 if (!tid) return;
                 CURRENT_TID = tid;
+                if (tid === 'friendlies') {
+                    FX = [];
+                    R = {};
+                    G = {};
+                    SQ = {};
+                    TB = {};
+                    ANNC = '';
+                }
                 try { localStorage.setItem('brhs_active_tournament', tid); } catch (_) {}
                 try {
                     const newHash = '#t=' + tid;
@@ -6326,11 +6337,28 @@ function hdr() {
                             const backup = change.restoreAll;
                             if (backup.R) remoteR = backup.R;
                             if (backup.G) remoteG = backup.G;
+                            if (backup.FX) remoteFX = backup.FX;
                             if (backup.SQ) remoteSQ = backup.SQ;
                             if (backup.TB) remoteTB = backup.TB;
                         }
+                        if (tid === 'friendlies') {
+                            remoteFX = (remoteFX || []).filter(f => f && f[0] === 'FR');
+                            remoteG = {};
+                            remoteSQ = {};
+                            remoteTB = {};
+                        }
                         tx.set(docRef, {
-                            json: JSON.stringify({ R: remoteR, G: remoteG, SQ: remoteSQ, TB: remoteTB, annc: remoteANNC }),
+                            json: JSON.stringify({
+                                name: remoteName,
+                                shortName: remoteShort,
+                                teamPrefix: (tid === 'season3' ? 'BRHS ' : (TOURNAMENT_PREFIX || '')),
+                                FX: remoteFX,
+                                R: remoteR,
+                                G: remoteG,
+                                SQ: remoteSQ,
+                                TB: remoteTB,
+                                annc: remoteANNC
+                            }),
                             u
                         });
                     });
