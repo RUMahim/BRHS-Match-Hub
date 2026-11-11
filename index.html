@@ -5483,10 +5483,12 @@ function openEdit(n) {
                     const aName = nm(n, 'a');
                     const bName = nm(n, 'b');
 
-                    if (curSa > prev.sa) {
-                        showGoalAlert(aName, curSa, curSb, aName, bName, r.lm, n);
-                    } else if (curSb > prev.sb) {
-                        showGoalAlert(bName, curSa, curSb, aName, bName, r.lm, n);
+                    if (r && r.live && !r.done) {
+                        if (curSa > prev.sa) {
+                            showGoalAlert(aName, curSa, curSb, aName, bName, r.lm, n);
+                        } else if (curSb > prev.sb) {
+                            showGoalAlert(bName, curSa, curSb, aName, bName, r.lm, n);
+                        }
                     }
                     prevMatchScores[n] = { sa: curSa, sb: curSb, done: !!r.done };
                 }
@@ -5754,6 +5756,8 @@ function hdr() {
             function switchTournament(tid) {
                 if (!tid) return;
                 CURRENT_TID = tid;
+                isInitialSnapshot = true;
+                prevMatchScores = null;
                 if (tid === 'friendlies') {
                     FX = [];
                     R = {};
@@ -5854,6 +5858,8 @@ function hdr() {
                     try { unsubTournDoc(); } catch (_) {}
                     unsubTournDoc = null;
                 }
+                isInitialSnapshot = true;
+                prevMatchScores = null;
                 if (!DB || !F) return;
 
                 unsubTournDoc = F.onSnapshot(F.doc(DB, 'hub', tid), s => {
