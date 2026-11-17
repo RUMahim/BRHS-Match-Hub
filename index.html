@@ -1722,65 +1722,255 @@
                 color: var(--gold);
                 font-weight: 800;
             }
-            /* ===== Prominent Event Switcher (Header Pill) ===== */
-            .tourn-picker-wrap {
+            /* ===== Modern Header Event Switcher ===== */
+            .tourn-picker-container {
+                position: relative;
+                display: inline-block;
+                margin-top: 8px;
+                margin-bottom: 4px;
+                max-width: 100%;
+                z-index: 100;
+            }
+            .tourn-picker-btn {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                margin-top: 8px;
-                margin-bottom: 3px;
-                background: linear-gradient(135deg, rgba(201,162,39,.2), rgba(20,17,10,.96));
+                background: linear-gradient(135deg, rgba(201,162,39,.18), rgba(20,17,10,.96));
                 border: 1.5px solid rgba(201,162,39,.65);
-                box-shadow: 0 2px 10px rgba(0,0,0,.45), 0 0 14px rgba(201,162,39,.25);
-                padding: 4px 10px 4px 8px;
-                border-radius: 20px;
+                box-shadow: 0 3px 12px rgba(0,0,0,.45), 0 0 14px rgba(201,162,39,.2);
+                padding: 4px 6px 4px 8px;
+                border-radius: 22px;
                 transition: all .2s cubic-bezier(.4,0,.2,1);
                 cursor: pointer;
-                position: relative;
+                outline: none;
+                color: #fff;
+                font-family: inherit;
                 max-width: 100%;
             }
-            .tourn-picker-wrap:hover {
+            .tourn-picker-btn:hover,
+            .tourn-picker-btn.open {
                 border-color: var(--gold);
-                box-shadow: 0 4px 18px rgba(201,162,39,.45);
+                box-shadow: 0 4px 20px rgba(201,162,39,.5), 0 0 16px rgba(201,162,39,.3);
                 transform: translateY(-1px);
+                background: linear-gradient(135deg, rgba(201,162,39,.28), rgba(26,21,12,.98));
             }
-            .tourn-picker-tag {
+            .tpb-badge {
                 font: 800 9px/1 Montserrat, sans-serif;
                 color: #1a1204;
                 background: linear-gradient(180deg, var(--gold), var(--gold2));
-                padding: 3px 6px;
-                border-radius: 8px;
+                padding: 3.5px 7px;
+                border-radius: 10px;
                 letter-spacing: .08em;
                 text-transform: uppercase;
                 white-space: nowrap;
+                box-shadow: 0 1px 4px rgba(0,0,0,.3);
+                flex-shrink: 0;
             }
-            .tourn-picker-icon {
-                font-size: 13px;
+            .tpb-icon {
+                font-size: 14px;
                 line-height: 1;
+                flex-shrink: 0;
             }
-            .tourn-picker-select {
-                background: transparent;
-                border: none;
+            .tpb-label {
+                font: 700 12.5px Montserrat, sans-serif;
                 color: #fff;
-                font: 700 12px Montserrat, sans-serif;
-                letter-spacing: .03em;
-                cursor: pointer;
-                outline: none;
-                padding-right: 2px;
-                max-width: 175px;
+                letter-spacing: .02em;
+                white-space: nowrap;
+                max-width: 180px;
+                overflow: hidden;
                 text-overflow: ellipsis;
             }
-            .tourn-picker-select option,
-            .tourn-picker-select optgroup {
-                background: #14110a;
+            .tpb-action {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: rgba(201,162,39,.2);
+                border: 1px solid rgba(201,162,39,.5);
+                padding: 3px 9px 3px 8px;
+                border-radius: 12px;
+                color: var(--gold);
+                font: 800 10px Montserrat, sans-serif;
+                letter-spacing: .06em;
+                text-transform: uppercase;
+                transition: all .2s ease;
+                flex-shrink: 0;
+            }
+            .tourn-picker-btn:hover .tpb-action,
+            .tourn-picker-btn.open .tpb-action {
+                background: var(--gold);
+                color: #1a1204;
+                border-color: var(--gold);
+            }
+            .tpb-arrow {
+                font-size: 8px;
+                transition: transform .25s ease;
+                line-height: 1;
+            }
+            .tourn-picker-btn.open .tpb-arrow {
+                transform: rotate(180deg);
+            }
+
+            .tourn-picker-select-hidden {
+                display: none !important;
+            }
+
+            /* Custom Luxury Dropdown Menu */
+            .tourn-dropdown-menu {
+                position: absolute;
+                top: calc(100% + 8px);
+                left: 0;
+                width: 320px;
+                max-width: calc(100vw - 28px);
+                background: linear-gradient(170deg, #18140c 0%, #0d0b07 100%);
+                border: 1.5px solid rgba(201,162,39,.6);
+                border-radius: 14px;
+                padding: 10px;
+                box-shadow: 0 12px 35px rgba(0,0,0,.85), 0 0 24px rgba(201,162,39,.25);
+                z-index: 1000;
+                animation: tdmFadeIn .2s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            @keyframes tdmFadeIn {
+                from { opacity: 0; transform: translateY(-6px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .tdm-header {
+                padding: 4px 6px 8px;
+                border-bottom: 1px solid rgba(201,162,39,.25);
+                margin-bottom: 8px;
+            }
+            .tdm-title {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font: 800 10.5px Montserrat, sans-serif;
+                color: var(--gold);
+                letter-spacing: .06em;
+                text-transform: uppercase;
+            }
+            .tdm-pulse {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--gold);
+                box-shadow: 0 0 6px var(--gold);
+            }
+            .tdm-sub {
+                font-size: 10.5px;
+                color: #a39c8e;
+                margin-top: 2px;
+            }
+            .tdm-list {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                max-height: 380px;
+                overflow-y: auto;
+            }
+            .tdm-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(255,255,255,.03);
+                border: 1px solid rgba(255,255,255,.07);
+                border-radius: 10px;
+                padding: 9px 12px;
+                cursor: pointer;
+                transition: all .2s ease;
+            }
+            .tdm-item:hover {
+                background: rgba(201,162,39,.14);
+                border-color: rgba(201,162,39,.45);
+                transform: translateX(2px);
+            }
+            .tdm-item.active {
+                background: linear-gradient(135deg, rgba(201,162,39,.22), rgba(201,162,39,.08));
+                border-color: var(--gold);
+                box-shadow: 0 2px 10px rgba(201,162,39,.25);
+            }
+            .tdm-item-icon {
+                font-size: 20px;
+                line-height: 1;
+                flex-shrink: 0;
+            }
+            .tdm-item-main {
+                flex: 1;
+                min-width: 0;
+            }
+            .tdm-item-top {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .tdm-item-name {
+                font: 700 12.5px Montserrat, sans-serif;
+                color: #fff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .tdm-item.active .tdm-item-name {
+                color: #fef08a;
+            }
+            .tdm-item-desc {
+                font-size: 10px;
+                color: #9c9586;
+                margin-top: 2px;
+                line-height: 1.3;
+            }
+            .tdm-tag {
+                font: 800 8.5px Montserrat, sans-serif;
+                padding: 1px 5px;
+                border-radius: 4px;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                line-height: 1.2;
+            }
+            .tdm-tag.arch {
+                background: rgba(255,255,255,.08);
+                color: #a8a29e;
+                border: 1px solid rgba(255,255,255,.1);
+            }
+            .tdm-tag.active {
+                background: linear-gradient(180deg, #22c55e, #15803d);
                 color: #fff;
             }
-            .tourn-picker-chevron {
-                font-size: 9px;
+            .tdm-tag.friendly {
+                background: linear-gradient(180deg, #10b981, #047857);
+                color: #fff;
+            }
+            .tdm-tag.live {
+                background: linear-gradient(180deg, #ef4444, #b91c1c);
+                color: #fff;
+                animation: eqPulse 1.2s infinite;
+            }
+            .tdm-tag.priv {
+                background: rgba(239,68,68,.15);
+                color: #fca5a5;
+                border: 1px solid rgba(239,68,68,.3);
+            }
+            .tdm-item-status {
+                font: 700 10px Montserrat, sans-serif;
+                color: var(--mut);
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .tdm-item:hover .tdm-item-status {
                 color: var(--gold);
-                pointer-events: none;
-                margin-left: 2px;
-                transition: transform .2s ease;
+            }
+            .tdm-item-status.active {
+                color: var(--gold);
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-weight: 800;
+            }
+            .tdm-dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--gold);
+                box-shadow: 0 0 5px var(--gold);
             }
 
             /* ===== Dedicated Event Quick Bar ===== */
@@ -2426,13 +2616,29 @@
                         Match <b>Portal</b>
                     </h1>
                     <div class="sub" id="portalSub">SEASON 03 · RESULTS</div>
-                    <div class="tourn-picker-wrap" id="tournPickerWrap" title="Switch Tournament or Friendly Matches">
-                        <span class="tourn-picker-tag">EVENT</span>
-                        <span class="tourn-picker-icon" id="tournPickerIcon">🏆</span>
-                        <select id="tournSelect" class="tourn-picker-select" aria-label="Select Tournament">
+                    <div class="tourn-picker-container" id="tournPickerContainer">
+                        <button type="button" class="tourn-picker-btn" id="tournPickerBtn" aria-expanded="false" aria-haspopup="true" title="Click to switch tournament or exhibition matches">
+                            <span class="tpb-badge">EVENT</span>
+                            <span class="tpb-icon" id="tournPickerIcon">🏆</span>
+                            <span class="tpb-label" id="tournPickerLabel">Season 03</span>
+                            <span class="tpb-action">
+                                <span class="tpb-action-text">SWITCH</span>
+                                <span class="tpb-arrow">▼</span>
+                            </span>
+                        </button>
+                        <select id="tournSelect" class="tourn-picker-select-hidden" aria-hidden="true" tabindex="-1">
                             <option value="season3">Season 03</option>
                         </select>
-                        <span class="tourn-picker-chevron">▼</span>
+                        <div id="tournDropdownMenu" class="tourn-dropdown-menu" style="display:none">
+                            <div class="tdm-header">
+                                <div class="tdm-title">
+                                    <span class="tdm-pulse"></span>
+                                    <span>SWITCH TOURNAMENT / EVENT</span>
+                                </div>
+                                <div class="tdm-sub">খেলা বা টুর্নামেন্ট বেছে নিতে চাপুন:</div>
+                            </div>
+                            <div class="tdm-list" id="tdmList"></div>
+                        </div>
                     </div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
@@ -6138,9 +6344,9 @@ function hdr() {
                     }
                 }
 
-                const wrap = $('tournPickerWrap');
+                const wrap = $('tournPickerContainer') || $('tournPickerWrap');
                 if (wrap) {
-                    wrap.style.display = 'inline-flex';
+                    wrap.style.display = 'inline-block';
                 }
 
                 const tournamentsList = visibleList.filter(t => t.id !== 'friendlies');
@@ -6170,9 +6376,115 @@ function hdr() {
                 if (iconEl) {
                     iconEl.textContent = (CURRENT_TID === 'friendlies') ? '🤝' : '🏆';
                 }
+                const labelEl = $('tournPickerLabel');
+                if (labelEl) {
+                    if (CURRENT_TID === 'friendlies') {
+                        labelEl.textContent = 'Friendly Matches';
+                    } else {
+                        const curMeta = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                        labelEl.textContent = curMeta ? (curMeta.shortName || curMeta.name) : (TOURNAMENT_SHORT || 'Season 03');
+                    }
+                }
 
+                renderTournDropdownMenu(visibleList);
                 renderEventPills(visibleList);
                 updateEventGuideBanner();
+            }
+
+            function toggleTournDropdownMenu() {
+                const menu = $('tournDropdownMenu');
+                const btn = $('tournPickerBtn');
+                if (!menu) return;
+                const isOpen = menu.style.display === 'block';
+                if (isOpen) {
+                    closeTournDropdownMenu();
+                } else {
+                    menu.style.display = 'block';
+                    if (btn) {
+                        btn.setAttribute('aria-expanded', 'true');
+                        btn.classList.add('open');
+                    }
+                }
+            }
+
+            function closeTournDropdownMenu() {
+                const menu = $('tournDropdownMenu');
+                const btn = $('tournPickerBtn');
+                if (menu) menu.style.display = 'none';
+                if (btn) {
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.classList.remove('open');
+                }
+            }
+
+            function renderTournDropdownMenu(visibleList) {
+                const box = $('tdmList');
+                if (!box) return;
+
+                let friendliesHasLive = false;
+                try {
+                    const rawF = localStorage.getItem('brhsHubCache_friendlies');
+                    if (rawF) {
+                        const c = JSON.parse(rawF);
+                        if (c.R) friendliesHasLive = Object.values(c.R).some(r => r && r.live && !r.done);
+                    }
+                } catch (_) {}
+
+                let html = '';
+                visibleList.forEach(t => {
+                    const isCurrent = (t.id === CURRENT_TID);
+                    const isFriendly = (t.id === 'friendlies');
+                    const isArch = !!t.archived;
+                    const isPriv = !!t.isPrivate;
+
+                    const icon = isFriendly ? '🤝' : '🏆';
+                    const title = isFriendly ? 'Friendly Matches (প্রীতি ম্যাচসমূহ)' : (t.shortName || t.name);
+
+                    let badgeHtml = '';
+                    let desc = '';
+                    if (isPriv) {
+                        badgeHtml = '<span class="tdm-tag priv">🔒 Private</span>';
+                        desc = 'শুধুমাত্র অ্যাডমিন দেখতে পারবে';
+                    } else if (isFriendly && friendliesHasLive) {
+                        badgeHtml = '<span class="tdm-tag live">🔴 LIVE NOW</span>';
+                        desc = 'লাইভ খেলা ও রিয়েল-টাইম স্কোর চলছে';
+                    } else if (isFriendly) {
+                        badgeHtml = '<span class="tdm-tag friendly">⚡ প্রীতি ম্যাচ</span>';
+                        desc = 'সাম্প্রতিক ও প্রদর্শনী প্রীতি ম্যাচসমূহ';
+                    } else if (isArch) {
+                        badgeHtml = '<span class="tdm-tag arch">📦 Archived</span>';
+                        desc = '২৩টি ম্যাচ · চ্যাম্পিয়ন BRHS 24';
+                    } else {
+                        badgeHtml = '<span class="tdm-tag active">🟢 Active</span>';
+                        desc = 'চলমান টুর্নামেন্ট ও ফিক্সচার';
+                    }
+
+                    html += '<div class="tdm-item ' + (isCurrent ? 'active' : '') + '" data-tid="' + esc(t.id) + '">'
+                        + '<div class="tdm-item-icon">' + icon + '</div>'
+                        + '<div class="tdm-item-main">'
+                        + '<div class="tdm-item-top">'
+                        + '<span class="tdm-item-name">' + esc(title) + '</span>'
+                        + badgeHtml
+                        + '</div>'
+                        + '<div class="tdm-item-desc">' + desc + '</div>'
+                        + '</div>'
+                        + (isCurrent ? '<div class="tdm-item-status active"><span class="tdm-dot"></span>বর্তমান</div>' : '<div class="tdm-item-status">সুইচ করুন ➔</div>')
+                        + '</div>';
+                });
+
+                box.innerHTML = html;
+
+                box.querySelectorAll('.tdm-item').forEach(item => {
+                    item.onclick = (e) => {
+                        e.stopPropagation();
+                        const tid = item.dataset.tid;
+                        closeTournDropdownMenu();
+                        if (tid && tid !== CURRENT_TID) {
+                            try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
+                            switchTournament(tid);
+                        }
+                    };
+                });
             }
 
             function renderEventPills(visibleList) {
@@ -6526,6 +6838,7 @@ function hdr() {
 
             function switchTournament(tid) {
                 if (!tid) return;
+                if (typeof closeTournDropdownMenu === 'function') closeTournDropdownMenu();
                 CURRENT_TID = tid;
                 isInitialSnapshot = true;
                 prevMatchScores = null;
@@ -7530,15 +7843,22 @@ const teb = $('topExportBackupBtn');
                     switchTournament(e.target.value);
                 };
             }
-            const tpWrap = $('tournPickerWrap');
-            if (tpWrap && tSel) {
-                tpWrap.onclick = e => {
-                    if (e.target !== tSel) {
-                        tSel.focus();
-                        try { tSel.showPicker(); } catch (_) {}
-                    }
+            const tpBtn = $('tournPickerBtn');
+            if (tpBtn) {
+                tpBtn.onclick = e => {
+                    e.stopPropagation();
+                    toggleTournDropdownMenu();
                 };
             }
+            document.addEventListener('click', e => {
+                const container = $('tournPickerContainer');
+                if (container && !container.contains(e.target)) {
+                    closeTournDropdownMenu();
+                }
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeTournDropdownMenu();
+            });
             const tslb = $('topSetLandingBtn');
             if (tslb) {
                 tslb.onclick = () => {
