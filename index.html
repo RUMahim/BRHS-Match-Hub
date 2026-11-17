@@ -1944,10 +1944,65 @@
                 color: #fff;
                 animation: eqPulse 1.2s infinite;
             }
+            .tdm-tag.efootball {
+                background: linear-gradient(135deg, #0284c7, #2563eb);
+                color: #fff;
+                box-shadow: 0 0 8px rgba(37,99,235,0.4);
+            }
             .tdm-tag.priv {
                 background: rgba(239,68,68,.15);
                 color: #fca5a5;
                 border: 1px solid rgba(239,68,68,.3);
+            }
+            .m-room-badge {
+                display: inline-flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 6px;
+                background: linear-gradient(135deg, rgba(37,99,235,0.22), rgba(2,132,199,0.15));
+                border: 1px solid rgba(59,130,246,0.45);
+                border-radius: 6px;
+                padding: 4px 10px;
+                margin-top: 8px;
+                font: 700 11px Montserrat, sans-serif;
+                color: #93c5fd;
+                cursor: pointer;
+                transition: all .15s ease;
+            }
+            .m-room-badge:hover {
+                background: linear-gradient(135deg, rgba(37,99,235,0.35), rgba(2,132,199,0.28));
+                border-color: #60a5fa;
+                color: #fff;
+                transform: translateY(-1px);
+            }
+            .m-room-icon {
+                font-size: 13px;
+            }
+            .m-room-badge b {
+                color: #fff;
+                letter-spacing: .06em;
+                font-family: monospace, sans-serif;
+                font-size: 12px;
+            }
+            .m-room-plat {
+                background: rgba(255,255,255,0.12);
+                border-radius: 4px;
+                padding: 1px 5px;
+                font-size: 9px;
+                text-transform: uppercase;
+                color: #bfdbfe;
+            }
+            .m-room-copy {
+                background: #2563eb;
+                color: #fff;
+                border-radius: 4px;
+                padding: 2px 6px;
+                font-size: 9px;
+                margin-left: 2px;
+                letter-spacing: .04em;
+            }
+            .m-room-badge:hover .m-room-copy {
+                background: #3b82f6;
             }
             .tdm-item-status {
                 font: 700 10px Montserrat, sans-serif;
@@ -2955,6 +3010,21 @@
                             <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Delay" maxlength="120">
                         </label>
                     </div>
+                    <div class="two" id="efRoomRow">
+                        <label>
+                            🎮 eFootball Room Code / Server ID (রুম কোড / রুম নম্বর)
+                            <input name="room" id="efRoomCode" placeholder="যেমনঃ 0452-9811 বা Room 1">
+                        </label>
+                        <label>
+                            📱 Gaming Platform / Mode (প্ল্যাটফর্ম)
+                            <select name="platform" id="efPlatform">
+                                <option value="">Auto / Standard</option>
+                                <option value="Mobile">📱 eFootball Mobile</option>
+                                <option value="PC/Console">🎮 PC / Console / PS5</option>
+                                <option value="Co-op">👥 Co-op (2v2 / 3v3)</option>
+                            </select>
+                        </label>
+                    </div>
                     <button class="btn" type="submit">SAVE RESULT</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
                     <button class="btn g2" type="button" id="cx">CANCEL</button>
@@ -3015,6 +3085,24 @@
                 <h2 class="lgt">CREATE NEW TOURNAMENT</h2>
                 <p class="lgs">Configure a custom season with groups, teams, and auto-generated fixtures.</p>
                 <form id="ntf">
+                    <div class="two" style="margin-bottom:8px">
+                        <label>
+                            Event Category / Sport (খেলার ধরন) *
+                            <select id="ntSportSel" style="font-weight:700">
+                                <option value="football">⚽ Physical Football (অন-ফিল্ড ফুটবল)</option>
+                                <option value="efootball">🎮 eFootball (ই-ফুটবল / PES গেমিং টুর্নামেন্ট)</option>
+                            </select>
+                        </label>
+                        <label>
+                            Quick Preset Template (দ্রুত ফরম্যাট)
+                            <select id="ntPresetSel">
+                                <option value="custom">⚙️ Custom (নিজে সাজাব)</option>
+                                <option value="efootball_8">🎮 eFootball 8 Gamers (2 Groups + Knockouts)</option>
+                                <option value="efootball_16">🎮 eFootball 16 Gamers (4 Groups + Knockouts)</option>
+                                <option value="football_16">⚽ Football 16 Batches (Season Format)</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="two">
                         <label>
                             Tournament Full Name *
@@ -3328,6 +3416,30 @@
             const DEFAULT_FRIENDLIES_ID = 'friendlies';
             const DEFAULT_FRIENDLIES_NAME = 'Friendly Matches & Exhibition Games';
             const DEFAULT_FRIENDLIES_SHORT = '🤝 Friendlies';
+            const DEFAULT_EFOOTBALL_ID = 'efootball';
+            const DEFAULT_EFOOTBALL_NAME = 'BRHS eFootball Championship 2026';
+            const DEFAULT_EFOOTBALL_SHORT = '🎮 eFootball 2026';
+            const DEFAULT_EFOOTBALL_G = {
+                1: ['Sakib (Real Madrid)', 'Mahim (Man City)', 'Tanvir (Arsenal)', 'Arif (Bayern Munich)'],
+                2: ['Fahim (Barcelona)', 'Rafi (PSG)', 'Shakil (Liverpool)', 'Nayeem (Inter Milan)']
+            };
+            const DEFAULT_EFOOTBALL_FX = [
+                ['G', 'Sakib (Real Madrid)', 'Mahim (Man City)', '3:00 PM', 'Room 01'],
+                ['G', 'Tanvir (Arsenal)', 'Arif (Bayern Munich)', '3:15 PM', 'Room 02'],
+                ['G', 'Fahim (Barcelona)', 'Rafi (PSG)', '3:00 PM', 'Room 03'],
+                ['G', 'Shakil (Liverpool)', 'Nayeem (Inter Milan)', '3:15 PM', 'Room 04'],
+                ['G', 'Sakib (Real Madrid)', 'Tanvir (Arsenal)', '3:30 PM', 'Room 01'],
+                ['G', 'Mahim (Man City)', 'Arif (Bayern Munich)', '3:45 PM', 'Room 02'],
+                ['G', 'Fahim (Barcelona)', 'Shakil (Liverpool)', '3:30 PM', 'Room 03'],
+                ['G', 'Rafi (PSG)', 'Nayeem (Inter Milan)', '3:45 PM', 'Room 04'],
+                ['G', 'Sakib (Real Madrid)', 'Arif (Bayern Munich)', '4:00 PM', 'Room 01'],
+                ['G', 'Mahim (Man City)', 'Tanvir (Arsenal)', '4:15 PM', 'Room 02'],
+                ['G', 'Fahim (Barcelona)', 'Nayeem (Inter Milan)', '4:00 PM', 'Room 03'],
+                ['G', 'Rafi (PSG)', 'Shakil (Liverpool)', '4:15 PM', 'Room 04'],
+                ['S', 'A1', 'B2', '4:45 PM', 'Semi Final 1'],
+                ['S', 'B1', 'A2', '5:00 PM', 'Semi Final 2'],
+                ['F', 'W13', 'W14', '5:30 PM', 'Grand Final Arena']
+            ];
             const DEFAULT_FX = [['G', '23', '24', '3:00 PM', 'বড় মাঠ'], ['G', '15', '18', '3:00 PM', 'ছোট মাঠ'], ['G', '25', '26', '3:30 PM', 'বড় মাঠ'], ['G', '19', '20', '3:30 PM', 'ছোট মাঠ'], ['G', '13', '14', '4:00 PM', 'বড় মাঠ'], ['G', '16', '17', '4:00 PM', 'ছোট মাঠ'], ['G', '09', '11', '4:30 PM', 'বড় মাঠ'], ['G', '21', '22', '4:30 PM', 'ছোট মাঠ'], ['G', '17', '18', '5:00 PM', 'বড় মাঠ'], ['G', '23', '25', '5:00 PM', 'ছোট মাঠ'], ['G', '19', '22', '5:30 PM', 'বড় মাঠ'], ['G', '24', '26', '5:30 PM', 'ছোট মাঠ'], ['G', '20', '21', '6:00 PM', 'বড় মাঠ'], ['G', '11', '13', '6:00 PM', 'ছোট মাঠ'], ['G', '15', '16', '6:30 PM', 'বড় মাঠ'], ['G', '09', '14', '6:30 PM', 'ছোট মাঠ'], ['Q', 'B1', 'C2', '7:00 PM', ''], ['Q', 'C1', 'B2', '7:00 PM', ''], ['Q', 'D1', 'A2', '7:30 PM', ''], ['Q', 'A1', 'D2', '7:30 PM', ''], ['S', 'W18', 'W20', '8:00 PM', ''], ['S', 'W17', 'W19', '8:30 PM', ''], ['F', 'W21', 'W22', '9:00 PM', '']];
             const DEFAULT_G = {
                 1: ['23', '24', '25', '26'],
@@ -3341,9 +3453,51 @@
             let TOURNAMENT_NAME = DEFAULT_TOURNAMENT_NAME;
             let TOURNAMENT_SHORT = DEFAULT_TOURNAMENT_SHORT;
             let TOURNAMENTS = [
-                { id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true },
+                { id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true, sport: 'football' },
+                { id: 'efootball', name: DEFAULT_EFOOTBALL_NAME, shortName: DEFAULT_EFOOTBALL_SHORT, sport: 'efootball' },
                 { id: 'friendlies', name: DEFAULT_FRIENDLIES_NAME, shortName: DEFAULT_FRIENDLIES_SHORT, isFriendly: true }
             ];
+
+            function isEFootballTourn(tid) {
+                const target = (tid || CURRENT_TID || '').toLowerCase();
+                if (target === 'efootball' || target.startsWith('efootball') || target.includes('pes') || target.includes('esports')) return true;
+                const meta = (typeof TOURNAMENTS !== 'undefined' && Array.isArray(TOURNAMENTS))
+                    ? TOURNAMENTS.find(t => t.id === (tid || CURRENT_TID)) : null;
+                if (meta && (meta.sport === 'efootball' || meta.category === 'efootball')) return true;
+                if (meta && (meta.name || '').toLowerCase().includes('efootball')) return true;
+                return false;
+            }
+
+            function copyText(txt, label) {
+                if (!txt) return;
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(txt).then(() => {
+                            toast('✓ ' + (label || 'Text') + ' copied: ' + txt, true);
+                        }).catch(() => fallbackCopy(txt, label));
+                    } else {
+                        fallbackCopy(txt, label);
+                    }
+                } catch (_) {
+                    fallbackCopy(txt, label);
+                }
+            }
+            function fallbackCopy(txt, label) {
+                const ta = document.createElement('textarea');
+                ta.value = txt;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    toast('✓ ' + (label || 'Text') + ' copied: ' + txt, true);
+                } catch (_) {
+                    toast('Failed to copy', false);
+                }
+                document.body.removeChild(ta);
+            }
+            window.copyText = copyText;
 
             let DEFAULT_LANDING_TID = 'season3';
             try {
@@ -3775,9 +3929,20 @@
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
                 const evTag = (r && r.ev) ? '<span class="tag" style="background:rgba(201,162,39,.18);color:var(--gold);border:1px solid rgba(201,162,39,.4);margin-right:4px">' + esc(r.ev) + '</span>' : '';
+                const isEf = isEFootballTourn();
                 const mNumStr = matchNumDisp(n);
-                const stgStr = ST[f[0]] || f[0] || 'Match';
-                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + mNumStr + ' · ' + evTag + stgStr + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
+                const stgStr = (isEf ? '🎮 ' : '') + (ST[f[0]] || f[0] || 'Match');
+                let roomCodeHtml = '';
+                if (r && r.room) {
+                    roomCodeHtml = '<div class="m-room-badge" onclick="event.stopPropagation();copyText(\'' + esc(r.room) + '\', \'Room Code\')" title="Click to copy Room Code">'
+                        + '<span class="m-room-icon">🎮</span>'
+                        + '<span class="m-room-text">ROOM: <b>' + esc(r.room) + '</b></span>'
+                        + (r.platform ? '<span class="m-room-plat">' + esc(r.platform) + '</span>' : '')
+                        + '<span class="m-room-copy">📋 COPY</span>'
+                        + '</div>';
+                }
+                const motmLabel = isEf ? '★ MVP / GAMER OF THE MATCH <b>' : '★ MAN OF THE MATCH <b>';
+                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + mNumStr + ' · ' + evTag + stgStr + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">' + motmLabel + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (roomCodeHtml ? roomCodeHtml : '') + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
@@ -4035,6 +4200,7 @@ function renderBracket() {
 
             function renderSquads() {
                 const isFriendlyMode = (CURRENT_TID === 'friendlies');
+                const isEf = isEFootballTourn();
                 let allBatches = [];
                 const batchGroup = {};
 
@@ -4050,16 +4216,16 @@ function renderBracket() {
                 }
 
                 let html = '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'
-                    + '<div class="stg" style="margin:0">' + (isFriendlyMode ? 'TEAM SQUADS (দলের স্কোয়াড)' : 'BATCH SQUADS') + '</div>'
+                    + '<div class="stg" style="margin:0">' + (isFriendlyMode ? 'TEAM SQUADS (দলের স্কোয়াড)' : (isEf ? 'GAMERS & SQUADS (গেমার ও স্কোয়াড)' : 'BATCH SQUADS')) + '</div>'
                     + (ADMIN ? '<button type="button" class="btn" id="btnAddSquadTeamBtn" style="padding:6px 14px;font-size:11px;min-height:34px">➕ ADD TEAM SQUAD</button>' : '')
                     + '</div>';
 
                 if (allBatches.length > 0) {
                     html += '<div class="bf-bar" style="margin:8px 0 14px">'
                         + '<select id="sqBatchFlt" class="batch-select" aria-label="Filter squad by team">'
-                        + '<option value="all">' + (isFriendlyMode ? '🔍 ALL TEAMS (সকল দল)' : '🔍 ALL BATCHES (সব ব্যাচ)') + '</option>'
+                        + '<option value="all">' + (isFriendlyMode ? '🔍 ALL TEAMS (সকল দল)' : (isEf ? '🔍 ALL GAMERS (সকল গেমার)' : '🔍 ALL BATCHES (সব ব্যাচ)')) + '</option>'
                         + allBatches.map(b => '<option value="' + esc(b) + '"' + (sqBatchFlt === b ? ' selected' : '') + '>'
-                            + (isFriendlyMode ? esc(teamDisp(b)) : ('BRHS BATCH ' + esc(b) + ' (Group ' + (batchGroup[b] || '?') + ')'))
+                            + (isFriendlyMode ? esc(teamDisp(b)) : isEf ? ('🎮 ' + esc(teamDisp(b)) + (batchGroup[b] ? ' (Group ' + batchGroup[b] + ')' : '')) : ('BRHS BATCH ' + esc(b) + ' (Group ' + (batchGroup[b] || '?') + ')'))
                             + '</option>').join('')
                         + '</select>'
                         + '</div>';
@@ -4085,7 +4251,9 @@ function renderBracket() {
 
                     const badgeHtml = isFriendlyMode
                         ? '<div class="sq-grp-badge" style="background:rgba(201,162,39,.18);color:var(--gold);border-color:rgba(201,162,39,.4)">Team Roster</div>'
-                        : '<div class="sq-grp-badge">Group ' + esc(grp || '?') + '</div>';
+                        : isEf
+                            ? '<div class="sq-grp-badge" style="background:linear-gradient(135deg,rgba(37,99,235,.2),rgba(2,132,199,.15));color:#93c5fd;border-color:rgba(59,130,246,.4)">🎮 Group ' + esc(grp || '?') + '</div>'
+                            : '<div class="sq-grp-badge">Group ' + esc(grp || '?') + '</div>';
 
                     html += '<div class="sq-card">'
                         + '<div class="sq-top">'
@@ -4851,6 +5019,7 @@ function renderBracket() {
 
                     const isFriendlyMatch = (CURRENT_TID === 'friendlies' || (f && f[0] === 'FR'));
                     const isSeason3 = (CURRENT_TID === 'season3');
+                    const isEf = isEFootballTourn();
 
                     if (isFriendlyMatch) {
                         const customEvent = (r && r.ev) ? r.ev.trim() : '';
@@ -4864,6 +5033,11 @@ function renderBracket() {
                             sharePortalText = (f[0] === 'F' ? 'Grand Final Match Portal' : 'Friendly & Exhibition Match Portal');
                         }
                         filePrefix = (f[0] === 'F' ? 'final-match-' : 'friendly-match-');
+                    } else if (isEf) {
+                        headerEventTitle = (TOURNAMENT_NAME || 'eFOOTBALL CHAMPIONSHIP 2026').toUpperCase();
+                        subHeaderTitle = ((ST[f[0]] ? ('🎮 ' + ST[f[0]] + ' · ') : '🎮 ') + 'MATCH #' + mNumStr + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                        sharePortalText = (TOURNAMENT_NAME || 'eFootball Tournament') + ' Match Portal';
+                        filePrefix = 'efootball-match-';
                     } else if (!isSeason3) {
                         headerEventTitle = (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
                         subHeaderTitle = ((ST[f[0]] ? (ST[f[0]] + ' · ') : '') + 'MATCH #' + mNumStr + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
@@ -4957,7 +5131,8 @@ function renderBracket() {
                         x.strokeStyle = '#4a3a10';
                         x.lineWidth = 2;
                         x.stroke();
-                        put('MAN OF THE MATCH: ' + r.mo.toUpperCase(), mid, 958, 28, GOLD, 'center', 2, 800, MO, 740);
+                        const motmText = isEf ? 'MVP / GAMER OF THE MATCH: ' : 'MAN OF THE MATCH: ';
+                        put(motmText + r.mo.toUpperCase(), mid, 958, 28, GOLD, 'center', 2, 800, MO, 740);
                     } else if (sh && r.nt) {
                         rr(120, 914, 840, 66, 16);
                         x.fillStyle = 'rgba(201,162,39,.14)';
@@ -6058,6 +6233,8 @@ function openEdit(n) {
                 F.lm.value = r.lm || '';
                 F.nt.value = r.nt || '';
                 if (F.ev) F.ev.value = r.ev || '';
+                if (F.room) F.room.value = r.room || '';
+                if (F.platform) F.platform.value = r.platform || '';
                 $('sh').hidden = false
             }
             const closeEdit = () => {
@@ -6143,7 +6320,9 @@ function openEdit(n) {
                     pw: F.pw ? F.pw.value : '',
                     ps: (F.ps && F.ps.value.trim()) ? F.ps.value.trim() : '',
                     nt: (F.nt && F.nt.value.trim()) ? F.nt.value.trim() : '',
-                    ev: (F.ev && F.ev.value.trim()) ? F.ev.value.trim() : ''
+                    ev: (F.ev && F.ev.value.trim()) ? F.ev.value.trim() : '',
+                    room: (F.room && F.room.value.trim()) ? F.room.value.trim() : '',
+                    platform: (F.platform && F.platform.value.trim()) ? F.platform.value.trim() : ''
                 };
                 const ta = F.ta.value.trim()
                   , tb = F.tb.value.trim();
@@ -6519,6 +6698,15 @@ function hdr() {
                         isFriendly: true
                     });
                 }
+                // Ensure efootball exists in TOURNAMENTS list
+                if (!TOURNAMENTS.some(t => t.id === 'efootball')) {
+                    TOURNAMENTS.push({
+                        id: DEFAULT_EFOOTBALL_ID,
+                        name: DEFAULT_EFOOTBALL_NAME,
+                        shortName: DEFAULT_EFOOTBALL_SHORT,
+                        sport: 'efootball'
+                    });
+                }
 
                 const visibleList = TOURNAMENTS.filter(t => ADMIN || !t.isPrivate);
 
@@ -6535,19 +6723,33 @@ function hdr() {
                     wrap.style.display = 'inline-block';
                 }
 
-                const tournamentsList = visibleList.filter(t => t.id !== 'friendlies');
+                const footballList = visibleList.filter(t => t.id !== 'friendlies' && !isEFootballTourn(t.id));
+                const efootballList = visibleList.filter(t => isEFootballTourn(t.id));
                 const friendliesMeta = visibleList.find(t => t.id === 'friendlies');
 
                 let html = '';
-                html += '<optgroup label="🏆 Tournaments (টুর্নামেন্টসমূহ)">';
-                tournamentsList.forEach(t => {
-                    const isSel = t.id === CURRENT_TID ? ' selected' : '';
-                    let badge = '';
-                    if (t.isPrivate) badge += ' 🔒 [Private]';
-                    else if (t.archived) badge += ' [Archived]';
-                    html += '<option value="' + esc(t.id) + '"' + isSel + '>' + esc(t.shortName || t.name) + badge + '</option>';
-                });
-                html += '</optgroup>';
+                if (footballList.length > 0) {
+                    html += '<optgroup label="🏆 Football (অন-ফিল্ড ফুটবল)">';
+                    footballList.forEach(t => {
+                        const isSel = t.id === CURRENT_TID ? ' selected' : '';
+                        let badge = '';
+                        if (t.isPrivate) badge += ' 🔒 [Private]';
+                        else if (t.archived) badge += ' [Archived]';
+                        html += '<option value="' + esc(t.id) + '"' + isSel + '>' + esc(t.shortName || t.name) + badge + '</option>';
+                    });
+                    html += '</optgroup>';
+                }
+                if (efootballList.length > 0) {
+                    html += '<optgroup label="🎮 eFootball (ই-ফুটবল টুর্নামেন্ট)">';
+                    efootballList.forEach(t => {
+                        const isSel = t.id === CURRENT_TID ? ' selected' : '';
+                        let badge = '';
+                        if (t.isPrivate) badge += ' 🔒 [Private]';
+                        else if (t.archived) badge += ' [Archived]';
+                        html += '<option value="' + esc(t.id) + '"' + isSel + '>🎮 ' + esc(t.shortName || t.name) + badge + '</option>';
+                    });
+                    html += '</optgroup>';
+                }
 
                 if (friendliesMeta) {
                     const isSel = CURRENT_TID === 'friendlies' ? ' selected' : '';
@@ -6560,7 +6762,7 @@ function hdr() {
 
                 const iconEl = $('tournPickerIcon');
                 if (iconEl) {
-                    iconEl.textContent = (CURRENT_TID === 'friendlies') ? '🤝' : '🏆';
+                    iconEl.textContent = (CURRENT_TID === 'friendlies') ? '🤝' : isEFootballTourn(CURRENT_TID) ? '🎮' : '🏆';
                 }
                 const labelEl = $('tournPickerLabel');
                 if (labelEl) {
@@ -6619,10 +6821,11 @@ function hdr() {
                 visibleList.forEach(t => {
                     const isCurrent = (t.id === CURRENT_TID);
                     const isFriendly = (t.id === 'friendlies');
+                    const isEf = isEFootballTourn(t.id);
                     const isArch = !!t.archived;
                     const isPriv = !!t.isPrivate;
 
-                    const icon = isFriendly ? '🤝' : '🏆';
+                    const icon = isFriendly ? '🤝' : isEf ? '🎮' : '🏆';
                     const title = isFriendly ? 'Friendly Matches (প্রীতি ম্যাচসমূহ)' : (t.shortName || t.name);
 
                     let badgeHtml = '';
@@ -6636,6 +6839,9 @@ function hdr() {
                     } else if (isFriendly) {
                         badgeHtml = '<span class="tdm-tag friendly">⚡ প্রীতি ম্যাচ</span>';
                         desc = 'সাম্প্রতিক ও প্রদর্শনী প্রীতি ম্যাচসমূহ';
+                    } else if (isEf) {
+                        badgeHtml = '<span class="tdm-tag efootball">🎮 eFootball</span>';
+                        desc = 'eSports · গেমিং টুর্নামেন্ট ও রুম কোড';
                     } else if (isArch) {
                         badgeHtml = '<span class="tdm-tag arch">📦 Archived</span>';
                         desc = '২৩টি ম্যাচ · চ্যাম্পিয়ন BRHS 24';
@@ -6922,9 +7128,13 @@ function hdr() {
                 const isPrivate = tMeta && tMeta.isPrivate;
                 const isFriendly = (CURRENT_TID === 'friendlies');
 
+                const isEf = isEFootballTourn(CURRENT_TID);
                 if (pSub) {
                     if (isFriendly) {
                         pSub.textContent = '🤝 FRIENDLIES · EXHIBITION GAMES';
+                    } else if (isEf) {
+                        let badge = isPrivate ? ' · 🔒 PRIVATE' : (isArchived ? ' · ARCHIVE' : ' · ESPORTS');
+                        pSub.textContent = '🎮 ' + (TOURNAMENT_SHORT || 'eFOOTBALL 2026').toUpperCase() + badge;
                     } else {
                         let badge = isPrivate ? ' · 🔒 PRIVATE' : (isArchived ? ' · ARCHIVE' : ' · RESULTS');
                         pSub.textContent = (TOURNAMENT_SHORT || 'SEASON 03').toUpperCase() + badge;
@@ -7045,6 +7255,16 @@ function hdr() {
                         TB = {};
                         ANNC = DEFAULT_ANNC;
                         TOURNAMENT_PREFIX = 'BRHS ';
+                    } else if (tid === 'efootball') {
+                        R = {};
+                        G = DEFAULT_EFOOTBALL_G;
+                        FX = DEFAULT_EFOOTBALL_FX;
+                        SQ = {};
+                        TB = {};
+                        ANNC = '🎮 BRHS eFootball Championship 2026 এ অংশগ্রহণকারী সকল গেমারদের স্বাগতম! নির্ধারিত সময়ে ম্যাচ রুমে যোগ দিন ও ফ্রেন্ডলি ম্যাচ শেষ করে স্কোর আপডেট করুন।';
+                        TOURNAMENT_NAME = DEFAULT_EFOOTBALL_NAME;
+                        TOURNAMENT_SHORT = DEFAULT_EFOOTBALL_SHORT;
+                        TOURNAMENT_PREFIX = '';
                     } else {
                         R = {};
                         G = {};
@@ -7167,6 +7387,13 @@ function hdr() {
                         TOURNAMENT_NAME = DEFAULT_TOURNAMENT_NAME;
                         TOURNAMENT_SHORT = DEFAULT_TOURNAMENT_SHORT;
                         TOURNAMENT_PREFIX = 'BRHS ';
+                    } else if (tid === 'efootball') {
+                        G = DEFAULT_EFOOTBALL_G;
+                        FX = DEFAULT_EFOOTBALL_FX;
+                        TOURNAMENT_NAME = DEFAULT_EFOOTBALL_NAME;
+                        TOURNAMENT_SHORT = DEFAULT_EFOOTBALL_SHORT;
+                        TOURNAMENT_PREFIX = '';
+                        ANNC = '🎮 BRHS eFootball Championship 2026 এ অংশগ্রহণকারী সকল গেমারদের স্বাগতম! নির্ধারিত সময়ে ম্যাচ রুমে যোগ দিন ও ফ্রেন্ডলি ম্যাচ শেষ করে স্কোর আপডেট করুন।';
                     } else if (tid === 'friendlies') {
                         R = {};
                         G = {};
@@ -7754,7 +7981,10 @@ function hdr() {
                                 if (data && Array.isArray(data.list) && data.list.length > 0) {
                                     let list = data.list;
                                     if (!list.some(t => t.id === 'season3')) {
-                                        list.unshift({ id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true });
+                                        list.unshift({ id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true, sport: 'football' });
+                                    }
+                                    if (!list.some(t => t.id === 'efootball')) {
+                                        list.push({ id: DEFAULT_EFOOTBALL_ID, name: DEFAULT_EFOOTBALL_NAME, shortName: DEFAULT_EFOOTBALL_SHORT, sport: 'efootball' });
                                     }
                                     TOURNAMENTS = list;
                                     try { localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS)); } catch(_) {}
@@ -8025,6 +8255,71 @@ const teb = $('topExportBackupBtn');
             }
             if ($('ntId')) {
                 $('ntId').oninput = () => { $('ntId').dataset.manual = '1'; };
+            }
+
+            const ntSportSel = $('ntSportSel');
+            const ntPresetSel = $('ntPresetSel');
+            const applyTournamentPreset = (presetKey) => {
+                if (presetKey === 'efootball_8' || (presetKey === 'custom' && ntSportSel && ntSportSel.value === 'efootball')) {
+                    if ($('ntTitle')) $('ntTitle').value = 'BRHS eFootball Championship 2026';
+                    if ($('ntShort')) $('ntShort').value = 'eFootball S1';
+                    if ($('ntId')) { $('ntId').value = 'efootball_s1'; delete $('ntId').dataset.manual; }
+                    if ($('ntPrefix')) $('ntPrefix').value = '';
+                    if ($('ntTeamsInput')) $('ntTeamsInput').value = 'Sakib (Real Madrid), Mahim (Man City), Tanvir (Arsenal), Arif (Bayern Munich), Fahim (Barcelona), Rafi (PSG), Shakil (Liverpool), Nayeem (Inter Milan)';
+                    if ($('ntGroupCount')) $('ntGroupCount').value = '2';
+                    if ($('ntAdvanceCount')) $('ntAdvanceCount').value = '2';
+                    if ($('ntVenues')) $('ntVenues').value = 'Room 01 (Online), Room 02 (Online)';
+                    if ($('ntInterval')) $('ntInterval').value = '15';
+                    if ($('ntGroupMatchModel')) $('ntGroupMatchModel').value = 'round_robin';
+                    if ($('btnPreviewGroups')) $('btnPreviewGroups').click();
+                } else if (presetKey === 'efootball_16') {
+                    if ($('ntTitle')) $('ntTitle').value = 'BRHS eFootball Masters Cup 2026';
+                    if ($('ntShort')) $('ntShort').value = 'eFootball 16';
+                    if ($('ntId')) { $('ntId').value = 'efootball_16'; delete $('ntId').dataset.manual; }
+                    if ($('ntPrefix')) $('ntPrefix').value = '';
+                    if ($('ntTeamsInput')) $('ntTeamsInput').value = 'Sakib (Real Madrid), Mahim (Man City), Tanvir (Arsenal), Arif (Bayern), Fahim (Barcelona), Rafi (PSG), Shakil (Liverpool), Nayeem (Inter), Hassan (Chelsea), Jubayer (Juventus), Rony (Dortmund), Sifat (Atletico), Shuvo (Milan), Rabbi (Spurs), Alif (Napoli), Imtiaz (Porto)';
+                    if ($('ntGroupCount')) $('ntGroupCount').value = '4';
+                    if ($('ntAdvanceCount')) $('ntAdvanceCount').value = '2';
+                    if ($('ntVenues')) $('ntVenues').value = 'Room 01, Room 02, Room 03, Room 04';
+                    if ($('ntInterval')) $('ntInterval').value = '15';
+                    if ($('ntGroupMatchModel')) $('ntGroupMatchModel').value = 'round_robin';
+                    if ($('btnPreviewGroups')) $('btnPreviewGroups').click();
+                } else if (presetKey === 'football_16') {
+                    if ($('ntTitle')) $('ntTitle').value = 'EX BRHSIAN Football Festival – Season 04';
+                    if ($('ntShort')) $('ntShort').value = 'Season 04';
+                    if ($('ntId')) { $('ntId').value = 'season4'; delete $('ntId').dataset.manual; }
+                    if ($('ntPrefix')) $('ntPrefix').value = 'BRHS ';
+                    if ($('ntTeamsInput')) $('ntTeamsInput').value = '23, 24, 25, 26, 15, 16, 17, 18, 19, 20, 21, 22, 09, 11, 13, 14';
+                    if ($('ntGroupCount')) $('ntGroupCount').value = '4';
+                    if ($('ntAdvanceCount')) $('ntAdvanceCount').value = '2';
+                    if ($('ntVenues')) $('ntVenues').value = 'বড় মাঠ, ছোট মাঠ';
+                    if ($('ntInterval')) $('ntInterval').value = '30';
+                    if ($('ntGroupMatchModel')) $('ntGroupMatchModel').value = 'lottery_2';
+                    if ($('btnPreviewGroups')) $('btnPreviewGroups').click();
+                }
+            };
+            if (ntSportSel) {
+                ntSportSel.onchange = () => {
+                    if (ntSportSel.value === 'efootball') {
+                        if (ntPresetSel && (ntPresetSel.value === 'custom' || ntPresetSel.value === 'football_16')) {
+                            ntPresetSel.value = 'efootball_8';
+                        }
+                        applyTournamentPreset('efootball_8');
+                    } else {
+                        if (ntPresetSel && ntPresetSel.value.startsWith('efootball')) {
+                            ntPresetSel.value = 'football_16';
+                            applyTournamentPreset('football_16');
+                        }
+                    }
+                };
+            }
+            if (ntPresetSel) {
+                ntPresetSel.onchange = () => {
+                    const val = ntPresetSel.value;
+                    if (val.startsWith('efootball') && ntSportSel) ntSportSel.value = 'efootball';
+                    else if (val.startsWith('football') && ntSportSel) ntSportSel.value = 'football';
+                    applyTournamentPreset(val);
+                };
             }
 
             const btnPrevGrp = $('btnPreviewGroups');
@@ -8653,10 +8948,12 @@ const teb = $('topExportBackupBtn');
 
                     try {
                         const isNewPrivate = $('ntVisibilitySel') ? ($('ntVisibilitySel').value === 'private') : false;
+                        const newSport = $('ntSportSel') ? $('ntSportSel').value : 'football';
                         const newPayload = {
                             name: tName,
                             shortName: tShort,
                             isPrivate: isNewPrivate,
+                            sport: newSport,
                             FX: generatedPreviewFX,
                             G: generatedPreviewG,
                             SQ: {},
@@ -8667,7 +8964,7 @@ const teb = $('topExportBackupBtn');
 
                         if (MODE === 'local') {
                             if (!TOURNAMENTS.some(t => t.id === tid)) {
-                                TOURNAMENTS.push({ id: tid, name: tName, shortName: tShort });
+                                TOURNAMENTS.push({ id: tid, name: tName, shortName: tShort, sport: newSport });
                             }
                             try {
                                 localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS));
@@ -8687,7 +8984,7 @@ const teb = $('topExportBackupBtn');
                                     currentList = regSnap.data().list;
                                 }
                                 if (!currentList.some(t => t.id === tid)) {
-                                    currentList.push({ id: tid, name: tName, shortName: tShort, isPrivate: isNewPrivate, createdAt: Date.now() });
+                                    currentList.push({ id: tid, name: tName, shortName: tShort, isPrivate: isNewPrivate, sport: newSport, createdAt: Date.now() });
                                 }
                                 tx.set(regRef, { list: currentList, u: Date.now() });
                                 TOURNAMENTS = currentList;
