@@ -2929,10 +2929,16 @@
                             <input name="ps" placeholder="e.g. 4-3, 5-4" maxlength="15">
                         </label>
                     </div>
-                    <label>
-                        📝 Match Note / Remark (ঐচ্ছিক মন্তব্য)
-                        <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Match delayed" maxlength="120">
-                    </label>
+                    <div class="two">
+                        <label>
+                            🏆 Event / Tournament Title (ঐচ্ছিক টুর্নামেন্ট/ইভেন্ট নাম)
+                            <input name="ev" placeholder="যেমনঃ Inter-College Friendly বা খালি রাখুন" maxlength="100">
+                        </label>
+                        <label>
+                            📝 Match Note / Remark (ঐচ্ছিক মন্তব্য)
+                            <input name="nt" placeholder="e.g. Walkover (3-0), Abandoned, Delay" maxlength="120">
+                        </label>
+                    </div>
                     <button class="btn" type="submit">SAVE RESULT</button>
                     <button class="btn g2" type="button" id="clr">CLEAR RESULT</button>
                     <button class="btn g2" type="button" id="cx">CANCEL</button>
@@ -3161,10 +3167,16 @@
                             <input id="fmVenue" placeholder="e.g. স্কুল মাঠ বা বাফুফে টার্ফ" value="স্কুল মাঠ">
                         </label>
                     </div>
-                    <label style="margin-top:8px">
-                        Match Title / Note (ঐচ্ছিক বিবরণ)
-                        <input id="fmNote" placeholder="e.g. Batch 18 vs 19 Annual Clash">
-                    </label>
+                    <div class="two" style="margin-top:8px">
+                        <label>
+                            Event / Tournament Title (ঐচ্ছিক টুর্নামেন্ট বা ইভেন্টের নাম)
+                            <input id="fmEvent" placeholder="যেমনঃ Inter-College Friendly, DU Alumni বা খালি রাখুন">
+                        </label>
+                        <label>
+                            Match Title / Note (ঐচ্ছিক বিবরণ বা ক্যাপশন)
+                            <input id="fmNote" placeholder="যেমনঃ Annual Friendly Clash, Derby 2026">
+                        </label>
+                    </div>
                     <div style="display:flex;gap:10px;margin-top:14px">
                         <button class="btn" type="submit" id="fmSaveBtn">➕ PUBLISH FRIENDLY MATCH</button>
                         <button class="btn g2" type="button" id="fmCancelBtn">CANCEL</button>
@@ -3718,7 +3730,8 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
+                const evTag = (r && r.ev) ? '<span class="tag" style="background:rgba(201,162,39,.18);color:var(--gold);border:1px solid rgba(201,162,39,.4);margin-right:4px">' + esc(r.ev) + '</span>' : '';
+                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + evTag + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
@@ -4473,7 +4486,7 @@ function renderBracket() {
                 try {
                     const payload = {
                         version: '1.0',
-                        tournament: 'EX BRHSIAN Football Festival Season 03',
+                        tournament: (TOURNAMENT_NAME || 'EX BRHSIAN Football Festival Season 03'),
                         exportedAt: new Date().toISOString(),
                         u: U0 || Date.now(),
                         R: R,
@@ -4722,7 +4735,34 @@ function renderBracket() {
                         x.stroke()
                     }
                     );
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 90, 24, GOLD2, 'center', 5, 800, MO, 900);
+                    let headerEventTitle = 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03';
+                    let subHeaderTitle = (ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase();
+                    let sharePortalText = 'EX BRHSIAN Football Festival · Season 03 Match Portal';
+                    let filePrefix = 'brhs-match-';
+
+                    const isFriendlyMatch = (CURRENT_TID === 'friendlies' || (f && f[0] === 'FR'));
+                    const isSeason3 = (CURRENT_TID === 'season3');
+
+                    if (isFriendlyMatch) {
+                        const customEvent = (r && r.ev) ? r.ev.trim() : '';
+                        if (customEvent) {
+                            headerEventTitle = customEvent.toUpperCase();
+                            subHeaderTitle = ('FRIENDLY MATCH · MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                            sharePortalText = customEvent + ' · Match Portal';
+                        } else {
+                            headerEventTitle = 'FRIENDLY & EXHIBITION MATCH';
+                            subHeaderTitle = ('MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                            sharePortalText = 'Friendly & Exhibition Match Portal';
+                        }
+                        filePrefix = 'friendly-match-';
+                    } else if (!isSeason3) {
+                        headerEventTitle = (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
+                        subHeaderTitle = ((ST[f[0]] ? (ST[f[0]] + ' · ') : '') + 'MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                        sharePortalText = (TOURNAMENT_NAME || 'Football Tournament') + ' Match Portal';
+                        filePrefix = (CURRENT_TID ? CURRENT_TID.toLowerCase().replace(/[^a-z0-9_-]/g, '') : 'tournament') + '-match-';
+                    }
+
+                    put(headerEventTitle, mid, 90, 24, GOLD2, 'center', 5, 800, MO, 900);
                     const tag = (r.ht && !r.done) ? 'HALF TIME' : lv ? '● LIVE' + (r.lm ? ' ' + r.lm : '') : d ? 'FULL TIME' : 'UPCOMING';
                     x.font = '800 46px ' + MO;
                     if ('letterSpacing'in x)
@@ -4743,7 +4783,7 @@ function renderBracket() {
                         x.stroke();
                         put(tag, mid, 200, 46, GOLD, 'center', 6, 800, MO)
                     }
-                    put((ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase(), mid, 296, 28, '#9a927c', 'center', 4, 700, MO, 940);
+                    put(subHeaderTitle, mid, 296, 28, '#9a927c', 'center', 4, 700, MO, 940);
                     const wA = d && (+r.sa > +r.sb || +r.sa == +r.sb && w === a)
                       , wB = d && (+r.sb > +r.sa || +r.sa == +r.sb && w === b);
                     if (sh) {
@@ -4824,14 +4864,14 @@ function renderBracket() {
                     x.fillStyle = bg;
                     x.fillRect(24, 996, S - 48, 60);
                     put('FULL RESULTS · https://' + location.host.toLowerCase(), mid, 1036, 28, '#1a1204', 'center', 3, 800, MO, 960);
-                    const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + ((r && r.nt) ? '\n📝 Note: ' + r.nt : '') + '\nEX BRHSIAN Football Festival · Season 03 Match Portal'
+                    const text = '⚽ ' + a + (sh ? ' ' + r.sa + '–' + r.sb + ' ' : ' vs ') + b + (lv ? ' (LIVE' + (r.lm ? ' ' + r.lm : '') + ')' : d ? ' (FULL TIME)' : '') + ((r && r.nt) ? '\n📝 Note: ' + r.nt : '') + '\n' + sharePortalText
                       , url = location.origin + location.pathname
                       , blob = await new Promise(res => c.toBlob(res, 'image/png'));
                     if (!blob) {
                         toast('Could not create the image', false);
                         return
                     }
-                    const file = new File([blob],'brhs-match-' + String(n).padStart(2, '0') + '.png',{
+                    const file = new File([blob], filePrefix + String(n).padStart(2, '0') + '.png',{
                         type: 'image/png'
                     });
                     try {
@@ -4943,7 +4983,8 @@ function renderBracket() {
                     });
 
                     // Tournament Title
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
+                    const tournTitleUpper = (CURRENT_TID === 'season3') ? 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03' : (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
+                    put(tournTitleUpper, mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
                     put('POINTS TABLE & STANDINGS', mid, 122, 38, '#ffffff', 'center', 2, 400, AN, 920);
 
                     // 2x2 Grid of Groups
@@ -5029,7 +5070,7 @@ function renderBracket() {
                             }
 
                             put(String(idx + 1), colX.rk, rowY + 6, 17, isQ ? '#4ade80' : GOLD2, 'left', 0, 400, AN);
-                            put('BRHS ' + team.t, colX.tm, rowY + 6, 15, isQ ? '#ffffff' : '#f3efe4', 'left', 0, 800, MO, 160);
+                            put(teamDisp(team.t), colX.tm, rowY + 6, 15, isQ ? '#ffffff' : '#f3efe4', 'left', 0, 800, MO, 160);
                             if (isQ) {
                                 rr(colX.tm + 88, rowY - 14, 24, 18, 4);
                                 x.fillStyle = '#14381d';
@@ -5059,7 +5100,7 @@ function renderBracket() {
                     put('FULL RESULTS & LIVE UPDATES · https://' + location.host.toLowerCase(), mid, 1036, 26, '#1a1204', 'center', 3, 800, MO, 960);
 
                     // Share or Download
-                    const text = '🏆 EX BRHSIAN Football Festival – Season 03\nPoints Table & Standings\n' + location.origin + location.pathname;
+                    const text = '🏆 ' + (TOURNAMENT_NAME || 'Football Tournament') + '\nPoints Table & Standings\n' + location.origin + location.pathname;
                     const blob = await new Promise(res => c.toBlob(res, 'image/png'));
                     if (!blob) {
                         toast('Could not create table image', false);
@@ -5187,7 +5228,8 @@ function renderBracket() {
                     });
 
                     // Tournament Title
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
+                    const tournTitleUpper = (CURRENT_TID === 'season3') ? 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03' : (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
+                    put(tournTitleUpper, mid, 72, 22, GOLD2, 'center', 4, 800, MO, 920);
                     put('TOP SCORERS · GOLDEN BOOT', mid, 122, 38, '#ffffff', 'center', 2, 400, AN, 920);
 
                     // Hero Card for #1 Rank (Leader)
@@ -5259,7 +5301,7 @@ function renderBracket() {
                     put('FULL RESULTS & LIVE UPDATES · https://' + location.host.toLowerCase(), mid, 1036, 26, '#1a1204', 'center', 3, 800, MO, 960);
 
                     // Share or Download
-                    const text = '⚽ EX BRHSIAN Football Festival – Season 03\nTop Scorers & Golden Boot Leaderboard\n' + location.origin + location.pathname;
+                    const text = '⚽ ' + (TOURNAMENT_NAME || 'Football Tournament') + '\nTop Scorers & Golden Boot Leaderboard\n' + location.origin + location.pathname;
                     const blob = await new Promise(res => c.toBlob(res, 'image/png'));
                     if (!blob) {
                         toast('Could not create top scorers image', false);
@@ -5382,7 +5424,8 @@ function renderBracket() {
                     x.strokeRect(32, 32, S - 64, S - 64);
 
                     // Header
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', mid, 82, 16, LIME, 'center', 4, 800, MO);
+                    const tournTitleUpper = (CURRENT_TID === 'season3') ? 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03' : (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
+                    put(tournTitleUpper, mid, 82, 16, LIME, 'center', 4, 800, MO);
                     put('TOP PLAYMAKERS', mid, 154, 62, '#ffffff', 'center', 3, 400, AN);
                     put('MOST ASSISTS LEADERBOARD', mid, 186, 15, '#9a927c', 'center', 3, 700, MO);
 
@@ -5403,7 +5446,7 @@ function renderBracket() {
                     put('★ TOP PLAYMAKER', 72 + 77, hY + 41, 11, '#ffffff', 'center', 2, 800, MO);
 
                     put(top1.n.toUpperCase(), 72, hY + 98, 40, '#ffffff', 'left', 1, 800, MO, 560);
-                    put('BRHS ' + top1.t + (top1.g ? ' · ' + top1.g + (top1.g > 1 ? ' Goals' : ' Goal') : ''), 72, hY + 138, 20, '#9a927c', 'left', 1, 600, MO, 560);
+                    put(teamDisp(top1.t) + (top1.g ? ' · ' + top1.g + (top1.g > 1 ? ' Goals' : ' Goal') : ''), 72, hY + 138, 20, '#9a927c', 'left', 1, 600, MO, 560);
 
                     // Right Assist Pill
                     const pillW = 200, pillH = 125;
@@ -5441,7 +5484,7 @@ function renderBracket() {
 
                         // Name & Team
                         put(p.n.toUpperCase(), 116, ry + 32, 21, '#ffffff', 'left', 1, 800, MO, 440);
-                        put('BRHS ' + p.t + (p.g ? ' · ' + p.g + ' G' : ''), 116, ry + 54, 14, '#9a927c', 'left', 0.5, 600, MO, 440);
+                        put(teamDisp(p.t) + (p.g ? ' · ' + p.g + ' G' : ''), 116, ry + 54, 14, '#9a927c', 'left', 0.5, 600, MO, 440);
 
                         // Visual Bar
                         const barW = 200;
@@ -5462,7 +5505,8 @@ function renderBracket() {
                     x.fillStyle = 'rgba(255,255,255,.08)';
                     x.fillRect(48, ftY - 26, S - 96, 1);
                     put('LIVE MATCH PORTAL · brhs-match-hub.pages.dev', 52, ftY, 13, '#9a927c', 'left', 1.5, 700, MO);
-                    put('ORGANIZED BY EX BRHSIANS', S - 52, ftY, 13, LIME, 'right', 1.5, 800, MO);
+                    const orgText = (CURRENT_TID === 'season3') ? 'ORGANIZED BY EX BRHSIANS' : 'MATCH PORTAL';
+                    put(orgText, S - 52, ftY, 13, LIME, 'right', 1.5, 800, MO);
 
                     const blob = await new Promise(r => c.toBlob(r, 'image/png'));
                     const file = new File([blob], 'brhs-top-assists.png', { type: 'image/png' });
@@ -5470,8 +5514,8 @@ function renderBracket() {
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             files: [file],
-                            title: 'Top Assists – BRHS Football Festival Season 03',
-                            text: 'Top Playmakers leaderboard of EX BRHSIAN Football Festival Season 03!'
+                            title: 'Top Assists – ' + (TOURNAMENT_SHORT || 'Tournament'),
+                            text: 'Top Playmakers leaderboard of ' + (TOURNAMENT_NAME || 'Football Tournament') + '!'
                         });
                         toast('✓ Shared successfully!', true);
                     } else {
@@ -5596,7 +5640,8 @@ function renderBracket() {
                     });
 
                     // Tournament Header
-                    put('EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03', S / 2, 70, 20, CYAN, 'center', 4, 800, MO, 920);
+                    const tournTitleUpper = (CURRENT_TID === 'season3') ? 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03' : (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
+                    put(tournTitleUpper, S / 2, 70, 20, CYAN, 'center', 4, 800, MO, 920);
 
                     // Clean Sheets Title Tag
                     const tagTxt = '🧤 CLEAN SHEETS · BEST DEFENSE';
@@ -5628,7 +5673,7 @@ function renderBracket() {
                     put('★ MOST CLEAN SHEETS', 182, hY + 44, 13, '#03141f', 'center', 2, 800, MO);
 
                     // Top Team Batch Name
-                    put('BRHS ' + top1.b, 72, hY + 106, 56, '#ffffff', 'left', 1, 800, MO, 640);
+                    put(teamDisp(top1.b), 72, hY + 106, 56, '#ffffff', 'left', 1, 800, MO, 640);
                     put(top1.cs + (top1.cs === 1 ? ' Clean Sheet' : ' Clean Sheets') + ' · ' + top1.ga + ' Goals Conceded (' + top1.played + (top1.played === 1 ? ' Match' : ' Matches') + ')', 72, hY + 140, 20, '#94a3b8', 'left', 1, 600, MO, 640);
 
                     // Right Clean Sheet Pill
@@ -5662,7 +5707,7 @@ function renderBracket() {
                         put(String(idx + 2), 80, ry + 46, 26, CYAN, 'left', 0, 800, MO);
 
                         // Batch Team
-                        put('BRHS ' + p.b, 130, ry + 44, 26, '#ffffff', 'left', 1, 800, MO, 400);
+                        put(teamDisp(p.b), 130, ry + 44, 26, '#ffffff', 'left', 1, 800, MO, 400);
 
                         // Conceded and matches
                         put(p.ga + ' conceded (' + p.played + (p.played === 1 ? ' match' : ' matches') + ')', 480, ry + 44, 18, '#94a3b8', 'left', 1, 600, MO, 300);
@@ -5679,7 +5724,8 @@ function renderBracket() {
                     x.fillStyle = 'rgba(255,255,255,.08)';
                     x.fillRect(48, ftY - 26, S - 96, 1);
                     put('LIVE MATCH PORTAL · brhs-match-hub.pages.dev', 52, ftY, 13, '#94a3b8', 'left', 1.5, 700, MO);
-                    put('ORGANIZED BY EX BRHSIANS', S - 52, ftY, 13, CYAN, 'right', 1.5, 800, MO);
+                    const orgText = (CURRENT_TID === 'season3') ? 'ORGANIZED BY EX BRHSIANS' : 'MATCH PORTAL';
+                    put(orgText, S - 52, ftY, 13, CYAN, 'right', 1.5, 800, MO);
 
                     const blob = await new Promise(r => c.toBlob(r, 'image/png'));
                     const file = new File([blob], 'brhs-clean-sheets.png', { type: 'image/png' });
@@ -5687,8 +5733,8 @@ function renderBracket() {
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             files: [file],
-                            title: 'Clean Sheets – BRHS Football Festival Season 03',
-                            text: 'Clean Sheets and Best Defense leaderboard of EX BRHSIAN Football Festival Season 03!'
+                            title: 'Clean Sheets – ' + (TOURNAMENT_SHORT || 'Tournament'),
+                            text: 'Clean Sheets and Best Defense leaderboard of ' + (TOURNAMENT_NAME || 'Football Tournament') + '!'
                         });
                         toast('✓ Shared successfully!', true);
                     } else {
@@ -5896,6 +5942,7 @@ function openEdit(n) {
                 F.st.value = (r.live && !r.done) ? (r.ht ? 'ht' : 'live') : 'ft';
                 F.lm.value = r.lm || '';
                 F.nt.value = r.nt || '';
+                if (F.ev) F.ev.value = r.ev || '';
                 $('sh').hidden = false
             }
             const closeEdit = () => {
@@ -5980,7 +6027,8 @@ function openEdit(n) {
                     mt: F.mt.value,
                     pw: F.pw ? F.pw.value : '',
                     ps: (F.ps && F.ps.value.trim()) ? F.ps.value.trim() : '',
-                    nt: (F.nt && F.nt.value.trim()) ? F.nt.value.trim() : ''
+                    nt: (F.nt && F.nt.value.trim()) ? F.nt.value.trim() : '',
+                    ev: (F.ev && F.ev.value.trim()) ? F.ev.value.trim() : ''
                 };
                 const ta = F.ta.value.trim()
                   , tb = F.tb.value.trim();
@@ -6215,6 +6263,7 @@ function hdr() {
                 updateFriendlyTeamsDatalist();
                 $('fmTeam1').value = '';
                 $('fmTeam2').value = '';
+                if ($('fmEvent')) $('fmEvent').value = '';
                 $('fmNote').value = '';
                 m.hidden = false;
                 $('fmTeam1').focus();
@@ -6242,6 +6291,7 @@ function hdr() {
                     if (!t1 || !t2) { toast('Please specify both teams', false); return; }
                     const time = ($('fmTime').value || '').trim() || '4:30 PM';
                     const venue = ($('fmVenue').value || '').trim() || 'স্কুল মাঠ';
+                    const ev = ($('fmEvent') ? $('fmEvent').value : '').trim();
                     const note = ($('fmNote').value || '').trim();
 
                     const btn = $('fmSaveBtn');
@@ -6253,10 +6303,9 @@ function hdr() {
                         const newMatch = ['FR', t1, t2, time, venue];
                         const pv = snap();
                         FX.push(newMatch);
-                        if (note) {
-                            if (!R[newMatchIdx]) R[newMatchIdx] = {};
-                            R[newMatchIdx].nt = note;
-                        }
+                        if (!R[newMatchIdx]) R[newMatchIdx] = {};
+                        if (note) R[newMatchIdx].nt = note;
+                        if (ev) R[newMatchIdx].ev = ev;
                         G = {};
 
                         render();
@@ -6265,6 +6314,7 @@ function hdr() {
                         fmfForm.reset();
                         if (!R[newMatchIdx]) R[newMatchIdx] = {};
                         if (note) R[newMatchIdx].nt = note;
+                        if (ev) R[newMatchIdx].ev = ev;
                         const changePayload = {
                             fixtures: FX,
                             matchId: newMatchIdx,
