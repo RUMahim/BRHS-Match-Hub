@@ -1722,16 +1722,37 @@
                 color: var(--gold);
                 font-weight: 800;
             }
+            /* ===== Prominent Event Switcher (Header Pill) ===== */
             .tourn-picker-wrap {
                 display: inline-flex;
                 align-items: center;
-                gap: 6px;
-                margin-top: 6px;
-                margin-bottom: 2px;
-                background: linear-gradient(135deg, rgba(201,162,39,.12), rgba(161,98,7,.18));
-                border: 1px solid rgba(201,162,39,.4);
-                padding: 3px 8px;
+                gap: 8px;
+                margin-top: 8px;
+                margin-bottom: 3px;
+                background: linear-gradient(135deg, rgba(201,162,39,.2), rgba(20,17,10,.96));
+                border: 1.5px solid rgba(201,162,39,.65);
+                box-shadow: 0 2px 10px rgba(0,0,0,.45), 0 0 14px rgba(201,162,39,.25);
+                padding: 4px 10px 4px 8px;
+                border-radius: 20px;
+                transition: all .2s cubic-bezier(.4,0,.2,1);
+                cursor: pointer;
+                position: relative;
+                max-width: 100%;
+            }
+            .tourn-picker-wrap:hover {
+                border-color: var(--gold);
+                box-shadow: 0 4px 18px rgba(201,162,39,.45);
+                transform: translateY(-1px);
+            }
+            .tourn-picker-tag {
+                font: 800 9px/1 Montserrat, sans-serif;
+                color: #1a1204;
+                background: linear-gradient(180deg, var(--gold), var(--gold2));
+                padding: 3px 6px;
                 border-radius: 8px;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+                white-space: nowrap;
             }
             .tourn-picker-icon {
                 font-size: 13px;
@@ -1740,16 +1761,239 @@
             .tourn-picker-select {
                 background: transparent;
                 border: none;
-                color: var(--gold);
+                color: #fff;
                 font: 700 12px Montserrat, sans-serif;
-                letter-spacing: .04em;
+                letter-spacing: .03em;
                 cursor: pointer;
                 outline: none;
-                padding-right: 4px;
+                padding-right: 2px;
+                max-width: 175px;
+                text-overflow: ellipsis;
             }
-            .tourn-picker-select option {
+            .tourn-picker-select option,
+            .tourn-picker-select optgroup {
                 background: #14110a;
                 color: #fff;
+            }
+            .tourn-picker-chevron {
+                font-size: 9px;
+                color: var(--gold);
+                pointer-events: none;
+                margin-left: 2px;
+                transition: transform .2s ease;
+            }
+
+            /* ===== Dedicated Event Quick Bar ===== */
+            .event-quick-bar {
+                background: linear-gradient(165deg, rgba(26,21,12,.95), rgba(14,12,7,.98));
+                border: 1px solid rgba(201,162,39,.35);
+                border-radius: 12px;
+                padding: 10px 12px;
+                margin-bottom: 12px;
+                box-shadow: 0 4px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(245,215,122,.08);
+            }
+            .eq-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .eq-title-box {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
+            .eq-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--gold);
+                box-shadow: 0 0 8px var(--gold);
+                animation: eqPulse 1.8s infinite;
+            }
+            @keyframes eqPulse {
+                0%, 100% { opacity: 1; transform: scale(1); }
+                50% { opacity: .4; transform: scale(1.3); }
+            }
+            .eq-title {
+                font: 800 11px Montserrat, sans-serif;
+                color: var(--gold);
+                letter-spacing: .08em;
+                text-transform: uppercase;
+            }
+            .eq-hint {
+                font-size: 10px;
+                color: var(--mut);
+                font-weight: 600;
+            }
+            .eq-pills {
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+            }
+            .eq-pills::-webkit-scrollbar { display: none; }
+            .eq-pill {
+                flex: 1;
+                min-width: 140px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                padding: 9px 12px;
+                background: rgba(18,16,9,.8);
+                border: 1.5px solid rgba(255,255,255,.09);
+                border-radius: 9px;
+                color: #e2d9c2;
+                font: 700 12px Montserrat, sans-serif;
+                letter-spacing: .03em;
+                cursor: pointer;
+                transition: all .2s cubic-bezier(.4,0,.2,1);
+                white-space: nowrap;
+            }
+            .eq-pill:hover {
+                border-color: rgba(201,162,39,.5);
+                color: #fff;
+                transform: translateY(-1px);
+            }
+            .eq-pill.on {
+                background: linear-gradient(135deg, rgba(201,162,39,.25), rgba(161,98,7,.38));
+                border-color: var(--gold);
+                color: #fff;
+                box-shadow: 0 2px 14px rgba(201,162,39,.35), inset 0 1px 0 rgba(245,215,122,.2);
+            }
+            .eq-pill-tag {
+                font: 800 9px Montserrat, sans-serif;
+                padding: 2px 5px;
+                border-radius: 5px;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                line-height: 1.2;
+            }
+            .eq-pill-tag.arch {
+                background: rgba(255,255,255,.08);
+                color: var(--mut);
+                border: 1px solid rgba(255,255,255,.1);
+            }
+            .eq-pill-tag.active {
+                background: linear-gradient(180deg, #22c55e, #15803d);
+                color: #fff;
+                box-shadow: 0 0 6px rgba(34,197,94,.4);
+            }
+            .eq-pill-tag.live {
+                background: linear-gradient(180deg, #ef4444, #b91c1c);
+                color: #fff;
+                box-shadow: 0 0 8px rgba(239,68,68,.5);
+                animation: eqPulse 1.2s infinite;
+            }
+
+            /* ===== Event Guide Banner (Callout) ===== */
+            .event-guide-banner {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: linear-gradient(135deg, rgba(201,162,39,.2), rgba(20,17,10,.96));
+                border: 1.5px solid rgba(201,162,39,.65);
+                border-radius: 12px;
+                padding: 12px 14px;
+                margin-bottom: 14px;
+                box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 16px rgba(201,162,39,.15);
+                flex-wrap: wrap;
+            }
+            .event-guide-banner.egb-friendly {
+                background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(12,18,10,.96));
+                border-color: rgba(34,197,94,.45);
+                box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 16px rgba(34,197,94,.12);
+            }
+            .egb-icon {
+                font-size: 24px;
+                line-height: 1;
+                flex-shrink: 0;
+            }
+            .egb-body {
+                flex: 1;
+                min-width: 200px;
+            }
+            .egb-title {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font: 800 12px Montserrat, sans-serif;
+                color: var(--gold);
+                letter-spacing: .04em;
+                margin-bottom: 3px;
+                text-transform: uppercase;
+            }
+            .egb-friendly .egb-title {
+                color: #86efac;
+            }
+            .egb-pulse {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #ef4444;
+                box-shadow: 0 0 8px #ef4444;
+                animation: eqPulse 1.2s infinite;
+            }
+            .egb-desc {
+                font-size: 11px;
+                color: #f3efe6;
+                line-height: 1.5;
+            }
+            .egb-desc b {
+                color: var(--gold);
+            }
+            .egb-friendly .egb-desc b {
+                color: #86efac;
+            }
+            .egb-btn {
+                padding: 9px 16px;
+                font: 800 11px Montserrat, sans-serif;
+                letter-spacing: .06em;
+                text-transform: uppercase;
+                background: linear-gradient(180deg, var(--gold), var(--gold2));
+                color: #1a1204;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                box-shadow: 0 2px 10px rgba(201,162,39,.35);
+                transition: all .2s ease;
+                white-space: nowrap;
+            }
+            .egb-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(201,162,39,.5);
+            }
+            .egb-btn-outline {
+                background: transparent;
+                color: var(--gold);
+                border: 1px solid rgba(201,162,39,.5);
+                box-shadow: none;
+            }
+            .egb-btn-outline:hover {
+                background: rgba(201,162,39,.12);
+                border-color: var(--gold);
+            }
+
+            @media (max-width: 600px) {
+                .event-guide-banner {
+                    flex-direction: column;
+                    align-items: stretch;
+                    text-align: left;
+                }
+                .egb-btn {
+                    width: 100%;
+                    text-align: center;
+                }
+                .eq-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 3px;
+                }
             }
             .nt-group-box {
                 background: #100e08;
@@ -2024,11 +2268,13 @@
                         Match <b>Portal</b>
                     </h1>
                     <div class="sub" id="portalSub">SEASON 03 · RESULTS</div>
-                    <div class="tourn-picker-wrap" id="tournPickerWrap">
-                        <span class="tourn-picker-icon">🏆</span>
+                    <div class="tourn-picker-wrap" id="tournPickerWrap" title="Switch Tournament or Friendly Matches">
+                        <span class="tourn-picker-tag">EVENT</span>
+                        <span class="tourn-picker-icon" id="tournPickerIcon">🏆</span>
                         <select id="tournSelect" class="tourn-picker-select" aria-label="Select Tournament">
                             <option value="season3">Season 03</option>
                         </select>
+                        <span class="tourn-picker-chevron">▼</span>
                     </div>
                     <div id="adm" class="adm"></div>
                     <div id="upd" class="updt"></div>
@@ -2057,6 +2303,16 @@
                     <button type="button" id="anncCloseBtn" style="background:transparent;border:none;color:var(--mut);font-size:16px;cursor:pointer;padding:0 4px;line-height:1" title="Dismiss notice">✕</button>
                 </div>
             </div>
+            <div id="eventQuickBar" class="event-quick-bar">
+                <div class="eq-header">
+                    <div class="eq-title-box">
+                        <span class="eq-dot"></span>
+                        <span class="eq-title">SELECT EVENT / টুর্নামেন্ট বা ম্যাচ বেছে নিন:</span>
+                    </div>
+                    <span class="eq-hint">১-ক্লিকেই খেলা পরিবর্তন করুন ⤵</span>
+                </div>
+                <div class="eq-pills" id="eqPills"></div>
+            </div>
             <div class="chips">
                 <div class="chip">
                     <b id="cM">0</b>
@@ -2080,6 +2336,7 @@
                 <button data-t="q">SQUADS</button>
             </nav>
             <section id="m">
+                <div id="eventGuideBanner" class="event-guide-banner" style="display:none"></div>
                 <div class="vt-bar" id="viewToggle">
                     <button type="button" class="vt-btn on" data-v="list">📋 LIST VIEW</button>
                     <button type="button" class="vt-btn" data-v="bracket">🏆 BRACKET</button>
@@ -3683,6 +3940,7 @@ function renderBracket() {
                 $('cM').textContent = played + '/' + FX.length;
                 $('cG').textContent = goals;
                 $('cT').textContent = L.length ? L[0].n : '-';
+                if (typeof updateEventGuideBanner === 'function') updateEventGuideBanner();
             }
             function switchTab(t, updateHash = true) {
                 const isFriendly = (CURRENT_TID === 'friendlies');
@@ -5709,6 +5967,132 @@ function hdr() {
                 }
 
                 sel.innerHTML = html;
+
+                const iconEl = $('tournPickerIcon');
+                if (iconEl) {
+                    iconEl.textContent = (CURRENT_TID === 'friendlies') ? '🤝' : '🏆';
+                }
+
+                renderEventPills(visibleList);
+                updateEventGuideBanner();
+            }
+
+            function renderEventPills(visibleList) {
+                const pillsBox = $('eqPills');
+                if (!pillsBox) return;
+
+                // Check if friendlies has any live matches from cache or state
+                let friendliesHasLive = false;
+                try {
+                    const rawF = localStorage.getItem('brhsHubCache_friendlies');
+                    if (rawF) {
+                        const c = JSON.parse(rawF);
+                        if (c.R) {
+                            friendliesHasLive = Object.values(c.R).some(r => r && r.live && !r.done);
+                        }
+                    }
+                } catch (_) {}
+
+                let html = '';
+                visibleList.forEach(t => {
+                    const isCurrent = (t.id === CURRENT_TID);
+                    const isFriendly = (t.id === 'friendlies');
+                    const isArch = !!t.archived;
+                    const isPriv = !!t.isPrivate;
+
+                    let tagHtml = '';
+                    if (isPriv) {
+                        tagHtml = '<span class="eq-pill-tag arch">🔒 Private</span>';
+                    } else if (isFriendly && friendliesHasLive) {
+                        tagHtml = '<span class="eq-pill-tag live">🔴 LIVE</span>';
+                    } else if (isFriendly) {
+                        tagHtml = '<span class="eq-pill-tag active">⚡ প্রীতি ম্যাচ</span>';
+                    } else if (isArch) {
+                        tagHtml = '<span class="eq-pill-tag arch">Archived</span>';
+                    } else {
+                        tagHtml = '<span class="eq-pill-tag active">Active</span>';
+                    }
+
+                    const icon = isFriendly ? '🤝' : '🏆';
+                    let label = isFriendly ? 'Friendly Matches' : (t.shortName || t.name);
+
+                    html += '<button type="button" class="eq-pill ' + (isCurrent ? 'on' : '') + '" data-tid="' + esc(t.id) + '">'
+                        + '<span class="eq-pill-icon">' + icon + '</span>'
+                        + '<span class="eq-pill-name">' + esc(label) + '</span>'
+                        + tagHtml
+                        + '</button>';
+                });
+
+                pillsBox.innerHTML = html;
+
+                pillsBox.querySelectorAll('.eq-pill').forEach(btn => {
+                    btn.onclick = () => {
+                        const tid = btn.dataset.tid;
+                        if (tid && tid !== CURRENT_TID) {
+                            switchTournament(tid);
+                        }
+                    };
+                });
+            }
+
+            function updateEventGuideBanner() {
+                const banner = $('eventGuideBanner');
+                if (!banner) return;
+
+                const curMeta = TOURNAMENTS.find(t => t.id === CURRENT_TID);
+                const isArchived = curMeta && curMeta.archived;
+
+                // Check if friendlies has live match from cache or state
+                let friendliesHasLive = false;
+                try {
+                    const rawF = localStorage.getItem('brhsHubCache_friendlies');
+                    if (rawF) {
+                        const c = JSON.parse(rawF);
+                        if (c.R) {
+                            friendliesHasLive = Object.values(c.R).some(r => r && r.live && !r.done);
+                        }
+                    }
+                } catch (_) {}
+
+                if (friendliesHasLive && CURRENT_TID !== 'friendlies') {
+                    banner.style.display = 'flex';
+                    banner.className = 'event-guide-banner';
+                    banner.style.borderColor = '#ef4444';
+                    banner.style.background = 'linear-gradient(135deg,rgba(239,68,68,.22),rgba(24,10,10,.97))';
+                    banner.innerHTML = '<div class="egb-icon">🔴</div>'
+                        + '<div class="egb-body">'
+                        + '<div class="egb-title" style="color:#f87171"><span class="egb-pulse"></span><b>🔴 প্রীতি ম্যাচে লাইভ খেলা চলছে! (LIVE MATCH IN PROGRESS)</b></div>'
+                        + '<div class="egb-desc">চলমান প্রীতি ম্যাচের রিয়েল-টাইম স্কোর ও গোল আপডেট দেখতে এখনই সুইচ করুন:</div>'
+                        + '</div>'
+                        + '<button type="button" class="egb-btn" style="background:linear-gradient(180deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 0 14px rgba(239,68,68,.7)" onclick="switchTournament(\'friendlies\')">🔴 সরাসরি লাইভ দেখুন (WATCH LIVE)</button>';
+                    return;
+                }
+
+                if (isArchived && CURRENT_TID !== 'friendlies') {
+                    banner.style.display = 'flex';
+                    banner.className = 'event-guide-banner';
+                    banner.style.borderColor = 'rgba(201,162,39,.65)';
+                    banner.style.background = 'linear-gradient(135deg, rgba(201,162,39,.2), rgba(20,17,10,.96))';
+                    banner.innerHTML = '<div class="egb-icon">🤝</div>'
+                        + '<div class="egb-body">'
+                        + '<div class="egb-title"><span class="egb-pulse" style="background:#22c55e;box-shadow:0 0 8px #22c55e"></span><b>চলমান বা নতুন ম্যাচ দেখতে চান? (LOOKING FOR ACTIVE MATCHES?)</b></div>'
+                        + '<div class="egb-desc">' + esc(TOURNAMENT_SHORT || 'Season 03') + ' টুর্নামেন্ট সমাপ্ত ও আর্কাইভড। সাম্প্রতিক ও চলমান ম্যাচগুলো দেখতে <b>Friendly Matches</b>-এ যান।</div>'
+                        + '</div>'
+                        + '<button type="button" class="egb-btn" onclick="switchTournament(\'friendlies\')">👉 প্রীতি ম্যাচ দেখুন (GO TO FRIENDLIES)</button>';
+                } else if (CURRENT_TID === 'friendlies') {
+                    banner.style.display = 'flex';
+                    banner.className = 'event-guide-banner egb-friendly';
+                    banner.style.borderColor = 'rgba(34,197,94,.45)';
+                    banner.style.background = 'linear-gradient(135deg, rgba(34,197,94,.14), rgba(12,18,10,.96))';
+                    banner.innerHTML = '<div class="egb-icon">🏆</div>'
+                        + '<div class="egb-body">'
+                        + '<div class="egb-title"><b>Friendly & Exhibition Hub (প্রীতি ম্যাচ পোর্টাল)</b></div>'
+                        + '<div class="egb-desc">এখানে সকল প্রীতি ম্যাচ ও লাইভ স্কোর পাবেন। পূর্বের <b>Season 03</b> টুর্নামেন্ট আর্কাইভ দেখতে:</div>'
+                        + '</div>'
+                        + '<button type="button" class="egb-btn egb-btn-outline" onclick="switchTournament(\'season3\')">🏆 Season 03 আর্কাইভ দেখুন</button>';
+                } else {
+                    banner.style.display = 'none';
+                }
             }
 
             function updateTournamentHeader() {
@@ -6705,6 +7089,15 @@ const teb = $('topExportBackupBtn');
             const tSel = $('tournSelect');
             if (tSel) {
                 tSel.onchange = e => { switchTournament(e.target.value); };
+            }
+            const tpWrap = $('tournPickerWrap');
+            if (tpWrap && tSel) {
+                tpWrap.onclick = e => {
+                    if (e.target !== tSel) {
+                        tSel.focus();
+                        try { tSel.showPicker(); } catch (_) {}
+                    }
+                };
             }
 
             const tnBtn = $('topNewTournBtn');
