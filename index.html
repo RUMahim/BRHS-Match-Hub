@@ -1979,6 +1979,164 @@
                 border-color: var(--gold);
             }
 
+            /* ===== Global Live Match Alert Banner ===== */
+            .global-live-alert {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                background: linear-gradient(135deg, rgba(220,38,38,.94), rgba(153,27,27,.98));
+                border: 1.5px solid rgba(254,202,202,.65);
+                border-radius: 12px;
+                padding: 10px 14px;
+                margin-bottom: 12px;
+                box-shadow: 0 4px 20px rgba(220,38,38,.45), 0 0 16px rgba(239,68,68,.35);
+                cursor: pointer;
+                transition: transform .2s ease, box-shadow .2s ease;
+                flex-wrap: wrap;
+                z-index: 20;
+            }
+            .global-live-alert:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 6px 24px rgba(220,38,38,.65), 0 0 20px rgba(239,68,68,.5);
+            }
+            .gla-content {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex: 1;
+                min-width: 240px;
+            }
+            .gla-live-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #fff;
+                color: #b91c1c;
+                font: 800 10px Montserrat, sans-serif;
+                letter-spacing: .08em;
+                padding: 4px 8px;
+                border-radius: 20px;
+                box-shadow: 0 2px 6px rgba(0,0,0,.25);
+                flex-shrink: 0;
+            }
+            .gla-pulse-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #ef4444;
+                box-shadow: 0 0 8px #ef4444;
+                animation: eqPulse 1s infinite;
+            }
+            .gla-info {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+            .gla-tourn-tag {
+                font: 700 9px Montserrat, sans-serif;
+                color: #fef08a;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+                opacity: .95;
+            }
+            .gla-match-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font: 800 14px Montserrat, sans-serif;
+                color: #fff;
+                flex-wrap: wrap;
+            }
+            .gla-match-title .gla-team {
+                color: #fff;
+                text-shadow: 0 1px 3px rgba(0,0,0,.5);
+            }
+            .gla-match-title .gla-score {
+                background: rgba(0,0,0,.35);
+                border: 1px solid rgba(255,255,255,.3);
+                padding: 1px 8px;
+                border-radius: 6px;
+                font: 900 15px Montserrat, sans-serif;
+                color: #fef08a;
+                letter-spacing: .05em;
+            }
+            .gla-ht-badge {
+                font: 800 9px Montserrat, sans-serif;
+                background: #f59e0b;
+                color: #1a1204;
+                padding: 2px 5px;
+                border-radius: 4px;
+                margin-left: 2px;
+            }
+            .gla-action {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .gla-btn {
+                background: #fff;
+                color: #991b1b;
+                font: 800 11px Montserrat, sans-serif;
+                padding: 7px 14px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                line-height: 1.2;
+                box-shadow: 0 2px 8px rgba(0,0,0,.25);
+                transition: background .15s ease, transform .15s ease;
+            }
+            .gla-btn:hover {
+                background: #fef08a;
+                color: #7f1d1d;
+                transform: scale(1.02);
+            }
+            .gla-btn-sub {
+                font-size: 8px;
+                opacity: .8;
+                letter-spacing: .06em;
+            }
+            .gla-dismiss {
+                background: transparent;
+                border: none;
+                color: rgba(255,255,255,.75);
+                font-size: 16px;
+                cursor: pointer;
+                padding: 4px;
+                line-height: 1;
+            }
+            .gla-dismiss:hover {
+                color: #fff;
+            }
+
+            /* Live match target scroll highlight */
+            @keyframes liveTargetPulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(239,68,68,.95), 0 0 22px rgba(245,158,11,.95);
+                    transform: scale(1.02);
+                    border-color: #ef4444;
+                }
+                50% {
+                    box-shadow: 0 0 0 10px rgba(239,68,68,.35), 0 0 35px rgba(245,158,11,1);
+                    transform: scale(1.03);
+                    border-color: #f59e0b;
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(239,68,68,.95), 0 0 22px rgba(245,158,11,.95);
+                    transform: scale(1.02);
+                    border-color: #ef4444;
+                }
+            }
+            .live-target-highlight {
+                animation: liveTargetPulse 1.2s infinite ease-in-out !important;
+                z-index: 50 !important;
+                position: relative !important;
+            }
+
             @media (max-width: 600px) {
                 .event-guide-banner {
                     flex-direction: column;
@@ -2287,10 +2445,36 @@
                 <div class="admin-quick-actions">
                     <button type="button" id="topNewTournBtn" class="admin-btn admin-btn-new">➕ New Tournament</button>
                     <button type="button" id="topManageTournBtn" class="admin-btn">⚙️ Manage Season</button>
+                    <button type="button" id="topSetLandingBtn" class="admin-btn" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(217,119,6,.35));border-color:rgba(245,158,11,.6);color:#fde047;font-weight:700" title="Set currently viewed tournament as default landing for all visitors">⭐ Set as Visitor Landing</button>
+                    <span id="topLandingBadge" class="admin-landing-badge" style="font-size:10px;padding:3px 8px;border-radius:12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#fde047;font-weight:600;display:inline-flex;align-items:center;gap:4px" title="Visitors land on this tournament by default">🎯 Landing: <b id="topLandingBadgeName">Season 03</b></span>
                     <button type="button" id="topNoticeBtn" class="admin-btn">📢 Notice</button>
                     <button type="button" id="topExportBackupBtn" class="admin-btn">💾 Backup</button>
                     <button type="button" id="topImportBackupBtn" class="admin-btn admin-btn-restore">⬆ Restore</button>
                     <button type="button" id="topLogoutBtn" class="admin-btn admin-btn-logout">Logout</button>
+                </div>
+            </div>
+            <div id="globalLiveAlert" class="global-live-alert" style="display:none">
+                <div class="gla-content">
+                    <div class="gla-live-badge">
+                        <span class="gla-pulse-dot"></span>
+                        <span>LIVE NOW</span>
+                    </div>
+                    <div class="gla-info">
+                        <span class="gla-tourn-tag" id="glaTournTag">Friendly Matches</span>
+                        <div class="gla-match-title" id="glaMatchTitle">
+                            <span class="gla-team" id="glaTeamA">BRHS 23</span>
+                            <span class="gla-score" id="glaScore">1 - 0</span>
+                            <span class="gla-team" id="glaTeamB">BRHS 24</span>
+                            <span class="gla-ht-badge" id="glaHtBadge" style="display:none">HT</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gla-action">
+                    <button type="button" class="gla-btn" id="glaGoBtn">
+                        <span>👉 সরাসরি লাইভ দেখুন</span>
+                        <span class="gla-btn-sub">WATCH LIVE ⚡</span>
+                    </button>
+                    <button type="button" class="gla-dismiss" id="glaDismissBtn" title="Dismiss notice">✕</button>
                 </div>
             </div>
             <div id="anncBar" class="annc-bar" style="display:block;margin-bottom:14px;background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(161,98,7,.25));border:1px solid rgba(201,162,39,.55);border-radius:10px;padding:10px 14px;box-shadow:0 3px 12px rgba(0,0,0,.3)">
@@ -2836,6 +3020,11 @@
                         </label>
                     </div>
 
+                    <label style="display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer;background:rgba(245,158,11,0.12);padding:9px 12px;border-radius:8px;border:1px solid rgba(245,158,11,0.35)">
+                        <input type="checkbox" id="mtDefaultLandingChk" style="width:18px;height:18px;accent-color:var(--gold);cursor:pointer">
+                        <span style="font-size:12px;font-weight:600;color:var(--gold)">⭐ Set as default landing tournament for all visitors (দর্শকদের জন্য ডিফল্ট করুন)</span>
+                    </label>
+
                     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
                         <button class="btn" type="submit" id="mtSaveBtn" style="flex:1;min-width:140px">💾 SAVE INFO</button>
                         <button class="btn g2" type="button" id="mtExportBtn" style="padding:10px 12px">📥 BACKUP</button>
@@ -2905,6 +3094,13 @@
                 { id: 'season3', name: DEFAULT_TOURNAMENT_NAME, shortName: DEFAULT_TOURNAMENT_SHORT, isDefault: true },
                 { id: 'friendlies', name: DEFAULT_FRIENDLIES_NAME, shortName: DEFAULT_FRIENDLIES_SHORT, isFriendly: true }
             ];
+
+            let DEFAULT_LANDING_TID = 'season3';
+            try {
+                const storedLanding = localStorage.getItem('brhs_default_landing_tid');
+                if (storedLanding) DEFAULT_LANDING_TID = storedLanding;
+            } catch (_) {}
+            let GLOBAL_LIVE_MATCH = null;
 
             let FX = DEFAULT_FX;
             let G = DEFAULT_G;
@@ -3316,7 +3512,7 @@
                   , w = d ? win(n) : null;
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
-                return '<div class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
+                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
@@ -3339,7 +3535,7 @@
                 const scA = (d || lv) ? r.sa : '-';
                 const scB = (d || lv) ? r.sb : '-';
                 const pen = (d && r.sa == r.sb && w) ? '<div class="bk-pen">Penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '';
-                return '<div class="bk-card' + (lv ? ' lv' : '') + (d ? ' done' : '') + '" data-n="' + n + '">'
+                return '<div id="bk_m' + n + '" class="bk-card' + (lv ? ' lv' : '') + (d ? ' done' : '') + '" data-n="' + n + '">'
                     + '<div class="bk-card-head">'
                     + '<span class="bk-badge">' + stageLabel + ' · #' + String(n).padStart(2, '0') + '</span>'
                     + '<span class="bk-time">' + f[3] + '</span>'
@@ -3941,6 +4137,7 @@ function renderBracket() {
                 $('cG').textContent = goals;
                 $('cT').textContent = L.length ? L[0].n : '-';
                 if (typeof updateEventGuideBanner === 'function') updateEventGuideBanner();
+                if (typeof renderGlobalLiveNotification === 'function') renderGlobalLiveNotification();
             }
             function switchTab(t, updateHash = true) {
                 const isFriendly = (CURRENT_TID === 'friendlies');
@@ -5788,6 +5985,7 @@ function hdr() {
                 if (qb) qb.style.display = ADMIN ? 'flex' : 'none';
                 const tlb = $('topLoginBtn');
                 if (tlb) tlb.style.display = (!ADMIN && MODE !== 'local') ? 'inline-block' : 'none';
+                if (typeof updateDefaultLandingBadge === 'function') updateDefaultLandingBadge();
             }
 
             // Friendly Match Handlers
@@ -6029,6 +6227,7 @@ function hdr() {
                     btn.onclick = () => {
                         const tid = btn.dataset.tid;
                         if (tid && tid !== CURRENT_TID) {
+                            try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
                             switchTournament(tid);
                         }
                     };
@@ -6064,7 +6263,7 @@ function hdr() {
                         + '<div class="egb-title" style="color:#f87171"><span class="egb-pulse"></span><b>🔴 প্রীতি ম্যাচে লাইভ খেলা চলছে! (LIVE MATCH IN PROGRESS)</b></div>'
                         + '<div class="egb-desc">চলমান প্রীতি ম্যাচের রিয়েল-টাইম স্কোর ও গোল আপডেট দেখতে এখনই সুইচ করুন:</div>'
                         + '</div>'
-                        + '<button type="button" class="egb-btn" style="background:linear-gradient(180deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 0 14px rgba(239,68,68,.7)" onclick="switchTournament(\'friendlies\')">🔴 সরাসরি লাইভ দেখুন (WATCH LIVE)</button>';
+                        + '<button type="button" class="egb-btn" style="background:linear-gradient(180deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 0 14px rgba(239,68,68,.7)" onclick="try{sessionStorage.setItem(\'brhs_user_manually_switched\',\'1\')}catch(_){};switchTournament(\'friendlies\')">🔴 সরাসরি লাইভ দেখুন (WATCH LIVE)</button>';
                     return;
                 }
 
@@ -6078,7 +6277,7 @@ function hdr() {
                         + '<div class="egb-title"><span class="egb-pulse" style="background:#22c55e;box-shadow:0 0 8px #22c55e"></span><b>চলমান বা নতুন ম্যাচ দেখতে চান? (LOOKING FOR ACTIVE MATCHES?)</b></div>'
                         + '<div class="egb-desc">' + esc(TOURNAMENT_SHORT || 'Season 03') + ' টুর্নামেন্ট সমাপ্ত ও আর্কাইভড। সাম্প্রতিক ও চলমান ম্যাচগুলো দেখতে <b>Friendly Matches</b>-এ যান।</div>'
                         + '</div>'
-                        + '<button type="button" class="egb-btn" onclick="switchTournament(\'friendlies\')">👉 প্রীতি ম্যাচ দেখুন (GO TO FRIENDLIES)</button>';
+                        + '<button type="button" class="egb-btn" onclick="try{sessionStorage.setItem(\'brhs_user_manually_switched\',\'1\')}catch(_){};switchTournament(\'friendlies\')">👉 প্রীতি ম্যাচ দেখুন (GO TO FRIENDLIES)</button>';
                 } else if (CURRENT_TID === 'friendlies') {
                     banner.style.display = 'flex';
                     banner.className = 'event-guide-banner egb-friendly';
@@ -6089,9 +6288,190 @@ function hdr() {
                         + '<div class="egb-title"><b>Friendly & Exhibition Hub (প্রীতি ম্যাচ পোর্টাল)</b></div>'
                         + '<div class="egb-desc">এখানে সকল প্রীতি ম্যাচ ও লাইভ স্কোর পাবেন। পূর্বের <b>Season 03</b> টুর্নামেন্ট আর্কাইভ দেখতে:</div>'
                         + '</div>'
-                        + '<button type="button" class="egb-btn egb-btn-outline" onclick="switchTournament(\'season3\')">🏆 Season 03 আর্কাইভ দেখুন</button>';
+                        + '<button type="button" class="egb-btn egb-btn-outline" onclick="try{sessionStorage.setItem(\'brhs_user_manually_switched\',\'1\')}catch(_){};switchTournament(\'season3\')">🏆 Season 03 আর্কাইভ দেখুন</button>';
                 } else {
                     banner.style.display = 'none';
+                }
+            }
+
+            function renderGlobalLiveNotification() {
+                const alertBox = $('globalLiveAlert');
+                if (!alertBox) return;
+
+                // Priority 1: Check if currently viewed tournament has any active live match
+                let activeLive = null;
+                const curLiveNum = Object.keys(R || {}).find(k => {
+                    const r = R[k];
+                    return r && r.live && !r.done;
+                });
+
+                if (curLiveNum) {
+                    const lmR = R[curLiveNum];
+                    const mIdx = parseInt(curLiveNum, 10);
+                    const fRow = FX && FX[mIdx - 1];
+                    const t1 = fRow ? (fRow[1] || 'Team 1') : 'Team 1';
+                    const t2 = fRow ? (fRow[2] || 'Team 2') : 'Team 2';
+                    const nameA = (typeof nm === 'function') ? nm(mIdx, 'a') : ((CURRENT_TID === 'season3' && !isNaN(t1)) ? ('BRHS ' + t1) : t1);
+                    const nameB = (typeof nm === 'function') ? nm(mIdx, 'b') : ((CURRENT_TID === 'season3' && !isNaN(t2)) ? ('BRHS ' + t2) : t2);
+                    activeLive = {
+                        tid: CURRENT_TID,
+                        tournName: TOURNAMENT_NAME,
+                        tournShort: TOURNAMENT_SHORT,
+                        matchId: mIdx,
+                        teamA: nameA,
+                        teamB: nameB,
+                        scoreA: (lmR.sa !== undefined && lmR.sa !== '') ? lmR.sa : 0,
+                        scoreB: (lmR.sb !== undefined && lmR.sb !== '') ? lmR.sb : 0,
+                        ht: !!lmR.ht,
+                        lm: lmR.lm || ''
+                    };
+                } else if (GLOBAL_LIVE_MATCH && (!GLOBAL_LIVE_MATCH.updated || Date.now() - GLOBAL_LIVE_MATCH.updated < 12 * 3600 * 1000)) {
+                    // Priority 2: Globally announced live match across all tournaments
+                    activeLive = GLOBAL_LIVE_MATCH;
+                }
+
+                if (!activeLive || !activeLive.matchId) {
+                    alertBox.style.display = 'none';
+                    return;
+                }
+
+                // Check dismissal for exact match score
+                const dismissKey = activeLive.tid + '_' + activeLive.matchId + '_' + activeLive.scoreA + '-' + activeLive.scoreB;
+                if (sessionStorage.getItem('brhs_live_alert_dismissed') === dismissKey) {
+                    alertBox.style.display = 'none';
+                    return;
+                }
+
+                const tag = $('glaTournTag');
+                if (tag) tag.textContent = activeLive.tournShort || activeLive.tournName || 'LIVE MATCH';
+                const tA = $('glaTeamA');
+                if (tA) tA.textContent = activeLive.teamA || 'Team 1';
+                const sc = $('glaScore');
+                if (sc) sc.textContent = activeLive.scoreA + ' - ' + activeLive.scoreB;
+                const tB = $('glaTeamB');
+                if (tB) tB.textContent = activeLive.teamB || 'Team 2';
+                const ht = $('glaHtBadge');
+                if (ht) {
+                    if (activeLive.ht) {
+                        ht.style.display = 'inline-block';
+                        ht.textContent = activeLive.lm ? activeLive.lm : 'HT';
+                    } else if (activeLive.lm) {
+                        ht.style.display = 'inline-block';
+                        ht.textContent = activeLive.lm;
+                    } else {
+                        ht.style.display = 'none';
+                    }
+                }
+
+                alertBox.style.display = 'flex';
+
+                alertBox.onclick = (e) => {
+                    if (e.target.closest('#glaDismissBtn')) {
+                        alertBox.style.display = 'none';
+                        try { sessionStorage.setItem('brhs_live_alert_dismissed', dismissKey); } catch (_) {}
+                        return;
+                    }
+                    goToLiveMatch(activeLive.tid, activeLive.matchId);
+                };
+            }
+
+            function goToLiveMatch(targetTid, matchId) {
+                if (!matchId) return;
+                targetTid = targetTid || CURRENT_TID;
+
+                try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
+
+                if (CURRENT_TID !== targetTid) {
+                    switchTournament(targetTid);
+                }
+
+                if (typeof switchTab === 'function') {
+                    switchTab('m', false);
+                }
+
+                // Ensure list view is visible
+                if (schedView === 'bracket') {
+                    schedView = 'list';
+                    try { localStorage.setItem('brhsSchedView', 'list'); } catch (_) {}
+                    if ($('bvBtn')) $('bvBtn').classList.remove('active');
+                    if ($('lvBtn')) $('lvBtn').classList.add('active');
+                    if ($('bracketView')) $('bracketView').hidden = true;
+                    if ($('ml')) $('ml').hidden = false;
+                }
+
+                let attempts = 0;
+                const tryScroll = () => {
+                    attempts++;
+                    const card = document.getElementById('m' + matchId) || document.getElementById('bk_m' + matchId);
+                    if (card) {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        card.classList.remove('live-target-highlight');
+                        void card.offsetWidth;
+                        card.classList.add('live-target-highlight');
+                        setTimeout(() => {
+                            card.classList.remove('live-target-highlight');
+                        }, 4500);
+                    } else if (attempts < 10) {
+                        setTimeout(tryScroll, 100);
+                    }
+                };
+                setTimeout(tryScroll, 60);
+            }
+
+            async function setDefaultLandingTournament(tid) {
+                if (!ADMIN) { toast('Admin login required', false); return; }
+                const target = TOURNAMENTS.find(t => t.id === tid) || { name: tid, shortName: tid };
+                const name = target.shortName || target.name || tid;
+
+                DEFAULT_LANDING_TID = tid;
+                try { localStorage.setItem('brhs_default_landing_tid', tid); } catch (_) {}
+                updateDefaultLandingBadge();
+
+                if (MODE === 'local') {
+                    toast('⭐ Default landing set to: ' + name, true);
+                    return;
+                }
+
+                if (!DB || !F) {
+                    toast('Database connection unavailable', false);
+                    return;
+                }
+
+                try {
+                    await F.setDoc(F.doc(DB, 'hub', 'tournaments'), {
+                        defaultTid: tid,
+                        u: Date.now()
+                    }, { merge: true });
+                    toast('⭐ Default visitor landing set to: ' + name, true);
+                } catch (err) {
+                    console.error('Failed to set default landing:', err);
+                    toast('Failed to save default landing: ' + (err.code || err.message || 'error'), false);
+                }
+            }
+
+            function updateDefaultLandingBadge() {
+                const badge = $('topLandingBadge');
+                const badgeName = $('topLandingBadgeName');
+                const setBtn = $('topSetLandingBtn');
+                if (badgeName) {
+                    const defT = TOURNAMENTS.find(t => t.id === DEFAULT_LANDING_TID) || { name: DEFAULT_LANDING_TID, shortName: DEFAULT_LANDING_TID };
+                    const defName = defT.shortName || defT.name || (DEFAULT_LANDING_TID === 'season3' ? 'Season 03' : (DEFAULT_LANDING_TID === 'friendlies' ? 'Friendly' : DEFAULT_LANDING_TID));
+                    badgeName.textContent = defName;
+                }
+                if (setBtn) {
+                    if (CURRENT_TID === DEFAULT_LANDING_TID) {
+                        setBtn.textContent = '⭐ Default Visitor Landing ✓';
+                        setBtn.style.opacity = '0.75';
+                        setBtn.title = 'This tournament is currently the default visitor landing';
+                    } else {
+                        setBtn.textContent = '⭐ Set as Visitor Landing';
+                        setBtn.style.opacity = '1';
+                        setBtn.title = 'Click to make visitors land on ' + (TOURNAMENT_SHORT || TOURNAMENT_NAME) + ' by default';
+                    }
+                }
+                const mtChk = $('mtDefaultLandingChk');
+                if (mtChk) {
+                    mtChk.checked = (CURRENT_TID === DEFAULT_LANDING_TID);
                 }
             }
 
@@ -6701,7 +7081,10 @@ function hdr() {
                     await F.runTransaction(DB, async (tx) => {
                         const tid = CURRENT_TID || 'season3';
                         const docRef = F.doc(DB, 'hub', tid);
+                        const regRef = F.doc(DB, 'hub', 'tournaments');
                         const docSnap = await tx.get(docRef);
+                        const regSnap = await tx.get(regRef);
+                        const regData = regSnap.exists() ? regSnap.data() : {};
                         let remoteR = {};
                         let remoteG = G;
                         let remoteFX = FX;
@@ -6778,6 +7161,39 @@ function hdr() {
                             }),
                             u
                         });
+
+                        // Check if any match in this tournament is currently LIVE (r.live && !r.done)
+                        const liveMatchNums = Object.keys(remoteR).filter(k => {
+                            const r = remoteR[k];
+                            return r && r.live && !r.done;
+                        });
+
+                        if (liveMatchNums.length > 0) {
+                            const lmR = remoteR[liveMatchNums[0]];
+                            const mIdx = parseInt(liveMatchNums[0], 10);
+                            const fRow = remoteFX && remoteFX[mIdx - 1];
+                            const t1 = fRow ? (fRow[1] || 'Team 1') : 'Team 1';
+                            const t2 = fRow ? (fRow[2] || 'Team 2') : 'Team 2';
+                            const nameA = (tid === 'season3' && !isNaN(t1)) ? ('BRHS ' + t1) : t1;
+                            const nameB = (tid === 'season3' && !isNaN(t2)) ? ('BRHS ' + t2) : t2;
+                            const livePayload = {
+                                tid,
+                                tournName: remoteName || TOURNAMENT_NAME,
+                                tournShort: remoteShort || TOURNAMENT_SHORT,
+                                matchId: mIdx,
+                                teamA: nameA,
+                                teamB: nameB,
+                                scoreA: (lmR.sa !== undefined && lmR.sa !== '') ? lmR.sa : 0,
+                                scoreB: (lmR.sb !== undefined && lmR.sb !== '') ? lmR.sb : 0,
+                                ht: !!lmR.ht,
+                                lm: lmR.lm || '',
+                                st: fRow ? fRow[0] : '',
+                                updated: u
+                            };
+                            tx.set(regRef, { liveMatch: livePayload }, { merge: true });
+                        } else if (regData && regData.liveMatch && regData.liveMatch.tid === tid) {
+                            tx.set(regRef, { liveMatch: null }, { merge: true });
+                        }
                     });
                 } catch (e) {
                     console.warn('Transaction failed, reverting:', e);
@@ -6901,6 +7317,20 @@ function hdr() {
                                     try { localStorage.setItem('brhs_tournaments', JSON.stringify(TOURNAMENTS)); } catch(_) {}
                                     renderTournDropdown();
                                 }
+                                if (data && data.defaultTid) {
+                                    DEFAULT_LANDING_TID = data.defaultTid;
+                                    try { localStorage.setItem('brhs_default_landing_tid', data.defaultTid); } catch (_) {}
+                                    const hasManualSwitch = sessionStorage.getItem('brhs_user_manually_switched') === '1';
+                                    const hasHash = !!(location.hash || '').match(/#t=([a-zA-Z0-9_\-]+)/);
+                                    if (!hasManualSwitch && !hasHash && CURRENT_TID !== DEFAULT_LANDING_TID) {
+                                        switchTournament(DEFAULT_LANDING_TID);
+                                    }
+                                }
+                                if (data && data.liveMatch !== undefined) {
+                                    GLOBAL_LIVE_MATCH = data.liveMatch;
+                                    renderGlobalLiveNotification();
+                                }
+                                updateDefaultLandingBadge();
                             } catch (e) { console.warn('Tournament list parse failed:', e); }
                         }
                     }, err => console.warn('Tournaments list listen error:', err));
@@ -7050,9 +7480,16 @@ const teb = $('topExportBackupBtn');
                 const hashMatch = (location.hash || '').match(/#t=([a-zA-Z0-9_\-]+)/);
                 if (hashMatch) {
                     CURRENT_TID = hashMatch[1];
+                    try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
                 } else {
-                    const storedTid = localStorage.getItem('brhs_active_tournament');
-                    if (storedTid) CURRENT_TID = storedTid;
+                    const hasManualSwitch = sessionStorage.getItem('brhs_user_manually_switched') === '1';
+                    if (hasManualSwitch) {
+                        const storedTid = localStorage.getItem('brhs_active_tournament');
+                        if (storedTid) CURRENT_TID = storedTid;
+                    } else {
+                        // Admin-controlled default visitor landing
+                        CURRENT_TID = DEFAULT_LANDING_TID || 'season3';
+                    }
                 }
                 const storedTourns = localStorage.getItem('brhs_tournaments');
                 if (storedTourns) {
@@ -7088,7 +7525,10 @@ const teb = $('topExportBackupBtn');
 
             const tSel = $('tournSelect');
             if (tSel) {
-                tSel.onchange = e => { switchTournament(e.target.value); };
+                tSel.onchange = e => {
+                    try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
+                    switchTournament(e.target.value);
+                };
             }
             const tpWrap = $('tournPickerWrap');
             if (tpWrap && tSel) {
@@ -7099,6 +7539,15 @@ const teb = $('topExportBackupBtn');
                     }
                 };
             }
+            const tslb = $('topSetLandingBtn');
+            if (tslb) {
+                tslb.onclick = () => {
+                    if (!ADMIN) return;
+                    setDefaultLandingTournament(CURRENT_TID);
+                };
+            }
+            updateDefaultLandingBadge();
+            renderGlobalLiveNotification();
 
             const tnBtn = $('topNewTournBtn');
             if (tnBtn) {
@@ -7421,6 +7870,7 @@ const teb = $('topExportBackupBtn');
                 if ($('mtStatusSel')) $('mtStatusSel').value = (curMeta && curMeta.archived) ? 'archived' : 'active';
                 if ($('mtVisibilitySel')) $('mtVisibilitySel').value = (curMeta && curMeta.isPrivate) ? 'private' : 'public';
                 if ($('mtTeamPrefix')) $('mtTeamPrefix').value = (curMeta && curMeta.teamPrefix) ? curMeta.teamPrefix.trim() : (CURRENT_TID === 'season3' ? 'BRHS' : '');
+                if ($('mtDefaultLandingChk')) $('mtDefaultLandingChk').checked = (CURRENT_TID === DEFAULT_LANDING_TID);
 
                 const isProtected = (CURRENT_TID === 'season3' || CURRENT_TID === 'friendlies');
                 const safeNotice = $('mtDeleteSafeNotice');
@@ -7546,7 +7996,15 @@ const teb = $('topExportBackupBtn');
                                 } else {
                                     currentList.push({ id: CURRENT_TID, name: newTitle, shortName: newShort, archived: isArchived, isPrivate: isPrivate });
                                 }
-                                tx.set(regRef, { list: currentList, u: Date.now() });
+                                const regUpdate = { list: currentList, u: Date.now() };
+                                const wantLanding = $('mtDefaultLandingChk') && $('mtDefaultLandingChk').checked;
+                                if (wantLanding) {
+                                    regUpdate.defaultTid = CURRENT_TID;
+                                    DEFAULT_LANDING_TID = CURRENT_TID;
+                                    try { localStorage.setItem('brhs_default_landing_tid', CURRENT_TID); } catch (_) {}
+                                    updateDefaultLandingBadge();
+                                }
+                                tx.set(regRef, regUpdate, { merge: true });
                                 TOURNAMENTS = currentList;
                             });
                         }
