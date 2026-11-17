@@ -1973,113 +1973,7 @@
                 box-shadow: 0 0 5px var(--gold);
             }
 
-            /* ===== Dedicated Event Quick Bar ===== */
-            .event-quick-bar {
-                background: linear-gradient(165deg, rgba(26,21,12,.95), rgba(14,12,7,.98));
-                border: 1px solid rgba(201,162,39,.35);
-                border-radius: 12px;
-                padding: 10px 12px;
-                margin-bottom: 12px;
-                box-shadow: 0 4px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(245,215,122,.08);
-            }
-            .eq-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 8px;
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-            .eq-title-box {
-                display: flex;
-                align-items: center;
-                gap: 7px;
-            }
-            .eq-dot {
-                width: 7px;
-                height: 7px;
-                border-radius: 50%;
-                background: var(--gold);
-                box-shadow: 0 0 8px var(--gold);
-                animation: eqPulse 1.8s infinite;
-            }
-            @keyframes eqPulse {
-                0%, 100% { opacity: 1; transform: scale(1); }
-                50% { opacity: .4; transform: scale(1.3); }
-            }
-            .eq-title {
-                font: 800 11px Montserrat, sans-serif;
-                color: var(--gold);
-                letter-spacing: .08em;
-                text-transform: uppercase;
-            }
-            .eq-hint {
-                font-size: 10px;
-                color: var(--mut);
-                font-weight: 600;
-            }
-            .eq-pills {
-                display: flex;
-                gap: 8px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                padding-bottom: 2px;
-            }
-            .eq-pills::-webkit-scrollbar { display: none; }
-            .eq-pill {
-                flex: 1;
-                min-width: 140px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 7px;
-                padding: 9px 12px;
-                background: rgba(18,16,9,.8);
-                border: 1.5px solid rgba(255,255,255,.09);
-                border-radius: 9px;
-                color: #e2d9c2;
-                font: 700 12px Montserrat, sans-serif;
-                letter-spacing: .03em;
-                cursor: pointer;
-                transition: all .2s cubic-bezier(.4,0,.2,1);
-                white-space: nowrap;
-            }
-            .eq-pill:hover {
-                border-color: rgba(201,162,39,.5);
-                color: #fff;
-                transform: translateY(-1px);
-            }
-            .eq-pill.on {
-                background: linear-gradient(135deg, rgba(201,162,39,.25), rgba(161,98,7,.38));
-                border-color: var(--gold);
-                color: #fff;
-                box-shadow: 0 2px 14px rgba(201,162,39,.35), inset 0 1px 0 rgba(245,215,122,.2);
-            }
-            .eq-pill-tag {
-                font: 800 9px Montserrat, sans-serif;
-                padding: 2px 5px;
-                border-radius: 5px;
-                text-transform: uppercase;
-                letter-spacing: .04em;
-                line-height: 1.2;
-            }
-            .eq-pill-tag.arch {
-                background: rgba(255,255,255,.08);
-                color: var(--mut);
-                border: 1px solid rgba(255,255,255,.1);
-            }
-            .eq-pill-tag.active {
-                background: linear-gradient(180deg, #22c55e, #15803d);
-                color: #fff;
-                box-shadow: 0 0 6px rgba(34,197,94,.4);
-            }
-            .eq-pill-tag.live {
-                background: linear-gradient(180deg, #ef4444, #b91c1c);
-                color: #fff;
-                box-shadow: 0 0 8px rgba(239,68,68,.5);
-                animation: eqPulse 1.2s infinite;
-            }
+
 
             /* ===== Event Guide Banner (Callout) ===== */
             .event-guide-banner {
@@ -2444,11 +2338,7 @@
                     width: 100%;
                     text-align: center;
                 }
-                .eq-header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 3px;
-                }
+
                 .global-live-alert {
                     padding: 8px 10px;
                 }
@@ -2812,16 +2702,7 @@
                     <button type="button" id="anncCloseBtn" style="background:transparent;border:none;color:var(--mut);font-size:16px;cursor:pointer;padding:0 4px;line-height:1" title="Dismiss notice">✕</button>
                 </div>
             </div>
-            <div id="eventQuickBar" class="event-quick-bar">
-                <div class="eq-header">
-                    <div class="eq-title-box">
-                        <span class="eq-dot"></span>
-                        <span class="eq-title">SELECT EVENT / টুর্নামেন্ট বা ম্যাচ বেছে নিন:</span>
-                    </div>
-                    <span class="eq-hint">১-ক্লিকেই খেলা পরিবর্তন করুন ⤵</span>
-                </div>
-                <div class="eq-pills" id="eqPills"></div>
-            </div>
+
             <div class="chips">
                 <div class="chip">
                     <b id="cM">0</b>
@@ -6626,7 +6507,6 @@ function hdr() {
                 }
 
                 renderTournDropdownMenu(visibleList);
-                renderEventPills(visibleList);
                 updateEventGuideBanner();
             }
 
@@ -6726,64 +6606,7 @@ function hdr() {
                 });
             }
 
-            function renderEventPills(visibleList) {
-                const pillsBox = $('eqPills');
-                if (!pillsBox) return;
 
-                // Check if friendlies has any live matches from cache or state
-                let friendliesHasLive = false;
-                try {
-                    const rawF = localStorage.getItem('brhsHubCache_friendlies');
-                    if (rawF) {
-                        const c = JSON.parse(rawF);
-                        if (c.R) {
-                            friendliesHasLive = Object.values(c.R).some(r => r && r.live && !r.done);
-                        }
-                    }
-                } catch (_) {}
-
-                let html = '';
-                visibleList.forEach(t => {
-                    const isCurrent = (t.id === CURRENT_TID);
-                    const isFriendly = (t.id === 'friendlies');
-                    const isArch = !!t.archived;
-                    const isPriv = !!t.isPrivate;
-
-                    let tagHtml = '';
-                    if (isPriv) {
-                        tagHtml = '<span class="eq-pill-tag arch">🔒 Private</span>';
-                    } else if (isFriendly && friendliesHasLive) {
-                        tagHtml = '<span class="eq-pill-tag live">🔴 LIVE</span>';
-                    } else if (isFriendly) {
-                        tagHtml = '<span class="eq-pill-tag active">⚡ প্রীতি ম্যাচ</span>';
-                    } else if (isArch) {
-                        tagHtml = '<span class="eq-pill-tag arch">Archived</span>';
-                    } else {
-                        tagHtml = '<span class="eq-pill-tag active">Active</span>';
-                    }
-
-                    const icon = isFriendly ? '🤝' : '🏆';
-                    let label = isFriendly ? 'Friendly Matches' : (t.shortName || t.name);
-
-                    html += '<button type="button" class="eq-pill ' + (isCurrent ? 'on' : '') + '" data-tid="' + esc(t.id) + '">'
-                        + '<span class="eq-pill-icon">' + icon + '</span>'
-                        + '<span class="eq-pill-name">' + esc(label) + '</span>'
-                        + tagHtml
-                        + '</button>';
-                });
-
-                pillsBox.innerHTML = html;
-
-                pillsBox.querySelectorAll('.eq-pill').forEach(btn => {
-                    btn.onclick = () => {
-                        const tid = btn.dataset.tid;
-                        if (tid && tid !== CURRENT_TID) {
-                            try { sessionStorage.setItem('brhs_user_manually_switched', '1'); } catch (_) {}
-                            switchTournament(tid);
-                        }
-                    };
-                });
-            }
 
             function updateEventGuideBanner() {
                 const banner = $('eventGuideBanner');
