@@ -4892,6 +4892,10 @@ function renderBracket() {
                         const clean = tName.trim();
                         if (!SQ[clean]) SQ[clean] = [];
                         sqBatchFlt = clean;
+                        try {
+                            localStorage.setItem('brhsSquads_' + CURRENT_TID, JSON.stringify(SQ));
+                            if (CURRENT_TID === 'season3') localStorage.setItem('brhsSquads', JSON.stringify(SQ));
+                        } catch (_) {}
                         renderSquads();
                         persistChange({ squads: SQ }, snap());
                         toast('✓ Team "' + clean + '" added to squads! You can now add player names below.', true);
@@ -4905,7 +4909,10 @@ function renderBracket() {
                     if (confirm('Are you sure you want to remove squad for ' + teamDisp(batch) + '?')) {
                         const pv = snap();
                         delete SQ[batch];
-                        try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)); } catch (_) {}
+                        try {
+                            localStorage.setItem('brhsSquads_' + CURRENT_TID, JSON.stringify(SQ));
+                            if (CURRENT_TID === 'season3') localStorage.setItem('brhsSquads', JSON.stringify(SQ));
+                        } catch (_) {}
                         sqBatchFlt = 'all';
                         renderSquads();
                         persistChange({ squads: SQ }, pv);
@@ -4916,12 +4923,23 @@ function renderBracket() {
                 const btn = e.target.closest('.sq-save-btn');
                 if (!btn || !ADMIN) return;
                 const batch = btn.dataset.batch;
-                const area = document.querySelector('.sq-edit-area[data-batch="' + batch + '"]');
+                const card = btn.closest('.sq-card') || btn.parentElement;
+                const area = card ? card.querySelector('.sq-edit-area') : document.querySelector('.sq-edit-area[data-batch="' + batch + '"]');
                 if (!area) return;
                 const names = area.value.split(/[\n,]/).map(x => x.trim()).filter(Boolean);
                 const pv = snap();
                 SQ[batch] = names;
-                try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)) } catch (_) {}
+                try {
+                    localStorage.setItem('brhsSquads_' + CURRENT_TID, JSON.stringify(SQ));
+                    if (CURRENT_TID === 'season3') localStorage.setItem('brhsSquads', JSON.stringify(SQ));
+                    localStorage.setItem('brhsHubCache_' + CURRENT_TID, JSON.stringify({
+                        name: TOURNAMENT_NAME,
+                        shortName: TOURNAMENT_SHORT,
+                        teamPrefix: TOURNAMENT_PREFIX,
+                        FX, R, G, SQ, TB,
+                        annc: ANNC
+                    }));
+                } catch (_) {}
                 renderSquads();
                 persistChange({ squads: SQ }, pv);
                 toast('✓ Squad saved & synced for ' + teamDisp(batch), true);
@@ -7184,7 +7202,6 @@ function hdr() {
                     FX = [];
                     R = {};
                     G = {};
-                    SQ = {};
                     TB = {};
                     ANNC = '';
                 }
@@ -7223,6 +7240,12 @@ function hdr() {
                                     }
                                 });
                                 if (c.SQ) frSQ = c.SQ;
+                            } catch (_) {}
+                        }
+                        if (!frSQ || !Object.keys(frSQ).length) {
+                            try {
+                                const localFr = JSON.parse(localStorage.getItem('brhsSquads_friendlies') || '{}');
+                                if (localFr && Object.keys(localFr).length) frSQ = localFr;
                             } catch (_) {}
                         }
                         FX = frMatches;
@@ -7318,6 +7341,12 @@ function hdr() {
                                 R = newR;
                                 G = {};
                                 SQ = st.SQ || {};
+                                if (!Object.keys(SQ).length) {
+                                    try {
+                                        const localFr = JSON.parse(localStorage.getItem('brhsSquads_friendlies') || '{}');
+                                        if (localFr && Object.keys(localFr).length) SQ = localFr;
+                                    } catch (_) {}
+                                }
                                 TB = {};
                                 ANNC = st.annc || '';
                                 TOURNAMENT_NAME = st.name || DEFAULT_FRIENDLIES_NAME;
@@ -7376,6 +7405,9 @@ function hdr() {
                                     annc: ANNC,
                                     u: U0
                                 }));
+                                if (tid === 'friendlies') {
+                                    try { localStorage.setItem('brhsSquads_friendlies', JSON.stringify(SQ)); } catch (_) {}
+                                }
                                 if (tid === 'season3') {
                                     localStorage.setItem('brhsHubCache', JSON.stringify({ R, G, SQ, TB, u: U0, annc: ANNC }));
                                 }
@@ -7812,9 +7844,7 @@ function hdr() {
                             if (backup.TB) remoteTB = backup.TB;
                         }
                         if (tid === 'friendlies') {
-                            remoteFX = (remoteFX || []).filter(f => f && f[0] === 'FR');
                             remoteG = {};
-                            remoteSQ = {};
                             remoteTB = {};
                         }
                         tx.set(docRef, {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brhs-match-hub-v19';
+const CACHE_NAME = 'brhs-match-hub-v20';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
