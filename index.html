@@ -2328,10 +2328,117 @@
             }
 
             @media (max-width: 600px) {
+                .w {
+                    padding: 10px 10px 60px;
+                }
+                header {
+                    gap: 10px;
+                    padding: 4px 0 10px;
+                    align-items: flex-start;
+                }
+                header img {
+                    width: 58px;
+                    height: 58px;
+                    margin-top: 2px;
+                    flex-shrink: 0;
+                }
+                h1 {
+                    font-size: 24px;
+                    line-height: 1.1;
+                }
+                .sub {
+                    font-size: 9.5px;
+                    letter-spacing: .16em;
+                    margin-top: 3px;
+                }
+                .chips {
+                    gap: 6px;
+                    margin-bottom: 10px;
+                    min-height: 52px;
+                }
+                .chip {
+                    padding: 8px 4px;
+                    border-radius: 10px;
+                }
+                .chip b {
+                    font-size: 22px;
+                }
+                .chip span {
+                    font-size: 9px;
+                    letter-spacing: .08em;
+                }
+                nav {
+                    padding: 6px 0;
+                    gap: 5px;
+                }
+                nav button {
+                    font-size: 11px;
+                    padding: 0 11px;
+                    min-height: 38px;
+                    letter-spacing: .04em;
+                    flex-shrink: 0;
+                }
+                .m {
+                    padding: 12px 12px;
+                    border-radius: 12px;
+                    margin-top: 8px;
+                }
+                .sc {
+                    gap: 6px;
+                    margin: 8px 0;
+                }
+                .tm {
+                    font-size: clamp(11.5px, 3.4vw, 14px);
+                }
+                .s {
+                    font-size: clamp(26px, 7.5vw, 34px);
+                    padding: 4px 8px;
+                    min-width: 76px;
+                }
+                .two:not(.two-scores) {
+                    grid-template-columns: 1fr;
+                    gap: 8px;
+                }
+                .two.two-scores {
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                }
+                .sheet {
+                    padding: 16px 12px calc(16px + env(safe-area-inset-bottom, 0px));
+                    border-radius: 16px 16px 0 0;
+                    max-height: 92vh;
+                }
+                .sheet input, .sheet select {
+                    font-size: 16px !important;
+                }
+                .tourn-picker-btn {
+                    gap: 6px;
+                    padding: 3.5px 6px 3.5px 6px;
+                    border-radius: 18px;
+                }
+                .tpb-label {
+                    max-width: 125px;
+                    font-size: 11.5px;
+                }
+                .tpb-action {
+                    padding: 2.5px 6.5px;
+                    font-size: 9px;
+                    gap: 3px;
+                }
+                .tpb-badge {
+                    font-size: 8px;
+                    padding: 2.5px 5px;
+                }
+                .tourn-dropdown-menu {
+                    width: calc(100vw - 20px);
+                    max-width: 330px;
+                    left: 0;
+                }
                 .event-guide-banner {
                     flex-direction: column;
                     align-items: stretch;
                     text-align: left;
+                    gap: 8px;
                 }
                 .egb-btn {
                     width: 100%;
@@ -2341,6 +2448,18 @@
                     flex-direction: column;
                     align-items: flex-start;
                     gap: 3px;
+                }
+                .global-live-alert {
+                    padding: 8px 10px;
+                }
+                .gla-content {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 8px;
+                }
+                .gla-btn {
+                    width: 100%;
+                    justify-content: center;
                 }
             }
             .nt-group-box {
@@ -2769,6 +2888,22 @@
                 <h2 id="sht"></h2>
                 <div class="top" id="shs"></div>
                 <form id="ef">
+                    <div class="two" style="margin-bottom:8px">
+                        <label>
+                            🔢 Match Number (ম্যাচ নম্বর)
+                            <input name="mn" id="efMatchNum" placeholder="যেমনঃ 23 বা 15">
+                        </label>
+                        <label>
+                            🏆 Stage / Category (ধাপ / পর্যায়)
+                            <select name="stg" id="efStage">
+                                <option value="FR">🤝 Friendly Match</option>
+                                <option value="F">🏆 Grand Final</option>
+                                <option value="S">⚡ Semi Final</option>
+                                <option value="Q">🔥 Quarter Final</option>
+                                <option value="G">⚽ Group Stage</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="two">
                         <label>
                             Team A (দল নির্বাচন / ম্যানুয়াল বা অটো)
@@ -2802,7 +2937,7 @@
                             Live minute<input name="lm" placeholder="34'" maxlength="8">
                         </label>
                     </div>
-                    <div class="two">
+                    <div class="two two-scores">
                         <label>
                             <span id="lblScoreA">Score A</span>
                             <div class="score-stepper">
@@ -3143,9 +3278,25 @@
         <div class="sh" id="fmm" hidden>
             <div class="sheet" style="max-width:480px;max-height:92vh;overflow-y:auto">
                 <div class="lgh">🤝</div>
-                <h2 class="lgt">ADD FRIENDLY MATCH</h2>
-                <p class="lgs">Schedule a single exhibition, derby, or friendly match between any batches or teams.</p>
+                <h2 class="lgt">ADD MATCH (ম্যাচ যোগ করুন)</h2>
+                <p class="lgs">Schedule a single final, derby, exhibition, or friendly match between any teams.</p>
                 <form id="fmf">
+                    <div class="two" style="margin-bottom:8px">
+                        <label>
+                            🔢 Match Number (ম্যাচ নম্বর)
+                            <input id="fmMatchNum" placeholder="যেমনঃ 23 বা 15 (খালি রাখলে অটো)">
+                        </label>
+                        <label>
+                            🏆 Stage / Category (ধাপ / পর্যায়)
+                            <select id="fmStage">
+                                <option value="FR">🤝 Friendly Match (প্রীতি ম্যাচ)</option>
+                                <option value="F">🏆 Grand Final (গ্র্যান্ড ফাইনাল)</option>
+                                <option value="S">⚡ Semi Final (সেমি ফাইনাল)</option>
+                                <option value="Q">🔥 Quarter Final (কোয়ার্টার ফাইনাল)</option>
+                                <option value="G">⚽ Group Stage (গ্রুপ পর্ব)</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="two">
                         <label>
                             Team 1 (দল ১) *
@@ -3178,7 +3329,7 @@
                         </label>
                     </div>
                     <div style="display:flex;gap:10px;margin-top:14px">
-                        <button class="btn" type="submit" id="fmSaveBtn">➕ PUBLISH FRIENDLY MATCH</button>
+                        <button class="btn" type="submit" id="fmSaveBtn">➕ PUBLISH MATCH</button>
                         <button class="btn g2" type="button" id="fmCancelBtn">CANCEL</button>
                     </div>
                 </form>
@@ -3340,7 +3491,19 @@
                 '>': '&gt;',
                 '"': '&quot;',
                 "'": '&#39;'
-            }[c]));
+            }[c]))
+              , matchNumDisp = n => {
+                if (!n) return '01';
+                const r = (typeof R !== 'undefined' && R && R[n]) ? R[n] : {};
+                const f = (typeof FX !== 'undefined' && FX && FX[n - 1]) ? FX[n - 1] : [];
+                const val = (r.mn !== undefined && r.mn !== null && String(r.mn).trim() !== '')
+                    ? String(r.mn).trim()
+                    : ((f[5] !== undefined && f[5] !== null && String(f[5]).trim() !== '') ? String(f[5]).trim() : '');
+                if (val) {
+                    return isNaN(val) ? val : String(val).padStart(2, '0');
+                }
+                return String(n).padStart(2, '0');
+            };
             let ANNC = DEFAULT_ANNC
               , R = {}
               , SQ = {}
@@ -3731,7 +3894,9 @@
                 const winA = d && (r.sa > r.sb || (r.sa == r.sb && w && w === a));
                 const winB = d && (r.sb > r.sa || (r.sa == r.sb && w && w === b));
                 const evTag = (r && r.ev) ? '<span class="tag" style="background:rgba(201,162,39,.18);color:var(--gold);border:1px solid rgba(201,162,39,.4);margin-right:4px">' + esc(r.ev) + '</span>' : '';
-                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + String(n).padStart(2, '0') + ' · ' + evTag + ST[f[0]] + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
+                const mNumStr = matchNumDisp(n);
+                const stgStr = ST[f[0]] || f[0] || 'Match';
+                return '<div id="m' + n + '" data-match="' + n + '" class="m' + (sh ? '' : ' up') + (ht ? ' ht' : lv ? ' lv' : '') + '"><div class="top"><span>#' + mNumStr + ' · ' + evTag + stgStr + (ht ? '<span class="tag ht">⏸ HALF TIME</span>' : lv ? '<span class="tag lvt">● LIVE' + (r.lm ? ' ' + esc(r.lm) : '') + '</span>' : d ? '<span class="tag ft">FULL TIME</span>' : '') + (nx ? '<span class="nx">NEXT</span>' : '') + '</span><span>' + f[3] + (f[4] ? ' · ' + f[4] : '') + '</span></div>' + '<div class="sc"><div class="tm">' + esc(a) + '</div><div class="s">' + (sh ? '<span class="' + (winA ? 'win' : '') + '">' + r.sa + '</span><i>–</i><span class="' + (winB ? 'win' : '') + '">' + r.sb + '</span>' : '<em>VS</em>') + '</div><div class="tm">' + esc(b) + '</div></div>' + (sh ? '<div class="gl"><div>' + gl(r.ga, r.aa) + '</div><div>' + gl(r.gb, r.ab) + '</div></div>' + cds(r) + (r.sa == r.sb && w ? '<div class="pen">Won on penalties: ' + esc(w) + (r.ps ? ' (' + esc(r.ps) + ')' : '') + '</div>' : '') + (r.mo ? '<div class="mo">★ MAN OF THE MATCH <b>' + esc(r.mo) + '</b></div>' : '') + ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '') : ((r && r.nt) ? '<div class="m-note">📝 ' + esc(r.nt) + '</div>' : '')) + (sh ? '<button class="sb" data-s="' + n + '">↗ SHARE</button>' : '') + (ADMIN ? (
                     CURRENT_TID === 'friendlies'
                         ? '<div style="display:flex;gap:6px;margin-top:10px">'
                             + '<button class="eb" data-n="' + n + '" style="flex:1">' + (lv ? '✎ UPDATE LIVE SCORE' : d ? '✎ EDIT RESULT' : '+ ENTER RESULT') + '</button>'
@@ -4735,8 +4900,10 @@ function renderBracket() {
                         x.stroke()
                     }
                     );
+                    const mNumStr = matchNumDisp(n);
+                    const stgName = (ST[f[0]] || f[0] || 'MATCH').toUpperCase();
                     let headerEventTitle = 'EX BRHSIAN FOOTBALL FESTIVAL · SEASON 03';
-                    let subHeaderTitle = (ST[f[0]] + ' · MATCH #' + String(n).padStart(2, '0')).toUpperCase();
+                    let subHeaderTitle = (stgName + ' · MATCH #' + mNumStr).toUpperCase();
                     let sharePortalText = 'EX BRHSIAN Football Festival · Season 03 Match Portal';
                     let filePrefix = 'brhs-match-';
 
@@ -4747,17 +4914,17 @@ function renderBracket() {
                         const customEvent = (r && r.ev) ? r.ev.trim() : '';
                         if (customEvent) {
                             headerEventTitle = customEvent.toUpperCase();
-                            subHeaderTitle = ('FRIENDLY MATCH · MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                            subHeaderTitle = (stgName + ' · MATCH #' + mNumStr + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
                             sharePortalText = customEvent + ' · Match Portal';
                         } else {
-                            headerEventTitle = 'FRIENDLY & EXHIBITION MATCH';
-                            subHeaderTitle = ('MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
-                            sharePortalText = 'Friendly & Exhibition Match Portal';
+                            headerEventTitle = (f[0] === 'F' ? 'GRAND FINAL' : (f[0] === 'S' ? 'SEMI FINAL' : 'FRIENDLY & EXHIBITION MATCH'));
+                            subHeaderTitle = ((f[0] !== 'FR' ? (stgName + ' · ') : '') + 'MATCH #' + mNumStr + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                            sharePortalText = (f[0] === 'F' ? 'Grand Final Match Portal' : 'Friendly & Exhibition Match Portal');
                         }
-                        filePrefix = 'friendly-match-';
+                        filePrefix = (f[0] === 'F' ? 'final-match-' : 'friendly-match-');
                     } else if (!isSeason3) {
                         headerEventTitle = (TOURNAMENT_NAME || 'FOOTBALL TOURNAMENT').toUpperCase();
-                        subHeaderTitle = ((ST[f[0]] ? (ST[f[0]] + ' · ') : '') + 'MATCH #' + String(n).padStart(2, '0') + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
+                        subHeaderTitle = ((ST[f[0]] ? (ST[f[0]] + ' · ') : '') + 'MATCH #' + mNumStr + (f[4] ? ' · ' + f[4] : '')).toUpperCase();
                         sharePortalText = (TOURNAMENT_NAME || 'Football Tournament') + ' Match Portal';
                         filePrefix = (CURRENT_TID ? CURRENT_TID.toLowerCase().replace(/[^a-z0-9_-]/g, '') : 'tournament') + '-match-';
                     }
@@ -4871,7 +5038,7 @@ function renderBracket() {
                         toast('Could not create the image', false);
                         return
                     }
-                    const file = new File([blob], filePrefix + String(n).padStart(2, '0') + '.png',{
+                    const file = new File([blob], filePrefix + mNumStr + '.png',{
                         type: 'image/png'
                     });
                     try {
@@ -5870,8 +6037,10 @@ function openEdit(n) {
                 const f = FX[n - 1]
                   , r = R[n] || {}
                   , F = $('ef').elements;
-                $('sht').textContent = 'MATCH #' + String(n).padStart(2, '0');
-                $('shs').innerHTML = '<span>' + ST[f[0]] + '</span><span>' + f[3] + '</span>';
+                $('sht').textContent = 'MATCH #' + matchNumDisp(n);
+                $('shs').innerHTML = '<span>' + (ST[f[0]] || f[0] || '') + '</span><span>' + (f[3] || '') + '</span>';
+                if (F.mn) F.mn.value = (r.mn !== undefined && r.mn !== null && String(r.mn) !== '') ? r.mn : (f[5] !== undefined ? f[5] : n);
+                if (F.stg) F.stg.value = f[0] || 'FR';
                 const rawRefA = (r.ta !== undefined) ? r.ta : f[1];
                 const rawRefB = (r.tb !== undefined) ? r.tb : f[2];
                 const selA = $('selTeamA');
@@ -6038,6 +6207,21 @@ function openEdit(n) {
                     r.tb = tb;
 
                 let fxChanged = false;
+                if (F.mn && F.mn.value.trim()) {
+                    r.mn = F.mn.value.trim();
+                    if (FX[n - 1]) FX[n - 1][5] = r.mn;
+                    fxChanged = true;
+                } else if (F.mn) {
+                    delete r.mn;
+                    if (FX[n - 1] && FX[n - 1][5]) {
+                        delete FX[n - 1][5];
+                        fxChanged = true;
+                    }
+                }
+                if (F.stg && F.stg.value && FX[n - 1] && F.stg.value !== FX[n - 1][0]) {
+                    FX[n - 1][0] = F.stg.value;
+                    fxChanged = true;
+                }
                 if (F.tm && F.tm.value.trim() && F.tm.value.trim() !== FX[n - 1][3]) {
                     FX[n - 1][3] = F.tm.value.trim();
                     fxChanged = true;
@@ -6263,6 +6447,8 @@ function hdr() {
                 updateFriendlyTeamsDatalist();
                 $('fmTeam1').value = '';
                 $('fmTeam2').value = '';
+                if ($('fmMatchNum')) $('fmMatchNum').value = '';
+                if ($('fmStage')) $('fmStage').value = 'FR';
                 if ($('fmEvent')) $('fmEvent').value = '';
                 $('fmNote').value = '';
                 m.hidden = false;
@@ -6291,21 +6477,22 @@ function hdr() {
                     if (!t1 || !t2) { toast('Please specify both teams', false); return; }
                     const time = ($('fmTime').value || '').trim() || '4:30 PM';
                     const venue = ($('fmVenue').value || '').trim() || 'স্কুল মাঠ';
+                    const matchNumInput = ($('fmMatchNum') ? $('fmMatchNum').value : '').trim();
+                    const stageInput = ($('fmStage') ? $('fmStage').value : '').trim() || 'FR';
                     const ev = ($('fmEvent') ? $('fmEvent').value : '').trim();
                     const note = ($('fmNote').value || '').trim();
 
                     const btn = $('fmSaveBtn');
                     if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING...'; }
                     try {
-                        // Ensure only friendly matches exist in FX
-                        FX = FX.filter(f => f && f[0] === 'FR');
                         const newMatchIdx = FX.length + 1;
-                        const newMatch = ['FR', t1, t2, time, venue];
+                        const newMatch = [stageInput, t1, t2, time, venue, matchNumInput || ''];
                         const pv = snap();
                         FX.push(newMatch);
                         if (!R[newMatchIdx]) R[newMatchIdx] = {};
                         if (note) R[newMatchIdx].nt = note;
                         if (ev) R[newMatchIdx].ev = ev;
+                        if (matchNumInput) R[newMatchIdx].mn = matchNumInput;
                         G = {};
 
                         render();
@@ -6315,13 +6502,15 @@ function hdr() {
                         if (!R[newMatchIdx]) R[newMatchIdx] = {};
                         if (note) R[newMatchIdx].nt = note;
                         if (ev) R[newMatchIdx].ev = ev;
+                        if (matchNumInput) R[newMatchIdx].mn = matchNumInput;
                         const changePayload = {
                             fixtures: FX,
                             matchId: newMatchIdx,
                             matchData: R[newMatchIdx]
                         };
                         await persistChange(changePayload, pv);
-                        toast('✓ Friendly Match #' + String(newMatchIdx).padStart(2, '0') + ' published successfully!', true);
+                        const dispNum = matchNumInput || String(newMatchIdx).padStart(2, '0');
+                        toast('✓ Match #' + dispNum + ' published successfully!', true);
                     } catch (err) {
                         console.error('Publish friendly match failed:', err);
                         toast('Failed to publish match (' + (err.code || err.message || 'error') + ')', false);
@@ -6339,7 +6528,7 @@ function hdr() {
                 isDeletingMatch = true;
                 try {
                     const f = FX[matchNum - 1];
-                    const matchTitle = 'Match #' + String(matchNum).padStart(2, '0') + (f ? ' (' + f[1] + ' vs ' + f[2] + ')' : '');
+                    const matchTitle = 'Match #' + matchNumDisp(matchNum) + (f ? ' (' + f[1] + ' vs ' + f[2] + ')' : '');
                     if (!confirm('Are you sure you want to completely delete ' + matchTitle + '?')) return;
 
                     const pv = snap();
