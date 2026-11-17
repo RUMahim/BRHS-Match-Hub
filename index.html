@@ -4034,35 +4034,64 @@ function renderBracket() {
             }
 
             function renderSquads() {
-                const allBatches = [...new Set(Object.values(G).flat())].sort((a, b) => a.localeCompare(b));
-                // Build group lookup
+                const isFriendlyMode = (CURRENT_TID === 'friendlies');
+                let allBatches = [];
                 const batchGroup = {};
-                Object.entries(G).forEach(([g, batches]) => {
-                    batches.forEach(b => { batchGroup[b] = g });
-                });
 
-                let html = '<div class="stg">BATCH SQUADS</div>'
-                    + '<div class="bf-bar" style="margin:8px 0 14px">'
-                    + '<select id="sqBatchFlt" class="batch-select" aria-label="Filter squad by batch">'
-                    + '<option value="all">🔍 ALL BATCHES (সব ব্যাচ)</option>'
-                    + allBatches.map(b => '<option value="' + esc(b) + '"' + (sqBatchFlt === b ? ' selected' : '') + '>BRHS BATCH ' + esc(b) + ' (Group ' + (batchGroup[b] || '?') + ')</option>').join('')
-                    + '</select>'
+                if (isFriendlyMode) {
+                    const teamsFromFX = (FX || []).flatMap(f => [f[1], f[2]]).filter(Boolean);
+                    const teamsFromSQ = Object.keys(SQ || {}).filter(Boolean);
+                    allBatches = [...new Set([...teamsFromFX, ...teamsFromSQ])].sort((a, b) => a.localeCompare(b));
+                } else {
+                    allBatches = [...new Set(Object.values(G).flat())].sort((a, b) => a.localeCompare(b));
+                    Object.entries(G).forEach(([g, batches]) => {
+                        batches.forEach(b => { batchGroup[b] = g });
+                    });
+                }
+
+                let html = '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'
+                    + '<div class="stg" style="margin:0">' + (isFriendlyMode ? 'TEAM SQUADS (দলের স্কোয়াড)' : 'BATCH SQUADS') + '</div>'
+                    + (ADMIN ? '<button type="button" class="btn" id="btnAddSquadTeamBtn" style="padding:6px 14px;font-size:11px;min-height:34px">➕ ADD TEAM SQUAD</button>' : '')
                     + '</div>';
 
-                const targetBatches = sqBatchFlt === 'all' ? allBatches : [sqBatchFlt];
+                if (allBatches.length > 0) {
+                    html += '<div class="bf-bar" style="margin:8px 0 14px">'
+                        + '<select id="sqBatchFlt" class="batch-select" aria-label="Filter squad by team">'
+                        + '<option value="all">' + (isFriendlyMode ? '🔍 ALL TEAMS (সকল দল)' : '🔍 ALL BATCHES (সব ব্যাচ)') + '</option>'
+                        + allBatches.map(b => '<option value="' + esc(b) + '"' + (sqBatchFlt === b ? ' selected' : '') + '>'
+                            + (isFriendlyMode ? esc(teamDisp(b)) : ('BRHS BATCH ' + esc(b) + ' (Group ' + (batchGroup[b] || '?') + ')'))
+                            + '</option>').join('')
+                        + '</select>'
+                        + '</div>';
+                }
+
+                const targetBatches = sqBatchFlt === 'all' ? allBatches : (allBatches.includes(sqBatchFlt) ? [sqBatchFlt] : allBatches);
+
+                if (allBatches.length === 0) {
+                    html += '<div class="empty" style="padding:36px 16px;text-align:center;background:#100e08;border:1px dashed var(--line);border-radius:12px;margin:16px 0">'
+                        + '<div style="font-size:36px;margin-bottom:8px">👥</div>'
+                        + '<b style="color:var(--gold);font-size:14px;text-transform:uppercase">NO SQUADS RECORDED YET</b>'
+                        + '<p style="font-size:12px;color:var(--mut);margin:8px auto 16px;max-width:440px;line-height:1.5">Add friendly matches with teams or click "+ ADD TEAM SQUAD" to list players for any team.</p>'
+                        + (ADMIN ? '<button type="button" class="btn" id="btnEmptyAddSquadTeam" style="padding:8px 16px;font-size:12px">➕ ADD FIRST TEAM SQUAD</button>' : '')
+                        + '</div>';
+                }
 
                 targetBatches.forEach(batch => {
                     const auto = getSquadPlayers(batch);
                     const manual = (SQ[batch] || []).filter(p => !auto.map(a => a.toLowerCase()).includes(p.toLowerCase()));
                     const allPlayers = [...auto, ...manual];
                     const stats = getBatchStats(batch);
-                    const grp = batchGroup[batch] || '?';
+                    const grp = batchGroup[batch] || '';
+
+                    const badgeHtml = isFriendlyMode
+                        ? '<div class="sq-grp-badge" style="background:rgba(201,162,39,.18);color:var(--gold);border-color:rgba(201,162,39,.4)">Team Roster</div>'
+                        : '<div class="sq-grp-badge">Group ' + esc(grp || '?') + '</div>';
 
                     html += '<div class="sq-card">'
                         + '<div class="sq-top">'
                         + '<div>'
                         + '<div class="sq-batch-title">' + esc(teamDisp(batch)) + '</div>'
-                        + '<div class="sq-grp-badge">Group ' + esc(grp) + '</div>'
+                        + badgeHtml
                         + '</div>'
                         + '<div style="text-align:right">'
                         + '<div style="font:400 22px Anton,Impact,sans-serif;color:var(--gold)">' + allPlayers.length + '</div>'
@@ -4088,7 +4117,7 @@ function renderBracket() {
 
                     if (allPlayers.length === 0) {
                         html += '<div class="empty" style="padding:16px 0">'
-                            + (ADMIN ? 'No players recorded yet. Type player names below and click Save.' : 'No squad roster listed yet for Batch ' + esc(batch) + '. Organizers will add it soon.')
+                            + (ADMIN ? 'No players recorded yet. Type player names below and click Save.' : 'No squad roster listed yet for ' + esc(teamDisp(batch)) + '. Organizers will add it soon.')
                             + '</div>';
                     } else {
                         allPlayers.forEach((p, idx) => {
@@ -4112,7 +4141,10 @@ function renderBracket() {
 
                     if (ADMIN) {
                         html += '<div style="margin-top:12px;background:#100d06;border:1px dashed #4a3a10;border-radius:10px;padding:10px">'
-                            + '<label style="font-size:10px;color:var(--gold);margin-bottom:4px">✎ EDIT SQUAD (' + esc(teamDisp(batch)) + ')</label>'
+                            + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+                            + '<label style="font-size:10px;color:var(--gold);margin:0">✎ EDIT SQUAD (' + esc(teamDisp(batch)) + ')</label>'
+                            + (isFriendlyMode ? '<button type="button" class="sq-del-team-btn" data-batch="' + esc(batch) + '" style="background:transparent;border:none;color:#f87171;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:3px" title="Remove squad for this team">🗑️ Remove Squad</button>' : '')
+                            + '</div>'
                             + '<textarea class="sq-edit-area" data-batch="' + esc(batch) + '" placeholder="Player names separated by commas or lines&#10;e.g. Mahim (C), Sakib, Rafiq">' + (SQ[batch] || []).join(', ') + '</textarea>'
                             + '<button class="btn sq-save-btn" data-batch="' + esc(batch) + '" style="margin-top:6px;min-height:36px;font-size:11px">SAVE SQUAD & SYNC TO VISITORS</button>'
                             + '</div>';
@@ -4406,14 +4438,14 @@ function renderBracket() {
             }
             function switchTab(t, updateHash = true) {
                 const isFriendly = (CURRENT_TID === 'friendlies');
-                const validTabs = isFriendly ? ['m', 's', 'c', 'o'] : ['m', 's', 't', 'c', 'o', 'q'];
+                const validTabs = isFriendly ? ['m', 's', 'c', 'o', 'q'] : ['m', 's', 't', 'c', 'o', 'q'];
                 if (!validTabs.includes(t)) t = 'm';
                 document.querySelectorAll('#nav button').forEach(x => x.classList.toggle('on', x.dataset.t === t));
                 ['m', 's', 't', 'c', 'o', 'q'].forEach(k => {
                     const el = $(k);
                     if (el) el.hidden = (k !== t);
                 });
-                if (t === 'q' && !isFriendly) renderSquads();
+                if (t === 'q') renderSquads();
                 try {
                     localStorage.setItem('brhsActiveTab', t);
                     if (updateHash) history.replaceState(null, '', '#' + t);
@@ -4684,6 +4716,35 @@ function renderBracket() {
             }
             ;
             $('q').onclick = e => {
+                const addBtn = e.target.closest('#btnAddSquadTeamBtn, #btnEmptyAddSquadTeam');
+                if (addBtn) {
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    const tName = prompt('Enter Team Name for Squad (দলের নাম লিখুন):\nযেমনঃ DU CSE বা Batch 18 বা St. Gregory:');
+                    if (tName && tName.trim()) {
+                        const clean = tName.trim();
+                        if (!SQ[clean]) SQ[clean] = [];
+                        sqBatchFlt = clean;
+                        renderSquads();
+                        persistChange({ squads: SQ }, snap());
+                        toast('✓ Team "' + clean + '" added to squads! You can now add player names below.', true);
+                    }
+                    return;
+                }
+                const delTeamBtn = e.target.closest('.sq-del-team-btn');
+                if (delTeamBtn) {
+                    if (!ADMIN) { toast('Admin login required', false); return; }
+                    const batch = delTeamBtn.dataset.batch;
+                    if (confirm('Are you sure you want to remove squad for ' + teamDisp(batch) + '?')) {
+                        const pv = snap();
+                        delete SQ[batch];
+                        try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)); } catch (_) {}
+                        sqBatchFlt = 'all';
+                        renderSquads();
+                        persistChange({ squads: SQ }, pv);
+                        toast('✓ Squad removed for ' + teamDisp(batch), true);
+                    }
+                    return;
+                }
                 const btn = e.target.closest('.sq-save-btn');
                 if (!btn || !ADMIN) return;
                 const batch = btn.dataset.batch;
@@ -4695,7 +4756,7 @@ function renderBracket() {
                 try { localStorage.setItem('brhsSquads', JSON.stringify(SQ)) } catch (_) {}
                 renderSquads();
                 persistChange({ squads: SQ }, pv);
-                toast('✓ Squad saved & synced for BRHS ' + batch, true);
+                toast('✓ Squad saved & synced for ' + teamDisp(batch), true);
             }
             ;
             async function shareMatch(n) {
@@ -5817,11 +5878,15 @@ function renderBracket() {
 
             function getTeamPlayers(batchOrTeam) {
                 if (!batchOrTeam) return [];
-                const m = String(batchOrTeam).match(/\b(\d{2,4})\b/);
-                const batch = m ? m[1] : String(batchOrTeam);
-                const auto = typeof getSquadPlayers === 'function' ? getSquadPlayers(batch) : [];
-                const manual = ((typeof SQ !== 'undefined' && SQ && SQ[batch]) || []).filter(p => !auto.map(a => a.toLowerCase()).includes(p.toLowerCase()));
-                return [...new Set([...auto, ...manual])].sort((a, b) => a.localeCompare(b));
+                const str = String(batchOrTeam).trim();
+                const m = str.match(/\b(\d{2,4})\b/);
+                const batch = m ? m[1] : str;
+                const auto1 = typeof getSquadPlayers === 'function' ? getSquadPlayers(batch) : [];
+                const auto2 = (batch !== str && typeof getSquadPlayers === 'function') ? getSquadPlayers(str) : [];
+                const manual1 = ((typeof SQ !== 'undefined' && SQ && SQ[batch]) || []);
+                const manual2 = (batch !== str && typeof SQ !== 'undefined' && SQ && SQ[str]) || [];
+                const combined = [...auto1, ...auto2, ...manual1, ...manual2];
+                return [...new Set(combined.map(p => String(p).trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
             }
 
             function appendOrIncrementPlayer(currentStr, playerName) {
@@ -6318,6 +6383,7 @@ function hdr() {
                 });
                 if (G) Object.values(G).flat().forEach(t => { if (t) set.add(t); });
                 if (FX) FX.forEach(f => { if (f[1]) set.add(f[1]); if (f[2]) set.add(f[2]); });
+                if (SQ) Object.keys(SQ).forEach(t => { if (t) set.add(t); });
                 dl.innerHTML = [...set].map(t => '<option value="' + esc(t) + '">').join('');
             }
 
@@ -6877,15 +6943,15 @@ function hdr() {
 
                 if (isFriendly) {
                     if (ptTab) ptTab.style.display = 'none';
-                    if (sqTab) sqTab.style.display = 'none';
+                    if (sqTab) sqTab.style.display = '';
                     if (mTab) mTab.textContent = 'MATCHES';
                     if (vtBar) vtBar.style.display = 'none';
                     if (flBar) flBar.style.display = 'none';
                     if (mgBtn) mgBtn.style.display = 'none';
                     schedView = 'list';
-                    // Auto redirect away from tournament-only tabs
+                    // Auto redirect away from tournament-only tabs (Points Table)
                     const curTab = localStorage.getItem('brhsActiveTab') || 'm';
-                    if (curTab === 't' || curTab === 'q') {
+                    if (curTab === 't') {
                         switchTab('m', false);
                     }
                 } else {
@@ -6934,23 +7000,25 @@ function hdr() {
                     if (tid === 'friendlies') {
                         const frMatches = [];
                         const newR = {};
+                        let frSQ = {};
                         if (cachedRaw) {
                             try {
                                 const c = JSON.parse(cachedRaw);
                                 (c.FX || []).forEach((f, idx) => {
                                     const oldIdx = idx + 1;
-                                    if (f && f[0] === 'FR') {
+                                    if (f) {
                                         frMatches.push(f);
                                         const newIdx = frMatches.length;
                                         if (c.R && c.R[oldIdx]) newR[newIdx] = c.R[oldIdx];
                                     }
                                 });
+                                if (c.SQ) frSQ = c.SQ;
                             } catch (_) {}
                         }
                         FX = frMatches;
                         R = newR;
                         G = {};
-                        SQ = {};
+                        SQ = frSQ;
                         TB = {};
                         ANNC = '';
                         TOURNAMENT_NAME = DEFAULT_FRIENDLIES_NAME;
@@ -7018,7 +7086,7 @@ function hdr() {
                                 let hadPollutedMatches = false;
                                 (st.FX || []).forEach((f, idx) => {
                                     const oldIdx = idx + 1;
-                                    if (f && f[0] === 'FR') {
+                                    if (f) {
                                         frMatches.push(f);
                                         const newIdx = frMatches.length;
                                         if (st.R && st.R[oldIdx]) newR[newIdx] = st.R[oldIdx];
@@ -7029,7 +7097,7 @@ function hdr() {
                                 FX = frMatches;
                                 R = newR;
                                 G = {};
-                                SQ = {};
+                                SQ = st.SQ || {};
                                 TB = {};
                                 ANNC = st.annc || '';
                                 TOURNAMENT_NAME = st.name || DEFAULT_FRIENDLIES_NAME;
@@ -7047,7 +7115,7 @@ function hdr() {
                                                 FX: frMatches,
                                                 R: newR,
                                                 G: {},
-                                                SQ: {},
+                                                SQ: SQ,
                                                 TB: {},
                                                 annc: ANNC
                                             }),
